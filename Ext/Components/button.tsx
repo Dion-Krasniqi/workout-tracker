@@ -8,8 +8,8 @@ interface Props {
 
 const CustomButton = ({buttonText, link}:Props) => {
   return (
-    <TouchableOpacity >
-        <Text className='text-white'>{buttonText} ff</Text>
+    <TouchableOpacity className='bg-white rounded-md'>
+        <Text className='font-bold px-4 py-2 text-light-100'>{buttonText}</Text>
     </TouchableOpacity>
   )
 }

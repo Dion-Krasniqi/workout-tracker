@@ -1,18 +1,35 @@
 import CustomButton from "@/Components/button";
+import Search from "@/Components/search";
+import { useState } from "react";
 import { Text, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
+  
+
+  const [searchQuery, setSearchQuery] = useState('');
+
   return (
-    <View
+    <SafeAreaProvider>
+      <SafeAreaView
+      className='bg-dark-100'
       style={{
         flex: 1,
-        justifyContent: "center",
+        
         alignItems: "center",
-      }}
+      }} 
     > 
-    <Text className='text-white'>D</Text>
-      <CustomButton buttonText="Func" link='/'/>
+
+      <View className="mx-2 items-center mt-10">
+        <Search value={searchQuery}
+                onChangeText={(text: string) => setSearchQuery(text)}/>
+      </View>
       
-    </View>
+      
+      
+    </SafeAreaView>
+
+    </SafeAreaProvider>
+    
   );
 }
