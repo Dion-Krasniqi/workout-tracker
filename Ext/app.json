@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Ext",
-    "slug": "Ext",
+    "slug": "ext",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -40,18 +40,9 @@
           }
         }
       ],
-      "expo-sqlite",
-        {
-          "enableFTS": true,
-          "useSQLCipher": true,
-          "android": {
-            "enableFTS": false,
-            "useSQLCipher": false
-          },
-          "ios": {
-            "customBuildFlags": ["-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1"]
-          }
-        }
+      "expo-sqlite"
+        
+      
     ],
     "experiments": {
       "typedRoutes": true,
