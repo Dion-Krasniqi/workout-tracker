@@ -3,12 +3,12 @@ import React from 'react'
 
 interface Props {
     buttonText: string;
-    link: string;
+    onPress: ()=>void;
 }
 
-const CustomButton = ({buttonText, link}:Props) => {
+const CustomButton = ({buttonText, onPress}:Props) => {
   return (
-    <TouchableOpacity className='bg-white rounded-md'>
+    <TouchableOpacity onPress={onPress} className='bg-white rounded-md'>
         <Text className='font-bold px-4 py-2 text-light-100'>{buttonText}</Text>
     </TouchableOpacity>
   )

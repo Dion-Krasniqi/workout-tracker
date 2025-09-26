@@ -10,7 +10,7 @@ interface Props {
 const Search = ({onPress, value, onChangeText}:Props) => {
   return (
     <View className='flex-row items-center bg-white rounded-2xl px-2 py-2 '>
-        <TextInput onPress={onPress} placeholder='Search for workout' 
+        <TextInput onPress={onPress} placeholder='Search for session' 
                                    value={value} 
                                    onChangeText={onChangeText} 
                                    placeholderTextColor={'darkgrey'}

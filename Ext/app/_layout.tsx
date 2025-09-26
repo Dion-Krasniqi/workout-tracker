@@ -21,5 +21,6 @@ export default function RootLayout() {
   <Stack >
     <Stack.Screen name='(tabs)' options={{headerShown:false}}/>
     <Stack.Screen name='exercise' options={{headerShown:false}}/>
+    <Stack.Screen name='otherPages/exercise_creation' options={{headerShown:false}}/>
   </Stack>);
 }

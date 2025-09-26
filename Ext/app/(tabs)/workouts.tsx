@@ -1,9 +1,26 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, FlatList, ScrollView } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@/Components/button'
+import { createCustomExercise, createCustomWorkout, getAllWorkoutTemplates } from '../db/queries'
+import { useRouter } from 'expo-router'
+import WorkoutCard from '@/Components/workoutCard'
 
 const Workouts = () => {
+  
+  const router = useRouter();
+  const [workouts, setWorkouts] = useState<Workout[]>([]);
+
+  useEffect(() => {
+    async function setup() {
+      const result = await getAllWorkoutTemplates();
+      console.log(result);
+      setWorkouts(result);
+    }
+    setup();
+  }, []);
+  
+  
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -15,8 +32,20 @@ const Workouts = () => {
       }} 
     > 
       <View className='mt-10'>
-        <CustomButton buttonText='Create Workout' />
+        <CustomButton onPress={()=>createCustomWorkout('FullBody A')} buttonText='Create Workout' />
+        <CustomButton onPress={()=>router.push('/otherPages/exercise_creation')} buttonText='Add Exercise' />
       </View>
+      <View className=' w-full'>
+        <>
+          <FlatList data={workouts}
+            renderItem={({item})=>(<WorkoutCard {...item}/>)}
+            keyExtractor={(item) =>item.id.toString()}
+            className="mt-16 w-full"/>
+        
+        </>
+      </View>
+    
+      
 
       
       
