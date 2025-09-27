@@ -9,7 +9,7 @@ interface Props {
 const CustomButton = ({buttonText, onPress}:Props) => {
   return (
     <TouchableOpacity onPress={onPress} className='bg-white rounded-md'>
-        <Text className='font-bold px-4 py-2 text-light-100'>{buttonText}</Text>
+        <Text className='font-bold px-4 py-2 text-light-100 text-center'>{buttonText}</Text>
     </TouchableOpacity>
   )
 }

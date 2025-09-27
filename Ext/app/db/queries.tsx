@@ -24,3 +24,21 @@ export const getAllWorkoutTemplates = async () => {
     return allRows;
 
 }
+
+export const startSession = async (workout_name:string) => {
+    try {
+        const workoutInfo = await db.getFirstAsync(`SELECT * FROM workouts WHERE name='${workout_name}'`);
+        console.log(workoutInfo);
+        //@ts-ignore
+        const workout_id = workoutInfo.id;
+        const start = Date.now();
+        await db.runAsync(`INSERT INTO sessions (workout_id, time_started) VALUES (${workout_id}, ${start});`);
+        console.log(await db.getAllAsync(`SELECT * FROM sessions`));
+    } catch (error) {
+        console.log('Couldnt find workout')
+    }
+    
+    
+    
+    
+}

@@ -34,7 +34,7 @@ export const initDB = async() => {
         `CREATE TABLE IF NOT EXISTS sessions(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         workout_id INTEGER NOT NULL,
-        time_started INTEGER,
+        time_started INTEGER NOT NULL,
         time_ended INTEGER,
         FOREIGN KEY (workout_id) REFERENCES workouts(id)
         );`

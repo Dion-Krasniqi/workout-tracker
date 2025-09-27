@@ -31,8 +31,8 @@ const Workouts = () => {
         alignItems: "center",
       }} 
     > 
-      <View className='mt-10'>
-        <CustomButton onPress={()=>createCustomWorkout('FullBody A')} buttonText='Create Workout' />
+      <View className='mt-10 gap-5'>
+        <CustomButton onPress={()=>createCustomWorkout('Push A')} buttonText='Create Workout' />
         <CustomButton onPress={()=>router.push('/otherPages/exercise_creation')} buttonText='Add Exercise' />
       </View>
       <View className=' w-full'>
