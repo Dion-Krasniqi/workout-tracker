@@ -10,16 +10,20 @@ export const createCustomExercise = async (exercise_name:string) => {
 
 }
 
-export const getExercise = async () => {
-    const allRows = await db.getAllAsync('SELECT * FROM exercises_info');
-    for (const row of allRows) {
-      //@ts-ignore
-        console.log(row.id, row.name);
-    }
+export const getExercise = async (id:number) => {
+    const exerciseInfo = await db.getFirstAsync<TwoRows>(`SELECT * FROM exercises_info WHERE id='${id}'`);
+    return exerciseInfo;
+}
+
+export const getAllExercises = async () => {
+    const allRows = await db.getAllAsync<TwoRows>('SELECT * FROM exercises_info');
+    
+    return allRows;
+
 }
 
 export const getAllWorkoutTemplates = async () => {
-    const allRows = await db.getAllAsync<Workout>('SELECT * FROM workouts');
+    const allRows = await db.getAllAsync<TwoRows>('SELECT * FROM workouts');
     
     return allRows;
 
