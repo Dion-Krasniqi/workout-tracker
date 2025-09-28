@@ -31,19 +31,21 @@ const Workouts = () => {
         alignItems: "center",
       }} 
     > 
-      <View className='mt-10 gap-5'>
+    <View className='flex-1 items-center w-[100%] justify-center'>
+      <View className='mt-10 gap-5 '>
         <CustomButton onPress={()=>createCustomWorkout('Push A')} buttonText='Create Workout' />
         <CustomButton onPress={()=>router.push('/otherPages/exercise_list')} buttonText='Exercise List' />
       </View>
-      <View className=' w-full'>
+      <View className='flex-1 w-full'>
         <>
           <FlatList data={workouts}
             renderItem={({item})=>(<NameCard {...item} />)}
             keyExtractor={(item) =>item.id.toString()}
-            className="mt-16 w-full"/>
+            className="mt-16 w-full self-center"/>
         
         </>
       </View>
+    </View>
     
       
 
