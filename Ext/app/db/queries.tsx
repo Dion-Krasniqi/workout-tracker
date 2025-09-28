@@ -14,6 +14,10 @@ export const getExercise = async (id:number) => {
     const exerciseInfo = await db.getFirstAsync<TwoRows>(`SELECT * FROM exercises_info WHERE id='${id}'`);
     return exerciseInfo;
 }
+export const getWorkoutbyId = async (id:number) => {
+    const workoutInfo = await db.getFirstAsync<TwoRows>(`SELECT * FROM workouts WHERE id='${id}'`);
+    return workoutInfo;
+}
 
 export const getAllExercises = async () => {
     const allRows = await db.getAllAsync<TwoRows>('SELECT * FROM exercises_info');
@@ -36,7 +40,7 @@ export const startSession = async (workout_name:string) => {
         //@ts-ignore
         const workout_id = workoutInfo.id;
         const start = Date.now();
-        await db.runAsync(`INSERT INTO sessions (workout_id, time_started) VALUES (${workout_id}, ${start});`);
+        await db.runAsync(`INSERT INTO sessions (workout_id, time_started, time_ended) VALUES (${workout_id}, ${start}, 0);`);
         console.log(await db.getAllAsync(`SELECT * FROM sessions`));
     } catch (error) {
         console.log('Couldnt find workout')
@@ -44,5 +48,11 @@ export const startSession = async (workout_name:string) => {
     
     
     
+    
+}
+
+export const getAllSessions = async() => {
+    const allRows = await db.getAllAsync<Session>('SELECT * FROM sessions');
+    return allRows;
     
 }

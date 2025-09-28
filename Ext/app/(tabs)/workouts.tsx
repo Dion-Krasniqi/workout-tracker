@@ -31,21 +31,24 @@ const Workouts = () => {
         alignItems: "center",
       }} 
     > 
-    <View className='flex-1 items-center w-[100%] justify-center'>
-      <View className='mt-10 gap-5 '>
-        <CustomButton onPress={()=>createCustomWorkout('Push A')} buttonText='Create Workout' />
+    <ScrollView className="flex w-full px-5 mb-24" showsVerticalScrollIndicator={false} 
+        contentContainerStyle={{ minHeight:'100%'}}>
+      <View className='mt-10 gap-5 w-auto'>
+        <CustomButton onPress={()=>createCustomWorkout('Push C')} buttonText='Create Workout' />
         <CustomButton onPress={()=>router.push('/otherPages/exercise_list')} buttonText='Exercise List' />
       </View>
-      <View className='flex-1 w-full'>
+      <View className='flex-1 w-[100%]'>
         <>
           <FlatList data={workouts}
             renderItem={({item})=>(<NameCard {...item} />)}
             keyExtractor={(item) =>item.id.toString()}
-            className="mt-16 w-full self-center"/>
+            className="mt-8 w-full self-center"
+            scrollEnabled={false}/>
+
         
         </>
       </View>
-    </View>
+    </ScrollView>
     
       
 

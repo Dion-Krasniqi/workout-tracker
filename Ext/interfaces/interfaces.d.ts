@@ -4,3 +4,9 @@ interface TwoRows {
     name: string;
 }
 
+interface Session {
+    id: number;
+    workout_id: number;
+    time_started: number;
+    time_ended: number;
+}
