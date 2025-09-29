@@ -4,10 +4,10 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { getAllExercises } from '../db/queries';
 import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import CustomButton from '@/Components/button';
-import { NameCardExec } from '@/Components/nameCard';
+import { NameCardExecAdd } from '@/Components/nameCard';
 
-const Exercise_list = () => {
-
+const Exercise_list_add = () => {
+  const {workout_id} = useLocalSearchParams();
   const router = useRouter();
   const [exercises, setExercises] = useState<TwoRows[]>([]);
 
@@ -32,7 +32,8 @@ const Exercise_list = () => {
             
         <>
             <FlatList data={exercises}
-            renderItem={({item})=>(<NameCardExec {...item} />)}
+            //@ts-ignore
+            renderItem={({item})=>(<NameCardExecAdd id={item.id} name={item.name} workout_id={workout_id}/>)}
             keyExtractor={(item) =>item.id.toString()}
             className="mt-6 w-full"
             contentContainerStyle={{justifyContent:'space-between'}}
@@ -51,4 +52,4 @@ const Exercise_list = () => {
   )
 }
 
-export default Exercise_list
+export default Exercise_list_add

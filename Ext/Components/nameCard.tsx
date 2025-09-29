@@ -16,6 +16,25 @@ export const NameCardExec = ({id, name}: TwoRows) => {
   
   )
 }
+type test = TwoRows & {
+    workout_id:number;
+  }
+export const NameCardExecAdd = ({id,name,workout_id}:test) => {
+  const router = useRouter();
+  
+  return (
+    
+    
+    <TouchableOpacity className='w-[90%] mt-2 py-2 bg-light-100 rounded-md items-center self-center' 
+    //@ts-ignore
+    onPress={()=>router.push({pathname:`/exercise_add/${id}`,
+                              params:{workout_id:workout_id}})}>
+      <Text className='text-white text-2xl font-md'>{name}</Text>
+    </TouchableOpacity>
+    
+  
+  )
+}
 
 export const NameCardWork = ({id, name}: TwoRows) => {
   return (

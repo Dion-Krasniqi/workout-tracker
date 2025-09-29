@@ -12,6 +12,7 @@ const WorkoutInformation = () => {
   const [name, setName] = useState('');
   useEffect(()=>{
     async function setup(){
+      //@ts-ignore
       const result = await getWorkoutbyId(parseInt(id));
       setWorkout(result);
     }
@@ -31,7 +32,8 @@ const WorkoutInformation = () => {
             
              </View>
              <View>
-              <CustomButton buttonText='Add Exercise'/>
+              <CustomButton buttonText='Add Exercise' onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
+                                                                                params: {workout_id:workout?.id}})}/>
              </View>
              
 

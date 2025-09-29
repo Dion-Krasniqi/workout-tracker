@@ -4,6 +4,12 @@ interface TwoRows {
     name: string;
 }
 
+interface DetailedExercise {
+    id: number;
+    name: string;
+    set_number: number;
+}
+
 interface Session {
     id: number;
     workout_id: number;
