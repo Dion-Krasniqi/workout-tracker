@@ -28,7 +28,6 @@ export const initDB = async() => {
         FOREIGN KEY (exercise_id) REFERENCES exercises_info(id),
         FOREIGN KEY (workout_id) REFERENCES workouts(id)
         );`
-        
     );
     await db.execSync(
         `CREATE TABLE IF NOT EXISTS sessions(

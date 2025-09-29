@@ -1,20 +1,26 @@
-import { View, Text, TextInput } from 'react-native'
+import { View, Text, TextInput, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { getExercise, getWorkoutbyId } from '../db/queries';
+import { getExercise, getWorkoutbyId, getWorkoutExercises } from '../db/queries';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '@/Components/button';
+import { NameCardExec } from '@/Components/nameCard';
 
 const WorkoutInformation = () => {
   const {id} = useLocalSearchParams();
+
   const [workout, setWorkout] = useState<TwoRows | null>(null);
+  const [exercises, setExercises] = useState<DetailedExercise[]>([]);
   const router = useRouter();
   const [name, setName] = useState('');
   useEffect(()=>{
     async function setup(){
       //@ts-ignore
       const result = await getWorkoutbyId(parseInt(id));
+      //@ts-ignore
+      const resultExec = await getWorkoutExercises<DetailedExercise>(parseInt(id));
       setWorkout(result);
+      setExercises(resultExec);
     }
     setup();
   },[])
@@ -31,6 +37,12 @@ const WorkoutInformation = () => {
 
             
              </View>
+             <FlatList data={exercises}
+                       renderItem={({item})=>(<NameCardExec id={item.id} name={item.name}/>)}
+                       keyExtractor={(item) =>item.id.toString()}
+                       className="mt-6 w-full"
+                       contentContainerStyle={{justifyContent:'space-between'}}/>
+
              <View>
               <CustomButton buttonText='Add Exercise' onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
                                                                                 params: {workout_id:workout?.id}})}/>

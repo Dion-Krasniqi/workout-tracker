@@ -8,7 +8,7 @@ export const getAllExercises = async () => {
 
 }
 export const createCustomExercise = async (exercise_name:string) => {
-    await db.runAsync(`INSERT INTO exercises_info (name) VALUES ('${exercise_name}');`)
+    await db.runAsync(`INSERT INTO exercises_info (name) VALUES (?);`, [exercise_name]);
 
 }
 
@@ -19,6 +19,12 @@ export const getExercise = async (id:number) => {
 
 
 //Workout Related
+
+export const addExerciseToWorkout = async (workout_id:number, exercise_id:number,set_number:number) => {
+    console.log(workout_id,exercise_id,set_number);
+    await db.runAsync(`INSERT INTO exercises (workout_id,exercise_id,set_number) VALUES (?,?,?)`, workout_id,exercise_id,set_number);
+                                                                                                     
+}
 
 export const getAllWorkoutTemplates = async () => {
     const allRows = await db.getAllAsync<TwoRows>('SELECT * FROM workouts');
@@ -34,13 +40,22 @@ export const getWorkoutbyId = async (id:number) => {
     const workoutInfo = await db.getFirstAsync<TwoRows>(`SELECT * FROM workouts WHERE id='${id}'`);
     return workoutInfo;
 }
+
 export const getWorkoutExercises = async (id:number) => {
     const workoutExercises = await db.getAllAsync(`SELECT * FROM exercises WHERE workout_id=${id}`);
-    const exerciseNames = {}
-    workoutExercises.forEach(function (value){
-
-    })
-    return workoutExercises;
+    
+    const detailedExercises = await Promise.all(
+        workoutExercises.map(async (value)=>{
+            //@ts-ignore
+            const exerciseInfo = await getExercise(value?.exercise_id);
+            //@ts-ignore
+            return {id: value.id, set_number: value.set_number, name: exerciseInfo?.name}
+        })
+    )
+    
+    console.log(detailedExercises);
+    return detailedExercises;
+    
 }
 
 

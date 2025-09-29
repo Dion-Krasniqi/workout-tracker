@@ -2,7 +2,7 @@ import { View, Text, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { getExercise } from '../db/queries';
+import { addExerciseToWorkout, getExercise } from '../db/queries';
 import CustomButton from '@/Components/button';
 
 const ExerciseAddPage = () => {
@@ -25,6 +25,8 @@ const ExerciseAddPage = () => {
 
 
   async function addExercise(){
+    //@ts-ignore
+    addExerciseToWorkout(parseInt(workout_id),id,sets);
     router.push(`/workout/${workout_id}`)
   }
 
