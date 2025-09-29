@@ -24,9 +24,9 @@ const Exercise_list = () => {
     <SafeAreaProvider>
       <SafeAreaView className='flex-1 bg-dark-100' style={{ alignItems: "center"}}> 
 
-      <View className='mt-6'>
+      {/*<View className='mt-6'>
           <CustomButton onPress={()=>router.push('/otherPages/exercise_creation')} buttonText='Create Exercise' />
-        </View>
+        </View>*/}
       <View className='w-full pb-20'>
         
             

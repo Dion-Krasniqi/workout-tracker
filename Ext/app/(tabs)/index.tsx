@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getAllSessions, getAllWorkoutTemplates, getExercise, getWorkoutbyId, startSession } from "../db/queries";
-import NameCard from "@/Components/nameCard";
+import { NameCardSesh } from "@/Components/nameCard";
+
 
 export default function Index() {
   
@@ -21,6 +22,7 @@ export default function Index() {
             return {...session, ...workout};
           })
         )
+        //@ts-ignore
         setSessions(sessionMap);
       }
       setup();
@@ -42,7 +44,7 @@ export default function Index() {
           <CustomButton onPress={()=>startSession('Push C')} buttonText='Start Session' />
         </View>
         <FlatList data={sessions}
-                  renderItem={({item})=>(<NameCard {...item} />)}
+                  renderItem={({item})=>(<NameCardSesh {...item} />)}
                   keyExtractor={(item) =>item.id.toString()}
                   className="mt-8 w-full self-center"
                   scrollEnabled={false}/>

@@ -1,7 +1,9 @@
 import db from "./db";
 
 export const createCustomWorkout = async (workout_name:string) => {
-    await db.runAsync(`INSERT INTO workouts (name) VALUES ('${workout_name}');`)
+    const result = await db.runSync(`INSERT INTO workouts (name) VALUES (?);`, [workout_name])
+    return result.lastInsertRowId;
+
 
 }
 

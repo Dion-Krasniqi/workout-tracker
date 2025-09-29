@@ -21,7 +21,10 @@ export default function RootLayout() {
   <Stack >
     <Stack.Screen name='(tabs)' options={{headerShown:false}}/>
     <Stack.Screen name="exercise/[id]" options={{ headerShown: false}}/>
+    <Stack.Screen name="workout/[id]" options={{ headerShown: false}}/>
     <Stack.Screen name='otherPages/exercise_creation' options={{headerShown:false}}/>
     <Stack.Screen name='otherPages/exercise_list' options={{headerShown:false}}/>
+    <Stack.Screen name='otherPages/exercise_list_adding' options={{headerShown:false}}/>
+    <Stack.Screen name='otherPages/workout_creation' options={{headerShown:false}}/>
   </Stack>);
 }
