@@ -51,7 +51,7 @@ export const NameCardWork = ({id, name}: TwoRows) => {
 export const NameCardSesh = ({id, name}: TwoRows) => {
   return (
     
-    <Link href={`/workout/${id}`} asChild>
+    <Link href={`/session/${id}`} asChild>
       <TouchableOpacity className='w-[90%] mt-2 py-2 bg-light-100 rounded-md items-center self-center' >
       <Text className='text-white text-2xl font-md'>{name}</Text>
     </TouchableOpacity>

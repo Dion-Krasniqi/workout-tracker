@@ -8,7 +8,7 @@ export const getAllExercises = async () => {
 
 }
 export const createCustomExercise = async (exercise_name:string) => {
-    await db.runAsync(`INSERT INTO exercises_info (name) VALUES (?);`, [exercise_name]);
+    await db.runAsync(`INSERT INTO exercises_info (name) VALUES (?);`, exercise_name);
 
 }
 
@@ -78,6 +78,10 @@ export const startSession = async (workout_name:string) => {
     
     
     
+}
+export const getSessionById = async (id:number) => {
+    const sessionInfo = await db.getFirstAsync(`SELECT * FROM sessions WHERE id='${id}'`);
+    return sessionInfo;
 }
 
 export const getAllSessions = async() => {

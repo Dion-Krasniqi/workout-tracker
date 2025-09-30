@@ -8,14 +8,30 @@ export const initDB = async() => {
     await db.execSync(
         `CREATE TABLE IF NOT EXISTS workouts(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL
+        name TEXT NOT NULL UNIQUE
         );`
         
     );
     await db.execSync(
+        `CREATE TABLE IF NOT EXISTS muscle_groups(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT UNIQUE
+        );
+        
+        INSERT OR IGNORE INTO muscle_groups (name) VALUES
+        ('None'),
+        ('Chest'),
+        ('Lats'),
+        ('Quads');`
+        
+    );
+    
+    await db.execSync(
         `CREATE TABLE IF NOT EXISTS exercises_info(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE
+        name TEXT NOT NULL UNIQUE,
+        muscle_group INTEGER NOT NULL DEFAULT 1,
+        FOREIGN KEY (muscle_group) REFERENCES muscle_groups(id)
         );`
         
     );
