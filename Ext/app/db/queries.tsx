@@ -2,13 +2,17 @@ import db from "./db";
 
 
 //Exercise Related
+export const getAllGroups = async () => {
+    const allRows = await db.getAllAsync<TwoRows>('SELECT * FROM muscle_groups');
+    console.log(allRows);
+}
 export const getAllExercises = async () => {
     const allRows = await db.getAllAsync<TwoRows>('SELECT * FROM exercises_info');
     return allRows;
 
 }
-export const createCustomExercise = async (exercise_name:string) => {
-    await db.runAsync(`INSERT INTO exercises_info (name) VALUES (?);`, exercise_name);
+export const createCustomExercise = async (exercise_name:string, muscle_group_id:number) => {
+    await db.runAsync(`INSERT INTO exercises_info (name,muscle_group) VALUES (?,?);`, exercise_name, muscle_group_id);
 
 }
 

@@ -3,7 +3,7 @@ import Search from "@/Components/search";
 import { useEffect, useState } from "react";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { getAllSessions, getAllWorkoutTemplates, getExercise, getWorkoutbyId, startSession } from "../db/queries";
+import { getAllGroups, getAllSessions, getAllWorkoutTemplates, getExercise, getWorkoutbyId, startSession } from "../db/queries";
 import { NameCardSesh } from "@/Components/nameCard";
 
 
@@ -24,6 +24,7 @@ export default function Index() {
         )
         //@ts-ignore
         setSessions(sessionMap);
+        getAllGroups();
       }
       setup();
     }, []);

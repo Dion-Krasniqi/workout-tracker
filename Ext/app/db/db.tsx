@@ -21,8 +21,11 @@ export const initDB = async() => {
         INSERT OR IGNORE INTO muscle_groups (name) VALUES
         ('None'),
         ('Chest'),
-        ('Lats'),
-        ('Quads');`
+        ('Back'),
+        ('Shoulders'),
+        ('Arms'),
+        ('Legs'),
+        ('Abs');`
         
     );
     

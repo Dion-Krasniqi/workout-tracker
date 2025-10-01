@@ -11,12 +11,21 @@ const Exercise_creation = () => {
   const router = useRouter();
 
   const [exerciseName, setExerciseName] = useState('');
-  const [muscleGroup, setMuscleGroup] = useState('None');
+  const [muscleGroup, setMuscleGroup] = useState(1);
+  const [muscleGroupText, setMuscleGroupText] = useState('None');
   const [visible, setVisible] = useState(false);
+
+  const MenuOptionView = (text:string) => {
+    return(
+      <View className=''>
+            <Text className='text-lg text-light-100'>{text}</Text>
+      </View>
+    )
+  }
 
   const pressButton = () => {
     try {
-        createCustomExercise(exerciseName);
+        createCustomExercise(exerciseName, muscleGroup);
         router.push('/(tabs)');
     } catch (error){
         console.log(error)
@@ -40,14 +49,28 @@ const Exercise_creation = () => {
           <DropdownMenu visible={visible}
                       handleOpen={()=>{setVisible(true)}}
                       handleClose={()=>{setVisible(false)}}
-                      trigger={<Text className='text-lg py-2 w-[full] text-start px-2 bg-white rounded-lg text-light-100'>{muscleGroup}</Text>}>
-            <MenuOption onSelect={()=>{setVisible(false);setMuscleGroup('None')}}>
-              <View className=''>
-                <Text className='text-lg text-light-100'>None</Text>
-              </View>
-              
+                      trigger={<Text className='text-lg py-2 w-[full] text-start px-2 bg-white rounded-lg text-light-100'>{muscleGroupText}</Text>}>
+            <MenuOption onSelect={()=>{setVisible(false);setMuscleGroup(1);setMuscleGroupText('None')}}>
+              {MenuOptionView('None')}
               </MenuOption>
-            <MenuOption onSelect={()=>{setVisible(false);setMuscleGroup('Chest')}}><Text className='text-lg text-light-100'>Chest</Text></MenuOption>
+            <MenuOption onSelect={()=>{setVisible(false);setMuscleGroup(2);setMuscleGroupText('Chest')}}>
+              {MenuOptionView('Chest')}
+            </MenuOption>
+            <MenuOption onSelect={()=>{setVisible(false);setMuscleGroup(3);setMuscleGroupText('Back')}}>
+              {MenuOptionView('Back')}
+              </MenuOption>
+            <MenuOption onSelect={()=>{setVisible(false);setMuscleGroup(5);setMuscleGroupText('Shoulders')}}>
+              {MenuOptionView('Shoulders')}
+            </MenuOption>
+            <MenuOption onSelect={()=>{setVisible(false);setMuscleGroup(6);setMuscleGroupText('Arms')}}>
+              {MenuOptionView('Arms')}
+              </MenuOption>
+            <MenuOption onSelect={()=>{setVisible(false);setMuscleGroup(6);setMuscleGroupText('Legs')}}>
+              {MenuOptionView('Legs')}
+            </MenuOption>
+            <MenuOption onSelect={()=>{setVisible(false);setMuscleGroup(7);setMuscleGroupText('Abs')}}>
+              {MenuOptionView('Abs')}
+            </MenuOption>
 
           </DropdownMenu>
         </View>
