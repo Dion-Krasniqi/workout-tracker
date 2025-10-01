@@ -93,3 +93,11 @@ export const getAllSessions = async() => {
     return allRows;
     
 }
+
+
+// Set Related
+
+export const getSetById = async (id:number): Promise<SessionSet | null> => {
+    const setInfo = await db.getFirstAsync<SessionSet>(`SELECT * FROM session_sets WHERE id='${id}'`);
+    return setInfo;
+}

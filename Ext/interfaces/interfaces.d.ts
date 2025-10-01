@@ -16,3 +16,13 @@ interface Session {
     time_started: number;
     time_ended: number;
 }
+
+interface SessionSet {
+    set_id: number;
+    session_exercise_id: number;
+    set_number: number;
+    weight: number;
+    reps: number;
+
+
+}
