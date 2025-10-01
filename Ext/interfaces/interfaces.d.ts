@@ -26,3 +26,25 @@ interface SessionSet {
 
 
 }
+
+
+type SetData = {
+    set: number;
+    weight: number;
+    reps: number;
+
+}
+
+type ExerciseData = {
+    exerciseId: number;
+    sets: SetData[];
+}
+
+type SessionState = {
+    workoutId: number | null;
+    sessionId: number | null;
+    exercises: ExerciseData[];
+    startSession: (workoutId:number)=>void;
+    endSession: ()=>void;
+    reset: ()=>void;
+}

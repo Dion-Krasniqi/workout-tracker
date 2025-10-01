@@ -7,6 +7,7 @@ import { getAllGroups, getAllSessions, getAllWorkoutTemplates, getExercise, getW
 import { NameCardSesh } from "@/Components/nameCard";
 
 
+
 export default function Index() {
   
 
