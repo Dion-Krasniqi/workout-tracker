@@ -8,6 +8,7 @@ const ExerciseInformation = () => {
   const [exercise, setExercise] = useState<TwoRows | null>(null);
   useEffect(()=>{
     async function setup(){
+      //@ts-ignore
       const result = await getExercise(parseInt(id));
       setExercise(result);
     }

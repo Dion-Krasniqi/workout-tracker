@@ -35,10 +35,6 @@ type SetData = {
 
 }
 
-type ExerciseData = {
-    exerciseId: number;
-    sets: SetData[];
-}
 
 type SessionState = {
     workoutId: number | null;
@@ -48,3 +44,18 @@ type SessionState = {
     endSession: ()=>void;
     reset: ()=>void;
 }
+
+// Fine grained
+
+export interface ExerciseTemplate {
+    id:number;
+    name:string;
+    set_number: number;
+}
+
+export interface WorkoutTemplate {
+    id:number;
+    name: string
+    exercises: ExerciseTemplate[]
+}
+

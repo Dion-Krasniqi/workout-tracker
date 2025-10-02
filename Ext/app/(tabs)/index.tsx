@@ -5,6 +5,7 @@ import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getAllGroups, getAllSessions, getAllWorkoutTemplates, getExercise, getWorkoutbyId, startSession } from "../db/queries";
 import { NameCardSesh } from "@/Components/nameCard";
+import { useStore } from "@/state/stateStore";
 
 
 
@@ -12,7 +13,9 @@ export default function Index() {
   
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [sessions, setSessions] = useState<(Session & TwoRows)[]>([]);
+  //const [sessions, setSessions] = useState<(Session & TwoRows)[]>([]);
+  const count = useStore((state)=>state.count);
+  const increment = useStore((state)=>state.increment);
 
   useEffect(() => {
       async function setup() {
@@ -43,13 +46,14 @@ export default function Index() {
         
         </View>
         <View className='mt-5'>
-          <CustomButton onPress={()=>startSession('Push C')} buttonText='Start Session' />
+          <Text className="text-white self-center">Session Count Test:{count}</Text>
+          <CustomButton onPress={increment} buttonText='Start Session' />
         </View>
-        <FlatList data={sessions}
+        {/*<FlatList data={sessions}
                   renderItem={({item})=>(<NameCardSesh {...item} />)}
                   keyExtractor={(item) =>item.id.toString()}
                   className="mt-8 w-full self-center"
-                  scrollEnabled={false}/>
+                  scrollEnabled={false}/>*/}
 
         </ScrollView>
 

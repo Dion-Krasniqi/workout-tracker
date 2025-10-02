@@ -3,6 +3,6 @@
     "entryPoints": ["./app","./Components", "./interfaces"],
     "entryPointStrategy": "expand",
     "plugin": ["typedoc-plugin-markdown"],
-    "theme": "github",
+    "theme": "markdown",
     "out": "./readme"
 }

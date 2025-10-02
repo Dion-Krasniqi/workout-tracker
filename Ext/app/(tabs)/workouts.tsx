@@ -2,22 +2,19 @@ import { View, Text, FlatList, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@/Components/button'
-import { createCustomExercise, createCustomWorkout, getAllWorkoutTemplates } from '../db/queries'
+//import { createCustomExercise, createCustomWorkout, getAllWorkoutTemplates } from '../db/queries'
 import { Link, useRouter } from 'expo-router'
 import { NameCardWork } from '@/Components/nameCard'
+import { useWorkoutStore } from '@/state/stateStore'
 
 const Workouts = () => {
   
+  const workouts = useWorkoutStore((state)=>state.workouts)
   const router = useRouter();
-  const [workouts, setWorkouts] = useState<TwoRows[]>([]);
+  
 
   useEffect(() => {
-    async function setup() {
-      const result = await getAllWorkoutTemplates();
-      console.log(result);
-      setWorkouts(result);
-    }
-    setup();
+    
   }, []);
   
   
@@ -40,7 +37,10 @@ const Workouts = () => {
       <View className='flex-1 w-[100%]'>
         <>
           <FlatList data={workouts}
-            renderItem={({item})=>(<NameCardWork {...item} />)}
+            renderItem={({item})=>(<View>
+                                    <Text className='text-white'>{item.name}</Text>
+                                    <Text className='text-white'>Exercise Number:{item.exercises.length}</Text>
+                                   </View>)}
             keyExtractor={(item) =>item.id.toString()}
             className="mt-8 w-full self-center"
             scrollEnabled={false}/>

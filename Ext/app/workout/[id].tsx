@@ -20,6 +20,7 @@ const WorkoutInformation = () => {
       //@ts-ignore
       const resultExec = await getWorkoutExercises<DetailedExercise>(parseInt(id));
       setWorkout(result);
+      //@ts-ignore
       setExercises(resultExec);
     }
     setup();

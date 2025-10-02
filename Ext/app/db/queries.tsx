@@ -1,3 +1,4 @@
+import { WorkoutTemplate } from "@/interfaces/interfaces";
 import db from "./db";
 
 
@@ -30,8 +31,8 @@ export const addExerciseToWorkout = async (workout_id:number, exercise_id:number
                                                                                                      
 }
 
-export const getAllWorkoutTemplates = async () => {
-    const allRows = await db.getAllAsync<TwoRows>('SELECT * FROM workouts');
+export const getAllWorkouts= async () => {
+    const allRows = await db.getAllAsync<WorkoutTemplate>('SELECT * FROM workouts');
     return allRows;
 }
 
@@ -53,13 +54,26 @@ export const getWorkoutExercises = async (id:number) => {
             //@ts-ignore
             const exerciseInfo = await getExercise(value?.exercise_id);
             //@ts-ignore
-            return {id: value.id, set_number: value.set_number, name: exerciseInfo?.name}
+            return {id: value.id , set_number: value.set_number, name: exerciseInfo?.name}
         })
     )
     
     console.log(detailedExercises);
     return detailedExercises;
     
+}
+
+export const loadWorkouts = async (): Promise<WorkoutTemplate[]> => {
+    const workoutReferences = await db.getAllAsync<{id:number;name:string}>('SELECT * FROM workouts');
+
+    const workouts : WorkoutTemplate[] = workoutReferences.map(workout =>({
+        id: workout.id,
+        name: workout.name,
+        exercises: [],
+    }));
+
+    return workouts;
+
 }
 
 

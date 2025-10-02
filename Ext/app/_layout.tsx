@@ -3,8 +3,12 @@ import { StackScreen } from "react-native-screens";
 import './global.css';
 import { useEffect } from "react";
 import { initDB } from "./db/db";
+import { useWorkoutStore } from "@/state/stateStore";
 
 export default function RootLayout() {
+
+  const loadWorkouts = useWorkoutStore((state)=>state.loadWorkouts);
+
   useEffect(()=>{
     const setupDB = async ()=>{
       try {
@@ -15,6 +19,7 @@ export default function RootLayout() {
       }
     }
     setupDB();
+    loadWorkouts();
   }, []);
 
   return (
@@ -24,7 +29,7 @@ export default function RootLayout() {
     <Stack.Screen name="exercise/[id]" options={{ headerShown: false}}/>
     <Stack.Screen name="exercise_add/[id]" options={{ headerShown: false}}/>
     <Stack.Screen name="workout/[id]" options={{ headerShown: false}}/>
-    <Stack.Screen name="session/[id]" options={{ headerShown: false}}/>
+    <Stack.Screen name="session/completed/[id]" options={{ headerShown: false}}/>
 
     <Stack.Screen name='otherPages/exercise_creation' options={{headerShown:false}}/>
     <Stack.Screen name='otherPages/exercise_list' options={{headerShown:false}}/>
