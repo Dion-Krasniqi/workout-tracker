@@ -1,0 +1,8 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": ["./app","./Components", "./interfaces"],
+    "entryPointStrategy": "expand",
+    "plugin": ["typedoc-plugin-markdown"],
+    "theme": "github",
+    "out": "./readme"
+}
