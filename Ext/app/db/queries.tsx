@@ -36,9 +36,9 @@ export const getAllWorkouts= async () => {
     return allRows;
 }
 
-export const createCustomWorkout = async (workout_name:string) => {
-    const result = await db.runSync(`INSERT INTO workouts (name) VALUES (?);`, [workout_name]);
-    return result.lastInsertRowId;
+export const createCustomWorkout = async (workout_name:string): Promise<number> => {
+    const result = await db.runAsync(`INSERT INTO workouts (name) VALUES (?);`, [workout_name]);
+    return result.lastInsertRowId as number;
 }
 
 export const getWorkoutbyId = async (id:number) => {

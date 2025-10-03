@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ScrollView } from 'react-native'
+import { View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@/Components/button'
@@ -37,10 +37,11 @@ const Workouts = () => {
       <View className='flex-1 w-[100%]'>
         <>
           <FlatList data={workouts}
-            renderItem={({item})=>(<View>
-                                    <Text className='text-white'>{item.name}</Text>
-                                    <Text className='text-white'>Exercise Number:{item.exercises.length}</Text>
-                                   </View>)}
+            renderItem={({item})=>(<Link href={`/workout/${item.id}`} asChild>
+                                    <TouchableOpacity className='w-[90%] mt-2 py-2 bg-light-100 rounded-md items-center self-center' >
+                                      <Text className='text-white text-2xl font-md'>{item.name}</Text>
+                                    </TouchableOpacity>
+                                  </Link>)}
             keyExtractor={(item) =>item.id.toString()}
             className="mt-8 w-full self-center"
             scrollEnabled={false}/>

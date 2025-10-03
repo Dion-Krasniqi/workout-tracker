@@ -5,25 +5,27 @@ import { getExercise, getWorkoutbyId, getWorkoutExercises } from '../db/queries'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '@/Components/button';
 import { NameCardExec } from '@/Components/nameCard';
+import { useWorkoutStore } from '@/state/stateStore';
 
 const WorkoutInformation = () => {
-  const {id} = useLocalSearchParams();
 
-  const [workout, setWorkout] = useState<TwoRows | null>(null);
-  const [exercises, setExercises] = useState<DetailedExercise[]>([]);
+  const { id } = useLocalSearchParams();
+  const {workouts, loading} = useWorkoutStore();
+
+  const workout = workouts.find((w) => {
+    return w.id === Number(id);
+  });
+
+  if(loading){
+    return(<Text>Loading Workouts</Text>)
+  }
+  if (!workout) {
+    return(<Text>Workout not found</Text>)
+  }
+  //const [exercises, setExercises] = useState<DetailedExercise[]>([]);
   const router = useRouter();
   const [name, setName] = useState('');
   useEffect(()=>{
-    async function setup(){
-      //@ts-ignore
-      const result = await getWorkoutbyId(parseInt(id));
-      //@ts-ignore
-      const resultExec = await getWorkoutExercises<DetailedExercise>(parseInt(id));
-      setWorkout(result);
-      //@ts-ignore
-      setExercises(resultExec);
-    }
-    setup();
   },[])
 
 
@@ -38,11 +40,11 @@ const WorkoutInformation = () => {
 
             
              </View>
-             <FlatList data={exercises}
+             {/*<FlatList data={exercises}
                        renderItem={({item})=>(<NameCardExec id={item.id} name={item.name}/>)}
                        keyExtractor={(item) =>item.id.toString()}
                        className="mt-6 w-full"
-                       contentContainerStyle={{justifyContent:'space-between'}}/>
+                       contentContainerStyle={{justifyContent:'space-between'}}/>*/}
 
              <View>
               <CustomButton buttonText='Add Exercise' onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',

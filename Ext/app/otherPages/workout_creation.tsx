@@ -4,17 +4,13 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@/Components/button';
 import { createCustomWorkout } from '../db/queries';
 import { useRouter } from 'expo-router';
+import { useWorkoutStore } from '@/state/stateStore';
 
 const Workout_creation = () => {
 
   const router = useRouter();
   const [name, setName] = useState('');
-  const saveWorkout = async () => {
-    try {
-        const resultId = await createCustomWorkout(name);
-        router.replace(`/workout/${resultId}`)
-    } catch {}
-  }
+  const addWorkout = useWorkoutStore((state)=>state.addWorkout);
   
 
 
@@ -32,7 +28,9 @@ const Workout_creation = () => {
                         <View className=''>
                             
                             <CustomButton buttonText='Create Workout' 
-                                                   onPress={()=>saveWorkout()}/>
+                                                   onPress={async ()=>{const resultId = await addWorkout(name);
+                                                                        console.log(resultId);
+                                                                       router.replace(`/workout/${resultId}`);}}/>
                         </View>)}
              </View>
 
