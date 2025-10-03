@@ -31,7 +31,8 @@ const Workout_creation = () => {
                                                    onPress={async ()=>{const resultId = await addWorkout(name);
                                                                         console.log(resultId);
                                                                        router.replace(`/workout/${resultId}`);}}/>
-                        </View>)}
+                        </View>)
+                   } 
              </View>
 
          </SafeAreaView>

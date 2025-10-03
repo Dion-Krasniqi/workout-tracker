@@ -1,4 +1,4 @@
-import { WorkoutTemplate } from "@/interfaces/interfaces";
+import { ExerciseTemplate, WorkoutTemplate } from "@/interfaces/interfaces";
 import db from "./db";
 
 
@@ -25,10 +25,12 @@ export const getExercise = async (id:number) => {
 
 //Workout Related
 
-export const addExerciseToWorkout = async (workout_id:number, exercise_id:number,set_number:number) => {
-    console.log(workout_id,exercise_id,set_number);
-    await db.runAsync(`INSERT INTO exercises (workout_id,exercise_id,set_number) VALUES (?,?,?)`, workout_id,exercise_id,set_number);
-                                                                                                     
+export const addExerciseToWorkout = async (workout_id:number, exercise_id:number,set_number:number): Promise<number> => {
+    const result = await db.runAsync(`INSERT INTO exercises (workout_id,exercise_id,set_number) VALUES (?,?,?)`,
+                                                                          workout_id,exercise_id,set_number);
+    const test = await db.getAllSync('SELECT * FROM exercises');
+    console.log(test);
+    return result.lastInsertRowId as number;
 }
 
 export const getAllWorkouts= async () => {
@@ -48,18 +50,15 @@ export const getWorkoutbyId = async (id:number) => {
 
 export const getWorkoutExercises = async (id:number) => {
     const workoutExercises = await db.getAllAsync(`SELECT * FROM exercises WHERE workout_id=${id}`);
-    
     const detailedExercises = await Promise.all(
         workoutExercises.map(async (value)=>{
             //@ts-ignore
             const exerciseInfo = await getExercise(value?.exercise_id);
             //@ts-ignore
-            return {id: value.id , set_number: value.set_number, name: exerciseInfo?.name}
+            return {id: value.id, name: exerciseInfo?.name , set_number: value.set_number}
         })
     )
-    
-    console.log(detailedExercises);
-    return detailedExercises;
+    return detailedExercises as ExerciseTemplate[];
     
 }
 

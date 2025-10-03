@@ -12,9 +12,7 @@ const WorkoutInformation = () => {
   const { id } = useLocalSearchParams();
   const {workouts, loading} = useWorkoutStore();
 
-  const workout = workouts.find((w) => {
-    return w.id === Number(id);
-  });
+  const workout = workouts.find((w) => w.id === Number(id));
 
   if(loading){
     return(<Text>Loading Workouts</Text>)
@@ -26,7 +24,10 @@ const WorkoutInformation = () => {
   const router = useRouter();
   const [name, setName] = useState('');
   useEffect(()=>{
-  },[])
+    if (workout){
+      useWorkoutStore.getState().loadExercises(workout.id)
+    }
+  },[workout?.id])
 
 
   return (
@@ -40,16 +41,21 @@ const WorkoutInformation = () => {
 
             
              </View>
-             {/*<FlatList data={exercises}
-                       renderItem={({item})=>(<NameCardExec id={item.id} name={item.name}/>)}
+             <FlatList data={workout.exercises}
+                       renderItem={({item})=>(<View><Text className='text-white'>{item.name}</Text></View>)}
                        keyExtractor={(item) =>item.id.toString()}
                        className="mt-6 w-full"
-                       contentContainerStyle={{justifyContent:'space-between'}}/>*/}
+                       contentContainerStyle={{justifyContent:'space-between'}}/>
 
              <View>
               <CustomButton buttonText='Add Exercise' onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
                                                                                 params: {workout_id:workout?.id}})}/>
              </View>
+             <View className=''>
+                                         
+                                         <CustomButton buttonText='Back' 
+                                                                onPress={()=>router.replace('/(tabs)/workouts')}/>
+            </View>
              
 
          </SafeAreaView>
