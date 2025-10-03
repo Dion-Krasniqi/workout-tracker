@@ -10,40 +10,10 @@ interface DetailedExercise {
     set_number: number;
 }
 
-interface Session {
-    id: number;
-    workout_id: number;
-    time_started: number;
-    time_ended: number;
-}
-
-interface SessionSet {
-    set_id: number;
-    session_exercise_id: number;
-    set_number: number;
-    weight: number;
-    reps: number;
 
 
-}
 
 
-type SetData = {
-    set: number;
-    weight: number;
-    reps: number;
-
-}
-
-
-type SessionState = {
-    workoutId: number | null;
-    sessionId: number | null;
-    exercises: ExerciseData[];
-    startSession: (workoutId:number)=>void;
-    endSession: ()=>void;
-    reset: ()=>void;
-}
 
 // Fine grained
 
@@ -59,3 +29,28 @@ export interface WorkoutTemplate {
     exercises: ExerciseTemplate[]
 }
 
+export interface SessionSet {
+    id:number;
+    session_exercise_id:number;
+    set_number:number;
+    weight:number;
+    reps:number;
+}
+
+export interface SessionExercise {
+    id:number;
+    session_id:number;
+    exercise_id:number;
+    name: string;
+    sets: SessionSet[];
+}
+
+export interface Session {
+    id:number;
+    workout_id:number;
+    start_time:number;
+    end_time?:number;
+    exercises: SessionExercise[];
+    active?:boolean;
+    
+}

@@ -30,6 +30,7 @@ export default function RootLayout() {
     <Stack.Screen name="exercise_add/[id]" options={{ headerShown: false}}/>
     <Stack.Screen name="workout/[id]" options={{ headerShown: false}}/>
     <Stack.Screen name="session/completed/[id]" options={{ headerShown: false}}/>
+    <Stack.Screen name="session/dummysesh" options={{ headerShown: false}}/>
 
     <Stack.Screen name='otherPages/exercise_creation' options={{headerShown:false}}/>
     <Stack.Screen name='otherPages/exercise_list' options={{headerShown:false}}/>

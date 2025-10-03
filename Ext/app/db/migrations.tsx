@@ -49,7 +49,7 @@ export const migrations = [
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         session_id INTEGER NOT NULL,
         exercise_id INTEGER NOT NULL,
-        FOREIGN KEY (exercise_id) REFERENCES exercises(id),
+        FOREIGN KEY (exercise_id) REFERENCES exercises_info(id),
         FOREIGN KEY (session_id) REFERENCES sessions(id)
         );
 

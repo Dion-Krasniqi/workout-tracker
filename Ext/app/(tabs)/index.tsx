@@ -6,6 +6,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getAllGroups, getAllSessions, getAllWorkoutTemplates, getExercise, getWorkoutbyId, startSession } from "../db/queries";
 import { NameCardSesh } from "@/Components/nameCard";
 import { useStore } from "@/state/stateStore";
+import { router } from "expo-router";
 
 
 
@@ -47,8 +48,12 @@ export default function Index() {
         </View>
         <View className='mt-5'>
           <Text className="text-white self-center">Session Count Test:{count}</Text>
-          <CustomButton onPress={increment} buttonText='Start Session' />
+          <CustomButton onPress={increment} buttonText='Increment' />
         </View>
+        <View className='mt-5'>
+          <CustomButton onPress={()=>router.push('/session/dummysesh')} buttonText='Start Session' />
+        </View>
+        
         {/*<FlatList data={sessions}
                   renderItem={({item})=>(<NameCardSesh {...item} />)}
                   keyExtractor={(item) =>item.id.toString()}

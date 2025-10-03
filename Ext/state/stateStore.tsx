@@ -1,5 +1,5 @@
 import { addExerciseToWorkout, createCustomWorkout, getAllExercises, getWorkoutExercises, loadWorkouts } from '@/app/db/queries';
-import { ExerciseTemplate, WorkoutTemplate } from '@/interfaces/interfaces';
+import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { create } from 'zustand';
 
 
@@ -58,6 +58,39 @@ export const useWorkoutStore = create<WorkoutStore>((set)=>({
     },
 }));
 
-interface ExerciseStore {
+interface SessionStore {
+    activeSession: Session | null;
+    startSession: (workout_id:number)=>void;
+    endSession: ()=>void;
 
+    //loadExercises: (exercise_id:number)=>Promise<void>;
+    //loadSets: ()=>void;
+
+    //addExerciseToSession: (exercise_id:number, name:string)=>void;
+    //addSetToSession: (exercise_id:number, weight:number, reps:number)=>void;
+    //updateSet: (set_id:number, weight:number, reps:number)=>void;
+    //removeSet: (set_id:number)=>void;
 }
+
+export const useSessionStore = create<SessionStore>((set, get)=>({
+    activeSession: null,
+
+    startSession: (workout_id)=>{
+        const newSession: Session = {
+            id: Date.now(),
+            workout_id: workout_id,
+            start_time:Date.now(),
+            exercises: [],
+        };
+        set({activeSession:newSession});
+    },
+
+    endSession: ()=>{
+        const { activeSession } = get();
+        if(!activeSession) return;
+
+        set({activeSession:{...activeSession,end_time:Date.now(),}});
+        //put it inside db
+    }
+
+}))
