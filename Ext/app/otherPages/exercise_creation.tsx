@@ -74,7 +74,7 @@ const Exercise_creation = () => {
 
           </DropdownMenu>
         </View>
-        <View className='mt-64'>
+        <View className='mt-72'>
           {exerciseName.length>0 && <CustomButton onPress={()=>pressButton()} buttonText='Create Exercise' />}
         </View>
         

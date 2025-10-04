@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { getSetById } from '@/app/db/queries';
 import { useLocalSearchParams } from 'expo-router';
 
-export const setCard = () => {
+export const SetCard = () => {
   const {id} = useLocalSearchParams();
   const [setRef, setSetRef] = useState<SessionSet | null>(null);
   const [weight, setWeight] = useState(0);
