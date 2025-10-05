@@ -1,16 +1,24 @@
 import { View, Text, TextInput, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CustomButton from '@/Components/button';
 import { createCustomExercise } from '../db/queries';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { DropdownMenu, MenuOption } from '@/Components/dropDown';
 import { ExerciseView, SetView } from '@/Components/sessionComponents';
+import { useSessionStore } from '@/state/stateStore';
 
 const Exercise_creation = () => {
 
   const router = useRouter();
+  const workout_id = 8;
+  const beginSession = useSessionStore((state)=>state.startSession);
+  const e = useSessionStore((state)=>state.loadExercises);
 
+  useEffect(()=>{
+    beginSession(workout_id);
+    e(workout_id);
+  },[workout_id]);
 
 
   return (

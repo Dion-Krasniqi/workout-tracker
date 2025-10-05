@@ -1,5 +1,6 @@
 import { addExerciseToWorkout, createCustomWorkout, getAllExercises, getWorkoutExercises, loadWorkouts } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
+import { act } from 'react';
 import { create } from 'zustand';
 
 
@@ -62,8 +63,7 @@ interface SessionStore {
     activeSession: Session | null;
     startSession: (workout_id:number)=>void;
     endSession: ()=>void;
-
-    //loadExercises: (exercise_id:number)=>Promise<void>;
+    loadExercisesWithSets: (workout_id:number)=>Promise<void>;
     //loadSets: ()=>void;
 
     //addExerciseToSession: (exercise_id:number, name:string)=>void;
@@ -91,6 +91,20 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
 
         set({activeSession:{...activeSession,end_time:Date.now(),}});
         //put it inside db
+    },
+    loadExercisesWithSets: async(workout_id:number)=>{
+        const workoutStore = useWorkoutStore.getState();
+        const workout = workoutStore.workouts.find((w)=>w.id==workout_id)
+        if (!workout){
+            return;
+        }
+        await useWorkoutStore.getState().loadExercises(workout_id)
+        console.log(workout?.exercises)
+        const { activeSession } = get();
+        if (activeSession) {
+            //
+        }
+       
     }
 
 }))
