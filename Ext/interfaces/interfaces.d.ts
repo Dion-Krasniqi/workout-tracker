@@ -19,6 +19,7 @@ interface DetailedExercise {
 
 export interface ExerciseTemplate {
     id:number;
+    exercise_id:number;
     name:string;
     set_number: number;
 }

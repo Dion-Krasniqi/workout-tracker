@@ -41,7 +41,7 @@ export const useWorkoutStore = create<WorkoutStore>((set)=>({
     },
     addExerciseToWorkout: async(workout_id,exercise_id,exercise_name,set_number)=>{
         const id = await addExerciseToWorkout(workout_id, exercise_id, set_number)
-        const newExercise = {id:id, name:exercise_name, set_number:set_number}
+        const newExercise = {id:id, exercise_id:exercise_id, name:exercise_name, set_number:set_number}
         set((state)=>({
             workouts: state.workouts.map((w)=>w.id==workout_id ? 
                                               {...w, exercises:[...w.exercises,newExercise]} :
@@ -101,9 +101,34 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         await useWorkoutStore.getState().loadExercises(workout_id)
         console.log(workout?.exercises)
         const { activeSession } = get();
-        if (activeSession) {
-            //
-        }
+        if (!activeSession) return;
+
+        const sessionExercises = workout.exercises.map((ex,index)=>{
+            const SessionExerciseId = Date.now() + index;
+
+            const sets = Array.from({length:ex.set_number}, (_, i)=>({
+                id: SessionExerciseId + i + 1,
+                session_exercise_id: SessionExerciseId,
+                set_number: i + 1,
+                weight: 0,
+                reps: 0,
+
+
+            }));
+
+            return {
+                id: SessionExerciseId,
+                session_id: activeSession.id,
+                exercise_id: ex.exercise_id,
+                name: ex.name,
+                sets: sets,
+
+            };
+        });
+
+        set({activeSession:{...activeSession,exercises: sessionExercises},});
+
+        console.log(sessionExercises);
        
     }
 
