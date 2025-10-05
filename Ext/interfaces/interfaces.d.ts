@@ -51,6 +51,7 @@ export interface SessionExercise {
 
 export interface Session {
     id:number;
+    session_name:string;
     workout_id:number;
     start_time:number;
     end_time?:number;

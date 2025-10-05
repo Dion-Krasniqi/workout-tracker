@@ -1,6 +1,7 @@
 import { addExerciseToWorkout, createCustomWorkout, getAllExercises, getWorkoutExercises, loadWorkouts } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { act } from 'react';
+import { Alert } from 'react-native';
 import { create } from 'zustand';
 
 
@@ -77,13 +78,24 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
     // starts session with a dummy id and sets start_time to when called and defaults exercises object to empty array
     // then assigns session object to activeSession
     startSession: (workout_id)=>{
+        const { activeSession } = get();
+        // if yes nulls out session, then new start session proceeds as usual
+        if(activeSession){
+            Alert.alert('Session already active','Do you want to start a new workout?',
+            [{text: 'Cancel',onPress: () => {},style: 'cancel',},
+             { text: 'YES', onPress: () => ({activeSession:null}) },],
+             { cancelable: false });
+
+        }
         const newSession: Session = {
             id: Date.now(),
+            session_name: `Session ${Date.now()}`,
             workout_id: workout_id,
             start_time:Date.now(),
             exercises: [],
         };
         set({activeSession:newSession});
+        console.log(newSession);
         return newSession;
     },
 
@@ -107,7 +119,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             return;
         }
         await useWorkoutStore.getState().loadExercises(workout_id)
-        console.log(workout?.exercises)
+        console.log(workout?.name)
         const { activeSession } = get();
         if (!activeSession) return;
 
@@ -134,7 +146,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             };
         });
 
-        set({activeSession:{...activeSession,exercises: sessionExercises},loading:false});
+        set({activeSession:{...activeSession,session_name:workout.name,exercises: sessionExercises},loading:false});
         
        
     },

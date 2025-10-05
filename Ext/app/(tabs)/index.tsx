@@ -3,9 +3,9 @@ import Search from "@/Components/search";
 import { useEffect, useState } from "react";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { getAllGroups, getAllSessions, getAllWorkoutTemplates, getExercise, getWorkoutbyId, startSession } from "../db/queries";
+import { getAllGroups, getAllSessions,  getExercise, getWorkoutbyId, startSession } from "../db/queries";
 import { NameCardSesh } from "@/Components/nameCard";
-import { useStore } from "@/state/stateStore";
+import { useSessionStore, useStore } from "@/state/stateStore";
 import { router } from "expo-router";
 
 
@@ -14,25 +14,11 @@ export default function Index() {
   
 
   const [searchQuery, setSearchQuery] = useState('');
-  //const [sessions, setSessions] = useState<(Session & TwoRows)[]>([]);
   const count = useStore((state)=>state.count);
   const increment = useStore((state)=>state.increment);
+  const {activeSession} = useSessionStore();
 
-  useEffect(() => {
-      async function setup() {
-        const result = await getAllSessions();
-        const sessionMap = await Promise.all(
-          result.map(async (session)=>{
-            const workout = await getWorkoutbyId(session.workout_id);
-            return {...session, ...workout};
-          })
-        )
-        //@ts-ignore
-        setSessions(sessionMap);
-        getAllGroups();
-      }
-      setup();
-    }, []);
+  
   
   
 
@@ -50,9 +36,19 @@ export default function Index() {
           <Text className="text-white self-center">Session Count Test:{count}</Text>
           <CustomButton onPress={increment} buttonText='Increment' />
         </View>
-        <View className='mt-5'>
-          <CustomButton onPress={()=>router.push('/session/dummysesh')} buttonText='Start Session' />
-        </View>
+        {activeSession && <View className='mt-5'>
+          <CustomButton onPress={()=>router.push('/session/dummysesh')} buttonText={activeSession?.session_name} />
+        </View>}
+        <FlatList data={[]}
+                  renderItem={(item)=>(<Text className="text-white">1</Text>)}
+                  //keyExtractor={({item})=>item.id.toString()}
+                  contentContainerStyle={{alignItems:'center'}}
+                  ListHeaderComponent={(<View>
+                                        <Text className='text-white font-semibold mt-5'>Previous Sessions</Text>
+                                       </View>)}
+                  ListEmptyComponent={(<View>
+                                        <Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>
+                                       </View>)}/>
         
         {/*<FlatList data={sessions}
                   renderItem={({item})=>(<NameCardSesh {...item} />)}

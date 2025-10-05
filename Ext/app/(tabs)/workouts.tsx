@@ -5,18 +5,23 @@ import CustomButton from '@/Components/button'
 //import { createCustomExercise, createCustomWorkout, getAllWorkoutTemplates } from '../db/queries'
 import { Link, useRouter } from 'expo-router'
 import { NameCardWork } from '@/Components/nameCard'
-import { useWorkoutStore } from '@/state/stateStore'
+import { useSessionStore, useWorkoutStore } from '@/state/stateStore'
 
 const Workouts = () => {
   
   const workouts = useWorkoutStore((state)=>state.workouts)
   const router = useRouter();
+  const beginSession = useSessionStore((state)=>state.startSession);
+  const loadExercises = useSessionStore((state)=>state.loadExercisesWithSets);
   
 
   useEffect(() => {
     
   }, []);
-  
+  const startSession = async (workout_id:number)=>{
+    const sesh = await beginSession(workout_id);
+    await loadExercises(workout_id, sesh.id)
+  }
   
   return (
     <SafeAreaProvider>
@@ -38,7 +43,7 @@ const Workouts = () => {
         <>
           <FlatList data={workouts}
             renderItem={({item})=>(<Link href={`/workout/${item.id}`} asChild>
-                                    <TouchableOpacity className='w-[90%] mt-2 py-2 bg-light-100 rounded-md items-center self-center' >
+                                    <TouchableOpacity className='w-[90%] mt-2 py-2 bg-light-100 rounded-md items-center self-center' onLongPress={async()=>{console.log('start');await startSession(item.id);}}>
                                       <Text className='text-white text-2xl font-md'>{item.name}</Text>
                                     </TouchableOpacity>
                                   </Link>)}
