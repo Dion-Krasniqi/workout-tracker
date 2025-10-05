@@ -1,10 +1,18 @@
 import { View, Text, TextInput, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SessionExercise, SessionSet } from '@/interfaces/interfaces';
+import { useSessionStore } from '@/state/stateStore';
 
 export const SetView = ({set}:{set:SessionSet}) => {
   const [weight, setWeight] = useState(0);
   const [reps, setReps] = useState(0);
+
+  const updateSet = useSessionStore((state)=>state.updateSet)
+
+  useEffect(()=>{
+    //calls useSessionStore updateSet when weight or reps changes in the text input
+    updateSet(set.id,weight,reps);
+  },[weight,reps])
 
   return (
       

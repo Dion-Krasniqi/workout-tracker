@@ -2,10 +2,11 @@ import { View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams } from 'expo-router';
 import { getExercise } from '../db/queries';
+import { ExerciseInfo } from '@/interfaces/interfaces';
 
 const ExerciseInformation = () => {
   const {id} = useLocalSearchParams();
-  const [exercise, setExercise] = useState<TwoRows | null>(null);
+  const [exercise, setExercise] = useState<ExerciseInfo | null>(null);
   useEffect(()=>{
     async function setup(){
       //@ts-ignore

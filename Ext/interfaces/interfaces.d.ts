@@ -16,7 +16,10 @@ interface DetailedExercise {
 
 
 // Fine grained
-
+export interface ExerciseInfo {
+    id: number;
+    name: string;
+}
 export interface ExerciseTemplate {
     id:number;
     exercise_id:number;

@@ -14,16 +14,23 @@ const Exercise_creation = () => {
   const workout_id = 1;
   const beginSession = useSessionStore((state)=>state.startSession);
   const loadExercises = useSessionStore((state)=>state.loadExercisesWithSets);
-  const currentSession = useSessionStore((state)=>state.activeSession)
+  const {activeSession, loading} = useSessionStore();
   
+ 
 
 
   useEffect(()=>{
-    beginSession(workout_id);
-    loadExercises(workout_id);
+    const session = beginSession(workout_id);
+    loadExercises(workout_id, session.id);
   },[workout_id]);
+
+  if(loading){
+    return (<View><Text>Session Loading...</Text></View>)
+  }
+
+
   //@ts-ignore
-  const time = new Date(currentSession?.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  const time = new Date(activeSession?.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   return (
     <SafeAreaProvider>
       <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}> 
@@ -42,7 +49,7 @@ const Exercise_creation = () => {
 
       <View className="mx-2">
 
-       <FlatList data={currentSession?.exercises}
+       <FlatList data={activeSession?.exercises}
                  keyExtractor={(item)=>item.id.toString()}
                  renderItem={({item})=>(<View className='rounded-lg bg-dark-200 mb-2'>
                                           <ExerciseView exercise={item}/>

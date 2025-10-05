@@ -59,22 +59,23 @@ export const useWorkoutStore = create<WorkoutStore>((set)=>({
     },
 }));
 
+
+
 interface SessionStore {
     activeSession: Session | null;
-    startSession: (workout_id:number)=>void;
+    loading: boolean;
+    startSession: (workout_id:number)=>Session;
     endSession: ()=>void;
-    loadExercisesWithSets: (workout_id:number)=>Promise<void>;
-    //loadSets: ()=>void;
-
-    //addExerciseToSession: (exercise_id:number, name:string)=>void;
-    //addSetToSession: (exercise_id:number, weight:number, reps:number)=>void;
-    //updateSet: (set_id:number, weight:number, reps:number)=>void;
+    loadExercisesWithSets: (workout_id:number, session_id:number)=>Promise<void>;
+    updateSet: (set_id:number, weight:number, reps:number)=>void;
     //removeSet: (set_id:number)=>void;
 }
 
 export const useSessionStore = create<SessionStore>((set, get)=>({
     activeSession: null,
-
+    loading: true,
+    // starts session with a dummy id and sets start_time to when called and defaults exercises object to empty array
+    // then assigns session object to activeSession
     startSession: (workout_id)=>{
         const newSession: Session = {
             id: Date.now(),
@@ -83,6 +84,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             exercises: [],
         };
         set({activeSession:newSession});
+        return newSession;
     },
 
     endSession: ()=>{
@@ -92,8 +94,14 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         set({activeSession:{...activeSession,end_time:Date.now(),}});
         //put it inside db
     },
-    loadExercisesWithSets: async(workout_id:number)=>{
+    // loads exercises using WorkoutStore and workout id, then creates the session exercise instances and sets arrays
+    // of exercises based on set_number set at the exercise table
+    loadExercisesWithSets: async(workout_id, session_id)=>{
         const workoutStore = useWorkoutStore.getState();
+        // not really working
+        if (workoutStore.workouts.length == 0){
+            await workoutStore.loadWorkouts();
+        }
         const workout = workoutStore.workouts.find((w)=>w.id==workout_id)
         if (!workout){
             return;
@@ -118,7 +126,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
 
             return {
                 id: SessionExerciseId,
-                session_id: activeSession.id,
+                session_id,
                 exercise_id: ex.exercise_id,
                 name: ex.name,
                 sets: sets,
@@ -126,10 +134,25 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             };
         });
 
-        set({activeSession:{...activeSession,exercises: sessionExercises},});
-
-        console.log(sessionExercises);
+        set({activeSession:{...activeSession,exercises: sessionExercises},loading:false});
+        
        
-    }
+    },
+    // updates set object and reloads exercise array
+    updateSet: async(set_id, weight, reps)=>{
+
+        set((state)=>{
+            if (!state.activeSession) return state;
+
+            const updatedExercises = state.activeSession.exercises.map((ex)=>({
+                ...ex,
+                sets: ex.sets.map((s)=>s.id==set_id ? {...s, weight, reps} : s),
+            }));
+            return {...state, activeSession: {...state.activeSession, exercises: updatedExercises},};
+
+
+        });
+
+    },
 
 }))

@@ -5,11 +5,12 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { addExerciseToWorkout, getExercise } from '../db/queries';
 import CustomButton from '@/Components/button';
 import { useWorkoutStore } from '@/state/stateStore';
+import { ExerciseInfo } from '@/interfaces/interfaces';
 
 const ExerciseAddPage = () => {
   const router = useRouter();
   const {id,workout_id} = useLocalSearchParams();
-  const [exerciseRef, setExerciseRef] = useState<TwoRows | null>(null);
+  const [exerciseRef, setExerciseRef] = useState<ExerciseInfo | null>(null);
   const [sets, setSets] = useState(1);
 
   const addExerciseToWorkout = useWorkoutStore((state)=>state.addExerciseToWorkout);
@@ -52,7 +53,9 @@ const ExerciseAddPage = () => {
                                    rounded-md
                                    w-[70%]
                                    mb-4'/>
-            <CustomButton buttonText='Add Exercise' onPress={()=>{addExerciseToWorkout(Number(workout_id),exerciseRef?.id,exerciseRef?.name,sets);router.push(`/workout/${workout_id}`)}}/>
+            
+            <CustomButton buttonText='Add Exercise' onPress={()=>{//@ts-ignore
+              addExerciseToWorkout(Number(workout_id),exerciseRef?.id,exerciseRef?.name,sets);router.push(`/workout/${workout_id}`)}}/>
         </SafeAreaView>
     </SafeAreaProvider>
   )
