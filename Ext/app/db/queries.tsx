@@ -1,4 +1,4 @@
-import { ExerciseTemplate, WorkoutTemplate } from "@/interfaces/interfaces";
+import { ExerciseTemplate, Session, WorkoutTemplate } from "@/interfaces/interfaces";
 import db from "./db";
 
 
@@ -79,23 +79,8 @@ export const loadWorkouts = async (): Promise<WorkoutTemplate[]> => {
 
 
 //Session Related
-export const startSession = async (workout_name:string) => {
-    try {
-        const workoutInfo = await db.getFirstAsync(`SELECT * FROM workouts WHERE name='${workout_name}'`);
-        console.log(workoutInfo);
-        //@ts-ignore
-        const workout_id = workoutInfo.id;
-        const start = Date.now();
-        await db.runAsync(`INSERT INTO sessions (workout_id, time_started, time_ended) VALUES (${workout_id}, ${start}, 0);`);
-        console.log(await db.getAllAsync(`SELECT * FROM sessions`));
-    } catch (error) {
-        console.log('Couldnt find workout')
-    }
-    
-    
-    
-    
-}
+ 
+
 export const getSessionById = async (id:number) => {
     const sessionInfo = await db.getFirstAsync(`SELECT * FROM sessions WHERE id='${id}'`);
     return sessionInfo;
@@ -103,14 +88,20 @@ export const getSessionById = async (id:number) => {
 
 export const getAllSessions = async() => {
     const allRows = await db.getAllAsync<Session>('SELECT * FROM sessions');
-    return allRows;
-    
+    return allRows;   
+}
+export const createSession = async(id:number, workout_id:number, session_name:string, time_started:number, time_ended:number)=>{
+    const lastSession = await db.runAsync(`INSERT INTO exercises (id,workout_id,session_name,time_started,time_ended) VALUES (?,?,?,?,?)`,
+                                                                          [id,workout_id,session_name,time_started,time_ended]);
+    return lastSession;
 }
 
 
 // Set Related
 
-export const getSetById = async (id:number): Promise<SessionSet | null> => {
-    const setInfo = await db.getFirstAsync<SessionSet>(`SELECT * FROM session_sets WHERE id='${id}'`);
-    return setInfo;
+
+export const writeSet = async (exercise_id:number, session_id:number, set_number:number, weight:number, reps:number)=>{
+    await db.runAsync(`INSERT INTO exercises (exercise_id,session_id,set_number,weight,reps) VALUES (?,?,?,?,?)`,
+                                                                          [exercise_id,session_id,set_number,weight,reps]);
+
 }

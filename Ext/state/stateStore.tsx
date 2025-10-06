@@ -63,8 +63,10 @@ export const useWorkoutStore = create<WorkoutStore>((set)=>({
 
 
 interface SessionStore {
+    previousSessions: [];
     activeSession: Session | null;
     loading: boolean;
+    loadPreviousSession: ()=>void;
     startSession: (workout_id:number)=>Session;
     endSession: ()=>void;
     loadExercisesWithSets: (workout_id:number, session_id:number)=>Promise<void>;
@@ -73,8 +75,13 @@ interface SessionStore {
 }
 
 export const useSessionStore = create<SessionStore>((set, get)=>({
+    previousSessions: [],
     activeSession: null,
     loading: true,
+    //reads all entries in the sessions table 
+    loadPreviousSession: async()=>{
+
+    },
     // starts session with a dummy id and sets start_time to when called and defaults exercises object to empty array
     // then assigns session object to activeSession
     startSession: (workout_id)=>{
@@ -104,6 +111,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         if(!activeSession) return;
 
         set({activeSession:{...activeSession,end_time:Date.now(),}});
+
         //put it inside db
     },
     // loads exercises using WorkoutStore and workout id, then creates the session exercise instances and sets arrays

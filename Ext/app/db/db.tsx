@@ -10,6 +10,7 @@ export const runMigrations = async() =>{
         if(migration.id > user_version){
             db.execSync(migration.up);
             db.execSync(`PRAGMA user_version=${migration.id}`);
+            console.log('Migrated');
         }
     }
 

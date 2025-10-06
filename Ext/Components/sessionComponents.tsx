@@ -4,8 +4,8 @@ import { SessionExercise, SessionSet } from '@/interfaces/interfaces';
 import { useSessionStore } from '@/state/stateStore';
 
 export const SetView = ({set}:{set:SessionSet}) => {
-  const [weight, setWeight] = useState(0);
-  const [reps, setReps] = useState(0);
+  const [weight, setWeight] = useState(set.weight);
+  const [reps, setReps] = useState(set.reps);
 
   const updateSet = useSessionStore((state)=>state.updateSet)
 
@@ -21,7 +21,7 @@ export const SetView = ({set}:{set:SessionSet}) => {
         <View className='flex-row gap-5 justify-end'>
           <TextInput placeholder={(set.weight).toString()+' kg'}
                  keyboardType='numeric' 
-                 onChangeText={(text)=>setWeight(Number(text))}
+                 onChangeText={(text)=>{setWeight(Number(text));}}
                  placeholderTextColor={'darkgrey'}
                  scrollEnabled={false}
                  className='text-start px-2 text-white border-2 border-light-100 rounded-md h-[40] w-[40%]'/>

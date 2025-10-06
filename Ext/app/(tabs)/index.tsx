@@ -3,7 +3,6 @@ import Search from "@/Components/search";
 import { useEffect, useState } from "react";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { getAllGroups, getAllSessions,  getExercise, getWorkoutbyId, startSession } from "../db/queries";
 import { NameCardSesh } from "@/Components/nameCard";
 import { useSessionStore, useStore } from "@/state/stateStore";
 import { router } from "expo-router";
@@ -16,7 +15,7 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const count = useStore((state)=>state.count);
   const increment = useStore((state)=>state.increment);
-  const {activeSession} = useSessionStore();
+  const {activeSession, previousSessions} = useSessionStore();
 
   
   
@@ -43,9 +42,9 @@ export default function Index() {
                   renderItem={(item)=>(<Text className="text-white">1</Text>)}
                   //keyExtractor={({item})=>item.id.toString()}
                   contentContainerStyle={{alignItems:'center'}}
-                  ListHeaderComponent={(<View>
+                  ListHeaderComponent={previousSessions.length>0 ? (<View>
                                         <Text className='text-white font-semibold mt-5'>Previous Sessions</Text>
-                                       </View>)}
+                                       </View>):(<View></View>)}
                   ListEmptyComponent={(<View>
                                         <Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>
                                        </View>)}/>

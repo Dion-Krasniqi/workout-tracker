@@ -62,4 +62,28 @@ export const migrations = [
         FOREIGN KEY (session_exercises_id) REFERENCES session_exercises(id)
         );`,
     },
+    {id:2,
+     up:`
+        DROP TABLE IF EXISTS session_exercises;
+
+        DROP TABLE IF EXISTS session_sets;
+        CREATE TABLE IF NOT EXISTS session_sets(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        session_id INTEGER NOT NULL,
+        exercise_id INTEGER NOT NULL,
+        set_number INTEGER,
+        weight REAL,
+        reps INTEGER,
+        FOREIGN KEY (session_id) REFERENCES sessions(id),
+        FOREIGN KEY (exercise_id) REFERENCES exercises_info(id)
+        );
+
+        ALTER TABLE sessions add COLUMN session_name TEXT;
+
+
+
+
+     `
+
+    }
 ]

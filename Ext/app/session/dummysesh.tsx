@@ -19,7 +19,13 @@ const Exercise_creation = () => {
  
 
   
-  
+  useEffect(()=>{
+    //@ts-ignore
+    if (activeSession?.exercises.length<1){
+      //@ts-ignore
+      loadExercises(activeSession?.workout_id,activeSession?.id)
+    }
+  },[])
 
 
   //@ts-ignore
