@@ -90,9 +90,9 @@ export const getAllSessions = async() => {
     const allRows = await db.getAllAsync<Session>('SELECT * FROM sessions');
     return allRows;   
 }
-export const createSession = async(id:number, workout_id:number, session_name:string, time_started:number, time_ended:number)=>{
-    const lastSession = await db.runAsync(`INSERT INTO exercises (id,workout_id,session_name,time_started,time_ended) VALUES (?,?,?,?,?)`,
-                                                                          [id,workout_id,session_name,time_started,time_ended]);
+export const createSession = async(workout_id:number, session_name:string, time_started:number, time_ended:number)=>{
+    const lastSession = await db.runAsync(`INSERT INTO sessions (workout_id,session_name,time_started,time_ended) VALUES (?,?,?,?)`,
+                                                                          [workout_id,session_name,time_started,time_ended]);
     return lastSession;
 }
 
@@ -101,7 +101,7 @@ export const createSession = async(id:number, workout_id:number, session_name:st
 
 
 export const writeSet = async (exercise_id:number, session_id:number, set_number:number, weight:number, reps:number)=>{
-    await db.runAsync(`INSERT INTO exercises (exercise_id,session_id,set_number,weight,reps) VALUES (?,?,?,?,?)`,
+    await db.runAsync(`INSERT INTO session_sets (exercise_id,session_id,set_number,weight,reps) VALUES (?,?,?,?,?)`,
                                                                           [exercise_id,session_id,set_number,weight,reps]);
 
 }

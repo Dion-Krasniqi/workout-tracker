@@ -1,8 +1,10 @@
-import { View, Text, TextInput, FlatList } from 'react-native'
+import { View, Text, TextInput, FlatList, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { SessionExercise, SessionSet } from '@/interfaces/interfaces';
+import { Session, SessionExercise, SessionSet } from '@/interfaces/interfaces';
 import { useSessionStore } from '@/state/stateStore';
 
+
+// renders sets in exercises
 export const SetView = ({set}:{set:SessionSet}) => {
   const [weight, setWeight] = useState(set.weight);
   const [reps, setReps] = useState(set.reps);
@@ -37,6 +39,7 @@ export const SetView = ({set}:{set:SessionSet}) => {
   )
 }
 
+// renders exercise in sessions
 export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
 
 
@@ -56,4 +59,33 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
       </View>
     </View>
   )
+}
+
+
+// renders finished session
+export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
+  //@ts-ignore
+  let seconds = (sesh.end_time-sesh.start_time)/1000;
+  const hours = Math.floor(seconds / 3600);
+  seconds = seconds % 3600;
+  const minutes = Math.floor(seconds/60)
+  seconds = Math.round(seconds%60);
+  const date = new Date(sesh.start_time).toLocaleTimeString([], {day: '2-digit', month: '2-digit', year: '2-digit'})
+  
+  const screenWidth = Dimensions.get("window").width/1.1;
+
+  return (
+      <View className='flex rounded-md h-[60] justify-center px-2 bg-white mt-4' style={{width:screenWidth}}>
+        <View className='flex-row justify-between'>
+          <Text className='font-bold text-center'>{sesh.session_name}</Text>
+          <Text>{date}</Text>
+        </View>
+        <View className='items-start'>
+          
+          <Text className='font-bold text-center'>Duration: {hours}:{minutes}:{seconds}</Text>
+        </View>
+         
+      </View>
+              )
+
 }

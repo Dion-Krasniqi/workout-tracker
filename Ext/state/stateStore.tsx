@@ -1,4 +1,4 @@
-import { addExerciseToWorkout, createCustomWorkout, getAllExercises, getWorkoutExercises, loadWorkouts } from '@/app/db/queries';
+import { addExerciseToWorkout, createCustomWorkout, createSession, getAllExercises, getWorkoutExercises, loadWorkouts } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { act } from 'react';
 import { Alert } from 'react-native';
@@ -63,7 +63,7 @@ export const useWorkoutStore = create<WorkoutStore>((set)=>({
 
 
 interface SessionStore {
-    previousSessions: [];
+    previousSessions: Session[];
     activeSession: Session | null;
     loading: boolean;
     loadPreviousSession: ()=>void;
@@ -106,13 +106,24 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         return newSession;
     },
 
-    endSession: ()=>{
-        const { activeSession } = get();
+    endSession: async()=>{
+        const { activeSession, previousSessions } = get();
         if(!activeSession) return;
+        //add end time not directly to active sesh
+        const finishedSession = {...activeSession, end_time:Date.now()}
+        
+        //save to db
+        await createSession(finishedSession.workout_id,
+                                             finishedSession.session_name,
+                                             finishedSession.start_time,
+                                             finishedSession.end_time);
+        
+        //add to prev session array, nullify active session
+        set({previousSessions:[...previousSessions,finishedSession],
+            activeSession:null,
+        })
 
-        set({activeSession:{...activeSession,end_time:Date.now(),}});
-
-        //put it inside db
+        
     },
     // loads exercises using WorkoutStore and workout id, then creates the session exercise instances and sets arrays
     // of exercises based on set_number set at the exercise table

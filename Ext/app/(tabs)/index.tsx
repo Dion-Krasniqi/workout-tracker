@@ -6,6 +6,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { NameCardSesh } from "@/Components/nameCard";
 import { useSessionStore, useStore } from "@/state/stateStore";
 import { router } from "expo-router";
+import { FinishedSessionView } from "@/Components/sessionComponents";
 
 
 
@@ -38,8 +39,8 @@ export default function Index() {
         {activeSession && <View className='mt-5'>
           <CustomButton onPress={()=>router.push('/session/dummysesh')} buttonText={activeSession?.session_name} />
         </View>}
-        <FlatList data={[]}
-                  renderItem={(item)=>(<Text className="text-white">1</Text>)}
+        <FlatList data={previousSessions}
+                  renderItem={({item})=>(<FinishedSessionView sesh={item}/>)}
                   //keyExtractor={({item})=>item.id.toString()}
                   contentContainerStyle={{alignItems:'center'}}
                   ListHeaderComponent={previousSessions.length>0 ? (<View>

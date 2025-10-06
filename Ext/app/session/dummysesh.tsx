@@ -39,7 +39,7 @@ const Exercise_creation = () => {
             <View className='flex-row justify-between mb-5 items-center'>
                 <Text className='text-light-100'>Started at {time}</Text>
                 {/*<Text className='text-light-100'>Ended at 01:30</Text>*/}
-                <CustomButton buttonText='Finish' onPress={()=>{console.log('Workout Finished')}}/>
+                <CustomButton buttonText='Finish' onPress={()=>{endSession();router.push('/(tabs)')}}/>
             </View>
             <View className=' rounded-md h-[50] justify-center px-2 bg-white'>
                 <Text className='font-bold text-center'>{activeSession?.session_name}</Text>
