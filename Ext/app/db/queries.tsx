@@ -93,9 +93,10 @@ export const getSessionById = async (id:number) => {
 }
 
 export const getAllSessions = async():Promise<Session[]> => {
-    const allRows = await db.getAllAsync<Session>('SELECT * FROM sessions');
+    const allRows = await db.getAllAsync<Session>(`SELECT * 
+                                                  FROM sessions`);
     console.log(allRows);
-    return allRows as Session[];   
+    return allRows;   
 }
 export const createSession = async(workout_id:number, session_name:string, time_started:number, time_ended:number): Promise<number>=>{
     const lastSession = await db.runAsync(`INSERT INTO sessions (workout_id,session_name,time_started,time_ended) VALUES (?,?,?,?)`,

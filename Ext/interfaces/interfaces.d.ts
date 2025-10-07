@@ -53,8 +53,8 @@ export interface Session {
     id:number;
     session_name:string;
     workout_id:number;
-    start_time:number;
-    end_time?:number;
+    time_started:number;
+    time_ended?:number;
     exercises: SessionExercise[];
     active?:boolean;
     

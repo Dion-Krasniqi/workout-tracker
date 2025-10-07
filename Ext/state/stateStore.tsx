@@ -102,7 +102,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             id: Date.now(),
             session_name: `Session ${Date.now()}`,
             workout_id: workout_id,
-            start_time:Date.now(),
+            time_started:Date.now(),
             exercises: [],
         };
         set({activeSession:newSession});
@@ -114,13 +114,13 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         const { activeSession, previousSessions } = get();
         if(!activeSession) return;
         //add end time not directly to active sesh
-        const finishedSession = {...activeSession, end_time:Date.now()}
+        const finishedSession = {...activeSession, time_ended:Date.now()}
         
         //save to db
         const actual_id = await createSession(finishedSession.workout_id,
                                              finishedSession.session_name,
-                                             finishedSession.start_time,
-                                             finishedSession.end_time);
+                                             finishedSession.time_started,
+                                             finishedSession.time_ended);
         
         //add to prev session array, nullify active session
         activeSession.exercises.forEach((ex)=>{

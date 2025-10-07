@@ -29,7 +29,7 @@ const Exercise_creation = () => {
 
 
   //@ts-ignore
-  const time = new Date(activeSession?.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  const time = new Date(activeSession?.time_started).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   return (
     <SafeAreaProvider>
       <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}> 

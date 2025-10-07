@@ -65,12 +65,12 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
 // renders finished session
 export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
   //@ts-ignore
-  let seconds = (sesh.end_time-sesh.start_time)/1000;
+  let seconds = (sesh.time_ended-sesh.time_started)/1000;
   const hours = Math.floor(seconds / 3600);
   seconds = seconds % 3600;
   const minutes = Math.floor(seconds/60)
   seconds = Math.round(seconds%60);
-  const date = new Date(sesh.start_time).toLocaleTimeString([], {day: '2-digit', month: '2-digit', year: '2-digit'})
+  const date = new Date(sesh.time_started).toLocaleTimeString([], {day: '2-digit', month: '2-digit', year: '2-digit'})
   
   const screenWidth = Dimensions.get("window").width/1.1;
 

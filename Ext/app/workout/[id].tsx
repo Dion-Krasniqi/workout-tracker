@@ -22,27 +22,30 @@ const WorkoutInformation = () => {
   }
   //const [exercises, setExercises] = useState<DetailedExercise[]>([]);
   const router = useRouter();
-  const [name, setName] = useState('');
+  
   useEffect(()=>{
     if (workout){
       useWorkoutStore.getState().loadExercises(workout.id)
     }
   },[workout?.id])
 
+  const [name, setName] = useState(workout.name);
 
   return (
     <SafeAreaProvider>
          <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}}> 
             <View className=" items-center mt-10 w-[80%]">
-                <TextInput placeholder='Enter Workout Name' 
-                   value={workout?.name}
+                <TextInput placeholder={name} 
+                   onChangeText={(text)=>setName(text)}
                    placeholderTextColor={'darkgrey'}
                    className='text-center text-light-100 bg-white rounded-md px-4 w-full mb-4'/>
 
             
              </View>
              <FlatList data={workout.exercises}
-                       renderItem={({item})=>(<View><Text className='text-white'>{item.name}</Text></View>)}
+                       renderItem={({item})=>(<View className='items-center'>
+                                                <Text className='text-white'>{item.set_number} x {item.name}</Text>
+                                              </View>)}
                        keyExtractor={(item) =>item.id.toString()}
                        className="mt-6 w-full"
                        contentContainerStyle={{justifyContent:'space-between'}}/>
@@ -51,7 +54,7 @@ const WorkoutInformation = () => {
               <CustomButton buttonText='Add Exercise' onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
                                                                                 params: {workout_id:workout?.id}})}/>
              </View>
-             <View className=''>
+             <View className='mt-8'>
                                          
                                          <CustomButton buttonText='Back' 
                                                                 onPress={()=>router.replace('/(tabs)/workouts')}/>

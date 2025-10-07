@@ -28,8 +28,8 @@ export default function Index() {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView className='bg-dark-100' style={{flex: 1}}> 
-      <ScrollView>
+      <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}> 
+      <ScrollView className="flex:1">
         <View className="mx-2 items-center mt-10">
         <Search value={searchQuery}
                 onChangeText={(text: string) => setSearchQuery(text)}/>
@@ -37,22 +37,20 @@ export default function Index() {
         
         </View>
         <View className='mt-5'>
-          <Text className="text-white self-center">Session Count Test:{count}</Text>
-          <CustomButton onPress={increment} buttonText='Increment' />
-        </View>
-        {activeSession && <View className='mt-5'>
+          {activeSession && <View className='mt-5'>
           <CustomButton onPress={()=>router.push('/session/dummysesh')} buttonText={activeSession?.session_name} />
         </View>}
+        </View>
+        
         <FlatList data={previousSessions}
                   renderItem={({item})=>(<FinishedSessionView sesh={item}/>)}
                   //keyExtractor={({item})=>item.id.toString()}
-                  contentContainerStyle={{alignItems:'center'}}
+                  contentContainerStyle={{alignItems:'center',marginBottom:120}}
                   ListHeaderComponent={previousSessions.length>0 ? (<View>
                                         <Text className='text-white font-semibold mt-5'>Previous Sessions</Text>
                                        </View>):(<View></View>)}
-                  ListEmptyComponent={(<View>
-                                        <Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>
-                                       </View>)}/>
+                  ListEmptyComponent={<Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>
+                                       }/>
         
         {/*<FlatList data={sessions}
                   renderItem={({item})=>(<NameCardSesh {...item} />)}
