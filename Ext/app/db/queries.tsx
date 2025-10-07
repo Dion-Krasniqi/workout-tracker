@@ -49,7 +49,7 @@ export const getWorkoutbyId = async (id:number) => {
 }
 
 export const getWorkoutExercises = async (id:number) => {
-    const workoutExercises = await db.getAllAsync(`SELECT * FROM exercises WHERE workout_id=${id}`);
+    {/*const workoutExercises = await db.getAllAsync(`SELECT * FROM exercises WHERE workout_id=${id}`);
     const detailedExercises = await Promise.all(
         workoutExercises.map(async (value)=>{
             //@ts-ignore
@@ -58,7 +58,13 @@ export const getWorkoutExercises = async (id:number) => {
             return {id: value.id, name: exerciseInfo?.name , set_number: value.set_number}
         })
     )
-    return detailedExercises as ExerciseTemplate[];
+    return detailedExercises as ExerciseTemplate[];*/}
+    const result = db.getAllSync(`
+        SELECT ex.id, ex.exercise_id, ef.name, ex.set_number 
+        FROM exercises ex 
+        JOIN exercises_info ef ON ex.exercise_id = ef.id 
+        WHERE ex.workout_id = ?;`, [id]);
+    return result
     
 }
 
@@ -90,10 +96,10 @@ export const getAllSessions = async() => {
     const allRows = await db.getAllAsync<Session>('SELECT * FROM sessions');
     return allRows;   
 }
-export const createSession = async(workout_id:number, session_name:string, time_started:number, time_ended:number)=>{
+export const createSession = async(workout_id:number, session_name:string, time_started:number, time_ended:number): Promise<number>=>{
     const lastSession = await db.runAsync(`INSERT INTO sessions (workout_id,session_name,time_started,time_ended) VALUES (?,?,?,?)`,
                                                                           [workout_id,session_name,time_started,time_ended]);
-    return lastSession;
+    return lastSession.lastInsertRowId as number;
 }
 
 
@@ -104,4 +110,8 @@ export const writeSet = async (exercise_id:number, session_id:number, set_number
     await db.runAsync(`INSERT INTO session_sets (exercise_id,session_id,set_number,weight,reps) VALUES (?,?,?,?,?)`,
                                                                           [exercise_id,session_id,set_number,weight,reps]);
 
+}
+export const getAllSets = async() => {
+    const allRows = await db.getAllAsync('SELECT * FROM session_sets');
+    console.log(allRows);   
 }

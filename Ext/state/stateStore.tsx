@@ -1,4 +1,4 @@
-import { addExerciseToWorkout, createCustomWorkout, createSession, getAllExercises, getWorkoutExercises, loadWorkouts } from '@/app/db/queries';
+import { addExerciseToWorkout, createCustomWorkout, createSession, getAllExercises, getAllSets, getWorkoutExercises, loadWorkouts, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { act } from 'react';
 import { Alert } from 'react-native';
@@ -113,12 +113,19 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         const finishedSession = {...activeSession, end_time:Date.now()}
         
         //save to db
-        await createSession(finishedSession.workout_id,
+        const actual_id = await createSession(finishedSession.workout_id,
                                              finishedSession.session_name,
                                              finishedSession.start_time,
                                              finishedSession.end_time);
         
         //add to prev session array, nullify active session
+        activeSession.exercises.forEach((ex)=>{
+            ex.sets.forEach(async(set)=>{
+                console.log(ex.name);
+                await writeSet(ex.exercise_id,actual_id,set.set_number,set.weight,set.reps);
+                await getAllSets();
+            })
+        })
         set({previousSessions:[...previousSessions,finishedSession],
             activeSession:null,
         })
