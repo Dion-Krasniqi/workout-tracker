@@ -1,16 +1,16 @@
 import { View, Text, TextInput, FlatList, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { Session, SessionExercise, SessionSet } from '@/interfaces/interfaces';
+import { Session, SessionExercise, SessionSet} from '@/interfaces/interfaces';
 import { useSessionStore } from '@/state/stateStore';
+import { getSetData } from '@/app/db/queries';
 
 
 // renders sets in exercises
 export const SetView = ({set}:{set:SessionSet}) => {
   const [weight, setWeight] = useState(set.weight);
   const [reps, setReps] = useState(set.reps);
-
+  console.log(weight,reps);
   const updateSet = useSessionStore((state)=>state.updateSet)
-
   useEffect(()=>{
     //calls useSessionStore updateSet when weight or reps changes in the text input
     updateSet(set.id,weight,reps);

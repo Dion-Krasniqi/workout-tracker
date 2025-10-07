@@ -1,14 +1,14 @@
-import { ExerciseTemplate, Session, WorkoutTemplate } from "@/interfaces/interfaces";
+import { ExerciseTemplate, Session, SetData, WorkoutTemplate } from "@/interfaces/interfaces";
 import db from "./db";
 
 
 //Exercise Related
 export const getAllGroups = async () => {
-    const allRows = await db.getAllAsync<TwoRows>('SELECT * FROM muscle_groups');
+    const allRows = await db.getAllAsync('SELECT * FROM muscle_groups');
     console.log(allRows);
 }
 export const getAllExercises = async () => {
-    const allRows = await db.getAllAsync<TwoRows>('SELECT * FROM exercises_info');
+    const allRows = await db.getAllAsync('SELECT * FROM exercises_info');
     return allRows;
 
 }
@@ -18,7 +18,7 @@ export const createCustomExercise = async (exercise_name:string, muscle_group_id
 }
 
 export const getExercise = async (id:number) => {
-    const exerciseInfo = await db.getFirstAsync<TwoRows>(`SELECT * FROM exercises_info WHERE id='${id}'`);
+    const exerciseInfo = await db.getFirstAsync(`SELECT * FROM exercises_info WHERE id='${id}'`);
     return exerciseInfo;
 }
 
@@ -44,7 +44,7 @@ export const createCustomWorkout = async (workout_name:string): Promise<number> 
 }
 
 export const getWorkoutbyId = async (id:number) => {
-    const workoutInfo = await db.getFirstAsync<TwoRows>(`SELECT * FROM workouts WHERE id='${id}'`);
+    const workoutInfo = await db.getFirstAsync(`SELECT * FROM workouts WHERE id='${id}'`);
     return workoutInfo;
 }
 
@@ -92,9 +92,10 @@ export const getSessionById = async (id:number) => {
     return sessionInfo;
 }
 
-export const getAllSessions = async() => {
+export const getAllSessions = async():Promise<Session[]> => {
     const allRows = await db.getAllAsync<Session>('SELECT * FROM sessions');
-    return allRows;   
+    console.log(allRows);
+    return allRows as Session[];   
 }
 export const createSession = async(workout_id:number, session_name:string, time_started:number, time_ended:number): Promise<number>=>{
     const lastSession = await db.runAsync(`INSERT INTO sessions (workout_id,session_name,time_started,time_ended) VALUES (?,?,?,?)`,
@@ -111,7 +112,23 @@ export const writeSet = async (exercise_id:number, session_id:number, set_number
                                                                           [exercise_id,session_id,set_number,weight,reps]);
 
 }
+
 export const getAllSets = async() => {
     const allRows = await db.getAllAsync('SELECT * FROM session_sets');
     console.log(allRows);   
+}
+
+export const getSetData = async(exercise_id:number, set_number:number): Promise<{weight:number;reps:number}>=>{
+    const result = await db.getFirstAsync<{weight:number;reps:number}>(`SELECT weight, reps 
+                                                                        FROM session_sets 
+                                                                        WHERE exercise_id = ? AND set_number = ?
+                                                                        ORDER BY id DESC`,[exercise_id,set_number]);
+    console.log(result);
+    if (!result){
+        return {weight:0,reps:0};
+    } 
+    const {weight,reps} = result;
+    return {weight, reps};
+
+
 }

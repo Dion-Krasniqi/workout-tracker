@@ -7,6 +7,7 @@ import { NameCardSesh } from "@/Components/nameCard";
 import { useSessionStore, useStore } from "@/state/stateStore";
 import { router } from "expo-router";
 import { FinishedSessionView } from "@/Components/sessionComponents";
+import { Session } from "@/interfaces/interfaces";
 
 
 
@@ -16,11 +17,14 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const count = useStore((state)=>state.count);
   const increment = useStore((state)=>state.increment);
+  const loadAllSessions = useSessionStore((state)=>state.loadPreviousSession);
   const {activeSession, previousSessions} = useSessionStore();
 
   
   
-  
+  useEffect(()=>{
+    loadAllSessions();
+  },[])
 
   return (
     <SafeAreaProvider>
