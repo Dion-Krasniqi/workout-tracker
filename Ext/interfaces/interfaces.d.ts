@@ -39,7 +39,6 @@ export interface SessionSet {
     set_number:number;
     weight:number;
     reps:string;
-    notes:string;
 }
 
 export interface SessionExercise {
@@ -48,6 +47,7 @@ export interface SessionExercise {
     exercise_id:number;
     name: string;
     sets: SessionSet[];
+    notes: string;
 }
 
 export interface Session {

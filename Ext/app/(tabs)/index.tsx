@@ -29,8 +29,7 @@ export default function Index() {
   return (
     <SafeAreaProvider>
       <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}> 
-      <ScrollView className="flex:1">
-        <View className="mx-2 items-center mt-10">
+        <View className="mx-2 items-center mt-10 px-2">
         <Search value={searchQuery}
                 onChangeText={(text: string) => setSearchQuery(text)}/>
 
@@ -58,7 +57,6 @@ export default function Index() {
                   className="mt-8 w-full self-center"
                   scrollEnabled={false}/>*/}
 
-        </ScrollView>
 
       
       

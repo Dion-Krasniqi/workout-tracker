@@ -104,13 +104,28 @@ export const createSession = async(workout_id:number, session_name:string, time_
     return lastSession.lastInsertRowId as number;
 }
 
+export const getNotes = async(exercise_id:number): Promise<string>=>{
+    const result = await db.getFirstSync<string>(`SELECT content 
+                                          FROM notes
+                                          WHERE exercise_id = ?
+                                          ORDER BY id DESC`, [exercise_id]);
+    if (!result || result.length<1){
+        return 'Notes'
+    }
+    return result;
+}
+
+export const writeNotes = async(exercise_id:number,content:string)=>{
+    await db.runAsync(`INSERT INTO notes (exercise_id,content) VALUES (?,?)`,[exercise_id,content]);
+}
+
 
 // Set Related
 
 
-export const writeSet = async (exercise_id:number, session_id:number, set_number:number, weight:number, reps:number, notes:string)=>{
-    await db.runAsync(`INSERT INTO session_sets (exercise_id,session_id,set_number,weight,reps,notes) VALUES (?,?,?,?,?,?)`,
-                                                                          [exercise_id,session_id,set_number,weight,reps,notes]);
+export const writeSet = async (exercise_id:number, session_id:number, set_number:number, weight:number, reps:number)=>{
+    await db.runAsync(`INSERT INTO session_sets (exercise_id,session_id,set_number,weight,reps,notes) VALUES (?,?,?,?,?)`,
+                                                                          [exercise_id,session_id,set_number,weight,reps]);
 
 }
 
@@ -119,17 +134,17 @@ export const getAllSets = async() => {
     console.log(allRows);   
 }
 
-export const getSetData = async(exercise_id:number, set_number:number): Promise<{weight:number;reps:number;notes:string}>=>{
-    const result = await db.getFirstAsync<{weight:number;reps:number;notes:string}>(`SELECT weight, reps, notes 
+export const getSetData = async(exercise_id:number, set_number:number): Promise<{weight:number;reps:number;}>=>{
+    const result = await db.getFirstAsync<{weight:number;reps:number}>(`SELECT weight, reps
                                                                         FROM session_sets 
                                                                         WHERE exercise_id = ? AND set_number = ?
                                                                         ORDER BY id DESC`,[exercise_id,set_number]);
     console.log(result);
     if (!result){
-        return {weight:0,reps:0, notes:''};
+        return {weight:0,reps:0};
     } 
-    const {weight,reps,notes} = result;
-    return {weight,reps,notes};
+    const {weight,reps} = result;
+    return {weight,reps};
 
 
 }

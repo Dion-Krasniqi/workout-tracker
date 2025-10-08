@@ -134,4 +134,39 @@ export const migrations = [
         ('Ab Crunch', 7);`
 
     },
+    {id:4,
+     up:`
+        DROP TABLE IF EXISTS exercises;
+        CREATE TABLE IF NOT EXISTS exercises(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        workout_id INTEGER NOT NULL,
+        exercise_id INTEGER NOT NULL,
+        set_number INTEGER DEFAULT 1,
+        notes VARCHAR(250),
+        FOREIGN KEY (exercise_id) REFERENCES exercises_info(id),
+        FOREIGN KEY (workout_id) REFERENCES workouts(id)
+        );
+     `
+    
+    },
+    {id:5,
+     up:`
+        DROP TABLE IF EXISTS exercises;
+        CREATE TABLE IF NOT EXISTS exercises(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        workout_id INTEGER NOT NULL,
+        exercise_id INTEGER NOT NULL,
+        set_number INTEGER DEFAULT 1,
+        FOREIGN KEY (exercise_id) REFERENCES exercises_info(id),
+        FOREIGN KEY (workout_id) REFERENCES workouts(id)
+        );
+        CREATE TABLE IF NOT EXISTS notes(
+        exercise_id INTEGER NOT NULL,
+        content VARCHAR(250),
+        PRIMARY KEY (exercise_id),
+        FOREIGN KEY (exercise_id) REFERENCES exercises(id)
+        );
+     `
+    
+    }
 ]

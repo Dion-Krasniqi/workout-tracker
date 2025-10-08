@@ -8,7 +8,7 @@ import { getSetData } from '@/app/db/queries';
 // renders sets in exercises
 export const SetView = ({set}:{set:SessionSet}) => {
   const [weight, setWeight] = useState(set.weight);
-  const [reps, setReps] = useState(set.reps);
+  const [reps, setReps] = useState(Number(set.reps));
   console.log(weight,reps);
   const updateSet = useSessionStore((state)=>state.updateSet)
   useEffect(()=>{
@@ -41,6 +41,12 @@ export const SetView = ({set}:{set:SessionSet}) => {
 
 // renders exercise in sessions
 export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
+  const [notes, setNotes] = useState('');
+  const updateNotes = useSessionStore((state)=>state.updateNotes)
+
+  useEffect(()=>{
+    updateNotes(exercise.id,notes);
+  },[notes])
 
 
   return (
@@ -52,7 +58,8 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
         <FlatList data={exercise.sets}
                 renderItem={(item)=>(<SetView set={item.item}/>)}
                 contentContainerStyle={{margin:0}}/>
-        <TextInput placeholder={'Notes'}
+        <TextInput placeholder={notes || 'Notes'}
+                 onChangeText={(text)=>{setNotes(text)}}
                  placeholderTextColor={'darkgrey'}
                  scrollEnabled={false}
                  className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[60] mt-5 w-[90%] self-center'/>
