@@ -38,7 +38,8 @@ export interface SessionSet {
     session_exercise_id:number;
     set_number:number;
     weight:number;
-    reps:number;
+    reps:string;
+    notes:string;
 }
 
 export interface SessionExercise {

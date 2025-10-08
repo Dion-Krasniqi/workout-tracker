@@ -85,5 +85,34 @@ export const migrations = [
 
      `
 
+    },
+    {id:3,
+     up:`
+        DELETE FROM session_sets;
+        ALTER TABLE session_sets add COLUMN notes VARCHAR(250);
+        DELETE FROM session;
+        ALTER TABLE sessions 
+        ALTER COLUMN session_name VARCHAR(30);
+        DELETE FROM workouts;
+        ALTER TABLE workouts 
+        ALTER COLUMN name VARCHAR(30);
+        DELETE FROM exercises;
+        INSERT INTO exercises_info (name, muscle_group) VALUES
+        ('Bench Press', 2),
+        ('Upper Chest Fly', 2),
+        ('Upper Back Row', 3),
+        ('Lat Pulldown', 3),
+        ('Kelso Shrug', 3),
+        ('Lateral Raises', 4),
+        ('Shoulder Press', 4),
+        ('Rear Delt Fly', 4),
+        ('Tricep Extension', 5),
+        ('Preacher Curl', 5),
+        ('Barbell Squat', 6),
+        ('SLDL', 6),
+        ('Ab Crunch', 7);
+        
+     `
+
     }
 ]

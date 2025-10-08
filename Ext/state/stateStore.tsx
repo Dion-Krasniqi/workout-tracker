@@ -70,7 +70,7 @@ interface SessionStore {
     startSession: (workout_id:number)=>Session;
     endSession: ()=>void;
     loadExercisesWithSets: (workout_id:number, session_id:number)=>Promise<void>;
-    updateSet: (set_id:number, weight:number, reps:number)=>void;
+    updateSet: (set_id:number, weight:number, reps:number, notes:string)=>void;
     //removeSet: (set_id:number)=>void;
 }
 
@@ -126,7 +126,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         activeSession.exercises.forEach((ex)=>{
             ex.sets.forEach(async(set)=>{
                 console.log(ex.name);
-                await writeSet(ex.exercise_id,actual_id,set.set_number,set.weight,set.reps);
+                await writeSet(ex.exercise_id,actual_id,set.set_number,set.weight,Number(set.reps),set.notes);
                 await getAllSets();
             })
         })
@@ -166,6 +166,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
                 set_number: i + 1,
                 weight:result?.weight,
                 reps:result?.reps,
+                notes:"jack in the box",
                 }
             }));
 
@@ -185,14 +186,14 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
        
     },
     // updates set object and reloads exercise array
-    updateSet: async(set_id, weight, reps)=>{
+    updateSet: async(set_id, weight, reps, notes)=>{
 
         set((state)=>{
             if (!state.activeSession) return state;
 
             const updatedExercises = state.activeSession.exercises.map((ex)=>({
                 ...ex,
-                sets: ex.sets.map((s)=>s.id==set_id ? {...s, weight, reps} : s),
+                sets: ex.sets.map((s)=>s.id==set_id ? {...s, weight, reps, notes} : s),
             }));
             return {...state, activeSession: {...state.activeSession, exercises: updatedExercises},};
 
