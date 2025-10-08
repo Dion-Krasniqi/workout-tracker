@@ -5,16 +5,18 @@ import { getAllExercises } from '../db/queries';
 import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import CustomButton from '@/Components/button';
 import { NameCardExec } from '@/Components/nameCard';
+import { ExerciseInfo } from '@/interfaces/interfaces';
 
 const Exercise_list = () => {
 
   const router = useRouter();
-  const [exercises, setExercises] = useState<TwoRows[]>([]);
+  const [exercises, setExercises] = useState<ExerciseInfo[]>([]);
 
   useEffect(()=>{
     async function setup (){
         const result =  await getAllExercises();
         console.log(result);
+        //@ts-ignore again zustand
         setExercises(result);
     }
     setup();
@@ -27,7 +29,7 @@ const Exercise_list = () => {
       <View className='mt-6'>
           <CustomButton onPress={()=>router.push('/otherPages/exercise_creation')} buttonText='Create Exercise' />
         </View>
-      <View className='w-full pb-20'>
+      <View className='w-full flex-1'>
         
             
         <>

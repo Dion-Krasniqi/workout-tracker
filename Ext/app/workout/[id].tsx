@@ -38,23 +38,24 @@ const WorkoutInformation = () => {
                 <TextInput placeholder={name} 
                    onChangeText={(text)=>setName(text)}
                    placeholderTextColor={'darkgrey'}
-                   className='text-center text-light-100 bg-white rounded-md px-4 w-full mb-4'/>
+                   className='text-center text-light-100 bg-white rounded-md px-4 w-full'/>
 
             
              </View>
              <FlatList data={workout.exercises}
-                       renderItem={({item})=>(<View className='items-center'>
-                                                <Text className='text-white'>{item.set_number} x {item.name}</Text>
+                       renderItem={({item})=>(<View className='flex-row w-[90%] mt-2 py-4 px-4 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between self-center'>
+                                                <Text className='text-white text-lg font-bold'>{item.name}</Text>
+                                                <Text className='text-white '>{item.set_number} Sets</Text>
                                               </View>)}
                        keyExtractor={(item) =>item.id.toString()}
                        className="mt-6 w-full"
                        contentContainerStyle={{justifyContent:'space-between'}}/>
 
-             <View>
+             <View className='mt-2'>
               <CustomButton buttonText='Add Exercise' onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
                                                                                 params: {workout_id:workout?.id}})}/>
              </View>
-             <View className='mt-8'>
+             <View className='mt-4'>
                                          
                                          <CustomButton buttonText='Back' 
                                                                 onPress={()=>router.replace('/(tabs)/workouts')}/>

@@ -1,22 +1,23 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Href, Link, RelativePathString, useRouter } from 'expo-router';
+import { ExerciseInfo } from '@/interfaces/interfaces';
 
 
 
 
-export const NameCardExec = ({id, name}: TwoRows) => {
+export const NameCardExec = ({id, name}: ExerciseInfo) => {
   return (
     
     <Link href={`/exercise/${id}`} asChild>
-      <TouchableOpacity className='w-[90%] mt-2 py-2 bg-light-100 rounded-md items-center self-center' >
+      <TouchableOpacity className='w-[90%] mt-2 py-2 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center self-center' >
       <Text className='text-white text-2xl font-md'>{name}</Text>
     </TouchableOpacity>
     </Link>
   
   )
 }
-type test = TwoRows & {
+type test = ExerciseInfo & {
     workout_id:number;
   }
 export const NameCardExecAdd = ({id,name,workout_id}:test) => {
@@ -25,7 +26,7 @@ export const NameCardExecAdd = ({id,name,workout_id}:test) => {
   return (
     
     
-    <TouchableOpacity className='w-[90%] mt-2 py-2 bg-light-100 rounded-md items-center self-center' 
+    <TouchableOpacity className='w-[90%] mt-2 py-3 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center self-center' 
     //@ts-ignore
     onPress={()=>router.push({pathname:`/exercise_add/${id}`,
                               params:{workout_id:workout_id}})}>

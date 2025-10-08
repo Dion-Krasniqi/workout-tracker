@@ -1,20 +1,22 @@
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { getAllExercises } from '../db/queries';
 import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import CustomButton from '@/Components/button';
 import { NameCardExecAdd } from '@/Components/nameCard';
+import { ExerciseInfo } from '@/interfaces/interfaces';
 
 const Exercise_list_add = () => {
   const {workout_id} = useLocalSearchParams();
   const router = useRouter();
-  const [exercises, setExercises] = useState<TwoRows[]>([]);
+  const [exercises, setExercises] = useState<ExerciseInfo[]>([]);
 
   useEffect(()=>{
     async function setup (){
         const result =  await getAllExercises();
         console.log(result);
+        //@ts-ignore BUT FIGURE OUT WHEN TRANSLATING IT ZUSTAND
         setExercises(result);
     }
     setup();
@@ -27,10 +29,16 @@ const Exercise_list_add = () => {
       {/*<View className='mt-6'>
           <CustomButton onPress={()=>router.push('/otherPages/exercise_creation')} buttonText='Create Exercise' />
         </View>*/}
-      <View className='w-full pb-20'>
+      <View className='flex-1 w-full'>
         
+          <View className='mt-4 items-center'>
             
-        <>
+            {/*{exercises.length>0 ? (<Text className='text-white text-2xl font-bold '>Exercise List</Text>):
+            (<Text className='text-white text-2xl font-bold '>No exercises found</Text>)} It does have default exercises so maybe*/}
+            <Text className='text-white text-2xl font-bold '>Exercise List</Text>
+          </View>
+        
+          <>
             <FlatList data={exercises}
             //@ts-ignore
             renderItem={({item})=>(<NameCardExecAdd id={item.id} name={item.name} workout_id={workout_id}/>)}
@@ -38,7 +46,8 @@ const Exercise_list_add = () => {
             className="mt-6 w-full"
             contentContainerStyle={{justifyContent:'space-between'}}
             />
-        </>
+          </>
+        
       </View>
           
         

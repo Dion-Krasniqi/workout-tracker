@@ -119,17 +119,17 @@ export const getAllSets = async() => {
     console.log(allRows);   
 }
 
-export const getSetData = async(exercise_id:number, set_number:number): Promise<{weight:number;reps:number}>=>{
-    const result = await db.getFirstAsync<{weight:number;reps:number}>(`SELECT weight, reps 
+export const getSetData = async(exercise_id:number, set_number:number): Promise<{weight:number;reps:number;notes:string}>=>{
+    const result = await db.getFirstAsync<{weight:number;reps:number;notes:string}>(`SELECT weight, reps, notes 
                                                                         FROM session_sets 
                                                                         WHERE exercise_id = ? AND set_number = ?
                                                                         ORDER BY id DESC`,[exercise_id,set_number]);
     console.log(result);
     if (!result){
-        return {weight:0,reps:0};
+        return {weight:0,reps:0, notes:''};
     } 
-    const {weight,reps} = result;
-    return {weight, reps};
+    const {weight,reps,notes} = result;
+    return {weight,reps,notes};
 
 
 }

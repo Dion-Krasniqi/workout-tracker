@@ -74,6 +74,7 @@ export const migrations = [
         set_number INTEGER,
         weight REAL,
         reps INTEGER,
+        notes VARCHAR(250),
         FOREIGN KEY (session_id) REFERENCES sessions(id),
         FOREIGN KEY (exercise_id) REFERENCES exercises_info(id)
         );
@@ -88,15 +89,35 @@ export const migrations = [
     },
     {id:3,
      up:`
-        DELETE FROM session_sets;
-        ALTER TABLE session_sets add COLUMN notes VARCHAR(250);
-        DELETE FROM session;
-        ALTER TABLE sessions 
-        ALTER COLUMN session_name VARCHAR(30);
-        DELETE FROM workouts;
-        ALTER TABLE workouts 
-        ALTER COLUMN name VARCHAR(30);
+        DROP TABLE IF EXISTS session_sets;
+        CREATE TABLE IF NOT EXISTS session_sets(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        session_id INTEGER NOT NULL,
+        exercise_id INTEGER NOT NULL,
+        set_number INTEGER,
+        weight REAL,
+        reps INTEGER,
+        notes VARCHAR(250),
+        FOREIGN KEY (session_id) REFERENCES sessions(id),
+        FOREIGN KEY (exercise_id) REFERENCES exercises_info(id)
+        );
+        DROP TABLE IF EXISTS workouts;
+        CREATE TABLE IF NOT EXISTS workouts(
+             id INTEGER PRIMARY KEY AUTOINCREMENT,
+             name VARCHAR(30) NOT NULL UNIQUE
+        );
+        DROP TABLE IF EXISTS sessions;
+        CREATE TABLE IF NOT EXISTS sessions(
+             id INTEGER PRIMARY KEY AUTOINCREMENT,
+             workout_id INTEGER NOT NULL,
+             session_name VARCHAR(30),
+             time_started INTEGER NOT NULL,
+             time_ended INTEGER,
+             FOREIGN KEY (workout_id) REFERENCES workouts(id)
+        );
+        
         DELETE FROM exercises;
+        DELETE FROM exercises_info;
         INSERT INTO exercises_info (name, muscle_group) VALUES
         ('Bench Press', 2),
         ('Upper Chest Fly', 2),
@@ -110,9 +131,7 @@ export const migrations = [
         ('Preacher Curl', 5),
         ('Barbell Squat', 6),
         ('SLDL', 6),
-        ('Ab Crunch', 7);
-        
-     `
+        ('Ab Crunch', 7);`
 
-    }
+    },
 ]

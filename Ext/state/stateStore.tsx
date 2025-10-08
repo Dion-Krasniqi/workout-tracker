@@ -166,7 +166,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
                 set_number: i + 1,
                 weight:result?.weight,
                 reps:result?.reps,
-                notes:"jack in the box",
+                notes:result?.notes,
                 }
             }));
 
