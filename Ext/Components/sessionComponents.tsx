@@ -41,11 +41,13 @@ export const SetView = ({set}:{set:SessionSet}) => {
 
 // renders exercise in sessions
 export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState(exercise.notes as string);
+  console.log('this',notes);
   const updateNotes = useSessionStore((state)=>state.updateNotes)
 
   useEffect(()=>{
     updateNotes(exercise.id,notes);
+    console.log(notes);
   },[notes])
 
 
@@ -58,7 +60,8 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
         <FlatList data={exercise.sets}
                 renderItem={(item)=>(<SetView set={item.item}/>)}
                 contentContainerStyle={{margin:0}}/>
-        <TextInput placeholder={notes || 'Notes'}
+        <TextInput 
+                 placeholder={notes}
                  onChangeText={(text)=>{setNotes(text)}}
                  placeholderTextColor={'darkgrey'}
                  scrollEnabled={false}

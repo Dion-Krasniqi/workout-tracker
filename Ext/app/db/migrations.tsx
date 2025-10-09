@@ -168,5 +168,17 @@ export const migrations = [
         );
      `
     
-    }
+    },
+    {id:6,
+     up:`
+        DROP TABLE IF EXISTS notes;
+        CREATE TABLE IF NOT EXISTS notes(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        exercise_id INTEGER NOT NULL,
+        content VARCHAR(250),
+        FOREIGN KEY (exercise_id) REFERENCES exercises(id)
+        );
+     `
+    
+    },
 ]

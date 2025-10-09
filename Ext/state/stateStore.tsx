@@ -125,12 +125,12 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         
         //add to prev session array, nullify active session
         activeSession.exercises.forEach((ex)=>{
-            if(ex.notes){
+            if(ex.notes && (ex.notes.length>0 && ex.notes!='Notes')){
                async()=>{ await writeNotes(ex.id,ex.notes)};
             }
             
             ex.sets.forEach(async(set)=>{
-                console.log(ex.name);
+                console.log('this perhaps');
                 await writeSet(ex.exercise_id,actual_id,set.set_number,set.weight,Number(set.reps));
                 await getAllSets();
             })
@@ -161,7 +161,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         const sessionExercises = await Promise.all(
             workout.exercises.map(async(ex,index)=>{
             const SessionExerciseId = Date.now() + index;
-            const notes = getNotes(ex.exercise_id);
+            const notes = await getNotes(ex.exercise_id) ;
             const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
                 const result = await getSetData(ex.exercise_id,i+1);
                 console.log(result);

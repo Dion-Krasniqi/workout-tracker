@@ -44,7 +44,7 @@ export const createCustomWorkout = async (workout_name:string): Promise<number> 
 }
 
 export const getWorkoutbyId = async (id:number) => {
-    const workoutInfo = await db.getFirstAsync(`SELECT * FROM workouts WHERE id='${id}'`);
+    const workoutInfo = await db.getFirstAsync(`SELECT * FROM workouts WHERE id=?`,[id]);
     return workoutInfo;
 }
 
@@ -88,7 +88,7 @@ export const loadWorkouts = async (): Promise<WorkoutTemplate[]> => {
  
 
 export const getSessionById = async (id:number) => {
-    const sessionInfo = await db.getFirstAsync(`SELECT * FROM sessions WHERE id='${id}'`);
+    const sessionInfo = await db.getFirstAsync(`SELECT * FROM sessions WHERE id=?`,[id]);
     return sessionInfo;
 }
 
@@ -104,14 +104,17 @@ export const createSession = async(workout_id:number, session_name:string, time_
     return lastSession.lastInsertRowId as number;
 }
 
-export const getNotes = async(exercise_id:number): Promise<string>=>{
-    const result = await db.getFirstSync<string>(`SELECT content 
+export const getNotes = async(exercise_id:number)=>{
+    const result = await db.getFirstAsync<string>(`SELECT content 
                                           FROM notes
                                           WHERE exercise_id = ?
                                           ORDER BY id DESC`, [exercise_id]);
+
+    
     if (!result || result.length<1){
-        return 'Notes'
+        return 'Notes';
     }
+    console.log(result);
     return result;
 }
 
@@ -124,7 +127,7 @@ export const writeNotes = async(exercise_id:number,content:string)=>{
 
 
 export const writeSet = async (exercise_id:number, session_id:number, set_number:number, weight:number, reps:number)=>{
-    await db.runAsync(`INSERT INTO session_sets (exercise_id,session_id,set_number,weight,reps,notes) VALUES (?,?,?,?,?)`,
+    await db.runAsync(`INSERT INTO session_sets (exercise_id,session_id,set_number,weight,reps) VALUES (?,?,?,?,?)`,
                                                                           [exercise_id,session_id,set_number,weight,reps]);
 
 }
