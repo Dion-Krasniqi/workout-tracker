@@ -41,13 +41,11 @@ export const SetView = ({set}:{set:SessionSet}) => {
 
 // renders exercise in sessions
 export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
-  const [notes, setNotes] = useState(exercise.notes as string);
-  console.log('this',notes);
+  const [notes, setNotes] = useState(exercise.notes);
   const updateNotes = useSessionStore((state)=>state.updateNotes)
 
   useEffect(()=>{
     updateNotes(exercise.id,notes);
-    console.log(notes);
   },[notes])
 
 

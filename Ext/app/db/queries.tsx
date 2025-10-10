@@ -105,17 +105,17 @@ export const createSession = async(workout_id:number, session_name:string, time_
 }
 
 export const getNotes = async(exercise_id:number)=>{
-    const result = await db.getFirstAsync<string>(`SELECT content 
+    const result = await db.getFirstAsync<{content:string}>(`SELECT content 
                                           FROM notes
                                           WHERE exercise_id = ?
                                           ORDER BY id DESC`, [exercise_id]);
 
     
-    if (!result || result.length<1){
+    if (!result){
         return 'Notes';
     }
-    console.log(result);
-    return result;
+    const {content} = result;
+    return content;
 }
 
 export const writeNotes = async(exercise_id:number,content:string)=>{
