@@ -107,7 +107,7 @@ export const createSession = async(workout_id:number, session_name:string, time_
 export const getNotes = async(exercise_id:number)=>{
     const result = await db.getFirstAsync<{content:string}>(`SELECT content 
                                           FROM notes
-                                          WHERE exercise_id = ?
+                                          WHERE ex_id = ?
                                           ORDER BY id DESC`, [exercise_id]);
 
     
@@ -119,7 +119,7 @@ export const getNotes = async(exercise_id:number)=>{
 }
 
 export const writeNotes = async(exercise_id:number,content:string)=>{
-    await db.runAsync(`INSERT INTO notes (exercise_id,content) VALUES (?,?)`,[exercise_id,content]);
+    await db.runAsync(`INSERT INTO notes (ex_id,content) VALUES (?,?)`,[exercise_id,content]);
 }
 
 
@@ -142,7 +142,6 @@ export const getSetData = async(exercise_id:number, set_number:number): Promise<
                                                                         FROM session_sets 
                                                                         WHERE exercise_id = ? AND set_number = ?
                                                                         ORDER BY id DESC`,[exercise_id,set_number]);
-    console.log(result);
     if (!result){
         return {weight:0,reps:0};
     } 

@@ -17,10 +17,10 @@ export const useStore = create<{
 interface WorkoutStore {
     workouts: WorkoutTemplate[];
     loading: boolean;
-    loadWorkouts: ()=> Promise<void>;
-    addWorkout: (workout_name: string)=> Promise<number>;
-    addExerciseToWorkout: (workout_id:number,exercise_id:number,exercise_name:string, set_number:number) => void;
-    loadExercises: (workout_id:number) => Promise<void>;
+    loadWorkouts: ()=>Promise<void>;
+    addWorkout: (workout_name: string)=>Promise<number>;
+    addExerciseToWorkout: (workout_id:number,exercise_id:number,exercise_name:string, set_number:number) =>void;
+    loadExercises: (workout_id:number) =>Promise<void>;
 }
 
 
@@ -42,7 +42,7 @@ export const useWorkoutStore = create<WorkoutStore>((set)=>({
     },
     addExerciseToWorkout: async(workout_id,exercise_id,exercise_name,set_number)=>{
         const id = await addExerciseToWorkout(workout_id, exercise_id, set_number)
-        const newExercise = {id:id, exercise_id:exercise_id, name:exercise_name, set_number:set_number,notes:''}
+        const newExercise = {id:id, exercise_id:exercise_id, name:exercise_name, set_number:set_number}
         set((state)=>({
             workouts: state.workouts.map((w)=>w.id==workout_id ? 
                                               {...w, exercises:[...w.exercises,newExercise]} :
@@ -107,7 +107,6 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             exercises: [],
         };
         set({activeSession:newSession});
-        console.log(newSession);
         return newSession;
     },
 
@@ -125,13 +124,11 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         
         //add to prev session array, nullify active session
         activeSession.exercises.forEach((ex)=>{
-            if(ex.notes && (ex.notes.trim().length>0 || ex.notes!='Notes')){
-               writeNotes(ex.id,ex.notes);
-            }
+            writeNotes(ex.id,ex.notes);
+            
             
             ex.sets.forEach(async(set)=>{
                 await writeSet(ex.exercise_id,actual_id,set.set_number,set.weight,Number(set.reps));
-                await getAllSets();
             })
         })
         set({previousSessions:[...previousSessions,finishedSession],
@@ -143,38 +140,38 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
     // loads exercises using WorkoutStore and workout id, then creates the session exercise instances and sets arrays
     // of exercises based on set_number set at the exercise table
     loadExercisesWithSets: async(workout_id, session_id)=>{
+
         const workoutStore = useWorkoutStore.getState();
-        // not really working
+
         if (workoutStore.workouts.length == 0){
             await workoutStore.loadWorkouts();
         }
         const workout = workoutStore.workouts.find((w)=>w.id==workout_id)
         if (!workout){
+            //do something
             return;
         }
         await useWorkoutStore.getState().loadExercises(workout_id)
-        console.log(workout?.name)
         const { activeSession } = get();
         if (!activeSession) return;
 
         const sessionExercises = await Promise.all(
             workout.exercises.map(async(ex,index)=>{
-            const SessionExerciseId = Date.now() + index;
+            const SessionExerciseId = ex.id;
             const notes = await getNotes(ex.exercise_id) ;
             const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
                 const result = await getSetData(ex.exercise_id,i+1);
-                console.log('notes:',notes);
                 return {
-                id: SessionExerciseId + i + 1,
-                session_exercise_id: SessionExerciseId,
-                set_number: i + 1,
-                weight:result?.weight,
-                reps:result?.reps,
+                    id: Date.now()+i,
+                    session_exercise_id: SessionExerciseId,
+                    set_number: i + 1,
+                    weight:result?.weight,
+                    reps:result?.reps,
                 }
             }));
 
             return {
-                id: ex.id,
+                id: SessionExerciseId,
                 session_id,
                 exercise_id: ex.exercise_id,
                 name: ex.name,
@@ -210,7 +207,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         set((state)=>{
             if (!state.activeSession) return state;
 
-            const updatedExercises = state.activeSession.exercises.map((ex)=>ex.id==exercise_id ? {...ex,notes:content} : ex);
+            const updatedExercises = state.activeSession.exercises.map((ex)=>ex.exercise_id==exercise_id ? {...ex,notes:content} : ex);
 
             console.log(content)
             return {...state, activeSession: {...state.activeSession, exercises: updatedExercises},};

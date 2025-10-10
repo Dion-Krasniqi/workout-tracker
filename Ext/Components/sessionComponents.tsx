@@ -9,7 +9,6 @@ import { getSetData } from '@/app/db/queries';
 export const SetView = ({set}:{set:SessionSet}) => {
   const [weight, setWeight] = useState(set.weight);
   const [reps, setReps] = useState(Number(set.reps));
-  console.log(weight,reps);
   const updateSet = useSessionStore((state)=>state.updateSet)
   useEffect(()=>{
     //calls useSessionStore updateSet when weight or reps changes in the text input
@@ -45,7 +44,7 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   const updateNotes = useSessionStore((state)=>state.updateNotes)
 
   useEffect(()=>{
-    updateNotes(exercise.id,notes);
+    updateNotes(exercise.exercise_id,notes);
   },[notes])
 
 
