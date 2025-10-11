@@ -2,7 +2,7 @@ import { View, Text, TextInput, FlatList, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Session, SessionExercise, SessionSet} from '@/interfaces/interfaces';
 import { useSessionStore } from '@/state/stateStore';
-import { getSetData } from '@/app/db/queries';
+import { getAllNotes, getSetData } from '@/app/db/queries';
 
 
 // renders sets in exercises
@@ -44,9 +44,9 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   const updateNotes = useSessionStore((state)=>state.updateNotes)
 
   useEffect(()=>{
-    updateNotes(exercise.exercise_id,notes);
+    //calls useSessionStore updateSet when weight or reps changes in the text input
+    updateNotes(exercise.exercise_id,notes)
   },[notes])
-
 
   return (
     <View className='mb-5 px-7'>

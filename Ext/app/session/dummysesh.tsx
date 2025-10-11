@@ -1,7 +1,7 @@
 import { View, Text, TextInput, ScrollView, FlatList, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomButton from '@/Components/button';
-import { createCustomExercise} from '../db/queries';
+import { createCustomExercise, getAllNotes} from '../db/queries';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { DropdownMenu, MenuOption } from '@/Components/dropDown';
@@ -24,6 +24,7 @@ const Exercise_creation = () => {
     if (activeSession?.exercises.length<1){
       //@ts-ignore
       loadExercises(activeSession?.workout_id,activeSession?.id)
+      getAllNotes();
     }
   },[])
 

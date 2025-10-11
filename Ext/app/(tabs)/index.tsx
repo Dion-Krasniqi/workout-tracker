@@ -19,6 +19,7 @@ export default function Index() {
   const count = useStore((state)=>state.count);
   const increment = useStore((state)=>state.increment);
   const loadAllSessions = useSessionStore((state)=>state.loadPreviousSession);
+  const delSessions = useSessionStore((state)=>state.deletePreviousSessions);
   const {activeSession, previousSessions} = useSessionStore();
 
   
@@ -30,16 +31,17 @@ export default function Index() {
   return (
     <SafeAreaProvider>
       <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}> 
-        <View className="mx-2 items-center mt-10 px-2">
+        {/*<View className="mx-2 items-center mt-10 px-2">
         <Search value={searchQuery}
                 onChangeText={(text: string) => setSearchQuery(text)}/>
 
         
-        </View>
-        <View className='mt-5'>
-          {activeSession && <View className='mt-5'>
-          <CustomButton onPress={()=>router.push('/session/dummysesh')} buttonText={activeSession?.session_name} />
-        </View>}
+        </View>*/}
+        <View className='mt-5 border-b-2 border-light-100 pb-6'>
+          <View className='mt-5'>{activeSession ? 
+            (<CustomButton onPress={()=>router.push('/session/dummysesh')} buttonText={activeSession?.session_name} />)
+            :(<Text className="text-white self-center font-bold">No active session</Text>)}
+          </View>
         </View>
         
         <FlatList data={previousSessions}
@@ -52,7 +54,7 @@ export default function Index() {
                   ListEmptyComponent={<Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>
                                        }
                   ListFooterComponent={
-                  <View className="mb-24 mt-8 w-full">{previousSessions.length>0 && <CustomButton onPress={()=>deleteAllSessions()} buttonText='Delete'/>}</View>
+                  <View className="mb-24 mt-8 w-full">{previousSessions.length>0 && <CustomButton onPress={()=>delSessions()} buttonText='Delete'/>}</View>
                   }
                   />
         

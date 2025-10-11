@@ -1,4 +1,4 @@
-import { addExerciseToWorkout, createCustomWorkout, createSession, getAllExercises, getAllSessions, getAllSets, getNotes, getSetData, getWorkoutExercises, loadWorkouts, writeNotes, writeSet } from '@/app/db/queries';
+import { addExerciseToWorkout, createCustomWorkout, createSession, deleteAllSessions, getAllExercises, getAllSessions, getAllSets, getNotes, getSetData, getWorkoutExercises, loadWorkouts, writeNotes, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { act } from 'react';
 import { Alert } from 'react-native';
@@ -67,6 +67,7 @@ interface SessionStore {
     activeSession: Session | null;
     loading: boolean;
     loadPreviousSession: ()=>void;
+    deletePreviousSessions: ()=>void;
     startSession: (workout_id:number)=>Session;
     endSession: ()=>void;
     loadExercisesWithSets: (workout_id:number, session_id:number)=>Promise<void>;
@@ -86,6 +87,11 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         set({previousSessions:[...sessions],});
         
 
+    },
+    deletePreviousSessions: async()=>{
+        const {previousSessions} = get();
+        set({previousSessions:[],});
+        await deleteAllSessions();
     },
     // starts session with a dummy id and sets start_time to when called and defaults exercises object to empty array
     // then assigns session object to activeSession
@@ -113,6 +119,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
     endSession: async()=>{
         const { activeSession, previousSessions } = get();
         if(!activeSession) return;
+
         //add end time not directly to active sesh
         const finishedSession = {...activeSession, time_ended:Date.now()}
         
@@ -124,7 +131,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         
         //add to prev session array, nullify active session
         activeSession.exercises.forEach((ex)=>{
-            writeNotes(ex.id,ex.notes);
+            writeNotes(ex.exercise_id,ex.notes);
             
             
             ex.sets.forEach(async(set)=>{
@@ -160,7 +167,8 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             
             workout.exercises.map(async(ex,index)=>{
             const SessionExerciseId = ex.id;
-            const notes = await getNotes(ex.exercise_id) ;
+            const notes = await getNotes(ex.exercise_id);
+            console.log('this shi',notes,ex.exercise_id);
             
             const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
                 const result = await getSetData(ex.exercise_id,i+1);
@@ -209,13 +217,13 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
 
     },
     updateNotes: async(exercise_id,content)=>{
+        console.log('legit',content);
 
         set((state)=>{
             if (!state.activeSession) return state;
 
             const updatedExercises = state.activeSession.exercises.map((ex)=>ex.exercise_id==exercise_id ? {...ex,notes:content} : ex);
 
-            console.log(content)
             return {...state, activeSession: {...state.activeSession, exercises: updatedExercises},};
 
 

@@ -108,15 +108,21 @@ export const deleteAllSessions = async()=>{
     await db.getAllAsync(`DELETE FROM sessions;`)
 }
 
-
+//Notes
+export const getAllNotes = async()=>{
+    const result = await db.getAllAsync(`SELECT *
+                                          FROM notes
+                                          ORDER BY id DESC`);
+    console.log(result);    
+}
 
 export const getNotes = async(exercise_id:number)=>{
     const result = await db.getFirstAsync<{content:string}>(`SELECT content 
                                           FROM notes
                                           WHERE ex_id = ?
                                           ORDER BY id DESC`, [exercise_id]);
+                                          
 
-    
     if (!result){
         return 'Notes';
     }
