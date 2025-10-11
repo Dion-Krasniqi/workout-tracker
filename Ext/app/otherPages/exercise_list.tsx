@@ -1,8 +1,8 @@
-import { View, Text, FlatList } from 'react-native'
+import { View, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { getAllExercises } from '../db/queries';
-import { Link, useLocalSearchParams, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import CustomButton from '@/Components/button';
 import { NameCardExec } from '@/Components/nameCard';
 import { ExerciseInfo } from '@/interfaces/interfaces';

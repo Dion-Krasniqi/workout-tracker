@@ -3,7 +3,6 @@ import Search from "@/Components/search";
 import { useEffect, useState } from "react";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { NameCardSesh } from "@/Components/nameCard";
 import { useSessionStore, useStore } from "@/state/stateStore";
 import { router } from "expo-router";
 import { FinishedSessionView } from "@/Components/sessionComponents";

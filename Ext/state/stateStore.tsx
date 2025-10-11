@@ -1,6 +1,5 @@
-import { addExerciseToWorkout, createCustomWorkout, createSession, deleteAllSessions, getAllExercises, getAllSessions, getAllSets, getNotes, getSetData, getWorkoutExercises, loadWorkouts, writeNotes, writeSet } from '@/app/db/queries';
+import { addExerciseToWorkout, createCustomWorkout, createSession, deleteAllSessions, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, writeNotes, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
-import { act } from 'react';
 import { Alert } from 'react-native';
 import { create } from 'zustand';
 

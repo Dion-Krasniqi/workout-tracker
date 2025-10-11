@@ -1,14 +1,3 @@
-interface TwoRows {
-    //workout and exercise only have name and id
-    id: number;
-    name: string;
-}
-
-interface DetailedExercise {
-    id: number;
-    name: string;
-    set_number: number;
-}
 
 
 
@@ -59,9 +48,4 @@ export interface Session {
     exercises: SessionExercise[];
     active?:boolean;
     
-}
-
-export interface SetData {
-    weight:number;
-    reps:number;
 }

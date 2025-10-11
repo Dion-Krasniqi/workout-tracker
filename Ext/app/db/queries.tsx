@@ -1,4 +1,4 @@
-import { ExerciseTemplate, Session, SetData, WorkoutTemplate } from "@/interfaces/interfaces";
+import { ExerciseInfo, ExerciseTemplate, Session, SetData, WorkoutTemplate } from "@/interfaces/interfaces";
 import db from "./db";
 
 
@@ -18,7 +18,7 @@ export const createCustomExercise = async (exercise_name:string, muscle_group_id
 }
 
 export const getExercise = async (id:number) => {
-    const exerciseInfo = await db.getFirstAsync(`SELECT * FROM exercises_info WHERE id='${id}'`);
+    const exerciseInfo = await db.getFirstAsync<ExerciseInfo>(`SELECT * FROM exercises_info WHERE id='${id}'`);
     return exerciseInfo;
 }
 

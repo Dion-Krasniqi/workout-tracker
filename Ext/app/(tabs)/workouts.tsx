@@ -43,7 +43,7 @@ const Workouts = () => {
         <>
           <FlatList data={workouts}
             renderItem={({item})=>(<Link href={`/workout/${item.id}`} asChild>
-                                    <TouchableOpacity className='w-[90%] mt-2 py-2 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.1)] items-center self-center' onLongPress={async()=>{console.log('start');await startSession(item.id);}}>
+                                    <TouchableOpacity className='w-[90%] mt-2 py-2 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.1)] items-center self-center' onLongPress={async()=>{await startSession(item.id)}}>
                                       <Text className='text-white text-2xl font-md'>{item.name}</Text>
                                     </TouchableOpacity>
                                   </Link>)}

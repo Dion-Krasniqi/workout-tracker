@@ -5,7 +5,7 @@ import { ExerciseInfo } from '@/interfaces/interfaces';
 
 
 
-
+// links to exercise info
 export const NameCardExec = ({id, name}: ExerciseInfo) => {
   return (
     
@@ -17,9 +17,12 @@ export const NameCardExec = ({id, name}: ExerciseInfo) => {
   
   )
 }
+
+//exericse info instance for selected workout
 type test = ExerciseInfo & {
     workout_id:number;
   }
+//links to the adding page which creates the instance with the entered set number(in this linked page)
 export const NameCardExecAdd = ({id,name,workout_id}:test) => {
   const router = useRouter();
   
@@ -37,7 +40,9 @@ export const NameCardExecAdd = ({id,name,workout_id}:test) => {
   )
 }
 
-export const NameCardWork = ({id, name}: TwoRows) => {
+
+// workout info
+export const NameCardWork = ({id, name}:{id:number,name:string}) => {
   return (
     
     <Link href={`/workout/${id}`} asChild>
@@ -48,16 +53,3 @@ export const NameCardWork = ({id, name}: TwoRows) => {
   
   )
 }
-
-export const NameCardSesh = ({id, name}: TwoRows) => {
-  return (
-    
-    <Link href={`/session/${id}`} asChild>
-      <TouchableOpacity className='w-[90%] mt-2 py-2 bg-light-100 rounded-md items-center self-center' >
-      <Text className='text-white text-2xl font-md'>{name}</Text>
-    </TouchableOpacity>
-    </Link>
-  
-  )
-}
-

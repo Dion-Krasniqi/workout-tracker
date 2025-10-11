@@ -1,18 +1,17 @@
 import { View, Text, TextInput, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { getExercise, getWorkoutbyId, getWorkoutExercises } from '../db/queries';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '@/Components/button';
 import { NameCardExec } from '@/Components/nameCard';
-import { useWorkoutStore } from '@/state/stateStore';
+import { useSessionStore, useWorkoutStore } from '@/state/stateStore';
 
 const WorkoutInformation = () => {
 
   const { id } = useLocalSearchParams();
   const {workouts, loading} = useWorkoutStore();
-
   const workout = workouts.find((w) => w.id === Number(id));
+  const beginSession = useSessionStore((state)=>state.startSession);
 
   if(loading){
     return(<Text>Loading Workouts</Text>)
@@ -55,6 +54,11 @@ const WorkoutInformation = () => {
               <CustomButton buttonText='Add Exercise' onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
                                                                                 params: {workout_id:workout?.id}})}/>
              </View>
+             <View className='mt-4'>
+                                         
+                                         <CustomButton buttonText='Start Workout' 
+                                                                onPress={()=>{beginSession(workout?.id);}}/>
+            </View>
              <View className='mt-4'>
                                          
                                          <CustomButton buttonText='Back' 

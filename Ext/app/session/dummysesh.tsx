@@ -1,11 +1,12 @@
-import { View, Text, TextInput, ScrollView, FlatList, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+// This is the active session page, not gonna rename it bcuz routing is being weird
+
+import { View, Text, FlatList,} from 'react-native'
+import React, { useEffect} from 'react'
 import CustomButton from '@/Components/button';
-import { createCustomExercise, getAllNotes} from '../db/queries';
+import { getAllNotes} from '../db/queries';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { DropdownMenu, MenuOption } from '@/Components/dropDown';
-import { ExerciseView, SetView } from '@/Components/sessionComponents';
+import { ExerciseView} from '@/Components/sessionComponents';
 import { useSessionStore } from '@/state/stateStore';
 
 const Exercise_creation = () => {
