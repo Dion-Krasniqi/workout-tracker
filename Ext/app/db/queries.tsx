@@ -94,7 +94,8 @@ export const getSessionById = async (id:number) => {
 
 export const getAllSessions = async():Promise<Session[]> => {
     const allRows = await db.getAllAsync<Session>(`SELECT * 
-                                                  FROM sessions`);
+                                                  FROM sessions
+                                                  ORDER BY id DESC`);
     console.log(allRows);
     return allRows;   
 }
@@ -103,6 +104,11 @@ export const createSession = async(workout_id:number, session_name:string, time_
                                                                           [workout_id,session_name,time_started,time_ended]);
     return lastSession.lastInsertRowId as number;
 }
+export const deleteAllSessions = async()=>{
+    await db.getAllAsync(`DELETE FROM sessions;`)
+}
+
+
 
 export const getNotes = async(exercise_id:number)=>{
     const result = await db.getFirstAsync<{content:string}>(`SELECT content 

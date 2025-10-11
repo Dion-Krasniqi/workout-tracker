@@ -154,22 +154,28 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         await useWorkoutStore.getState().loadExercises(workout_id)
         const { activeSession } = get();
         if (!activeSession) return;
-
+        //dummy set Id so the updateSet can access
+        let setId = 1
         const sessionExercises = await Promise.all(
+            
             workout.exercises.map(async(ex,index)=>{
             const SessionExerciseId = ex.id;
             const notes = await getNotes(ex.exercise_id) ;
+            
             const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
                 const result = await getSetData(ex.exercise_id,i+1);
+                // this should give unique temp ids
+                setId=setId+1;
                 return {
-                    id: Date.now()+i,
+                    id: setId,
                     session_exercise_id: SessionExerciseId,
                     set_number: i + 1,
                     weight:result?.weight,
                     reps:result?.reps,
                 }
+                
             }));
-
+            setId = setId + 1;
             return {
                 id: SessionExerciseId,
                 session_id,

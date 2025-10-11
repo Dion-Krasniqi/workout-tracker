@@ -8,6 +8,7 @@ import { useSessionStore, useStore } from "@/state/stateStore";
 import { router } from "expo-router";
 import { FinishedSessionView } from "@/Components/sessionComponents";
 import { Session } from "@/interfaces/interfaces";
+import { deleteAllSessions } from "../db/queries";
 
 
 
@@ -49,7 +50,11 @@ export default function Index() {
                                         <Text className='text-white font-semibold mt-5'>Previous Sessions</Text>
                                        </View>):(<View></View>)}
                   ListEmptyComponent={<Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>
-                                       }/>
+                                       }
+                  ListFooterComponent={
+                  <View className="mb-24 mt-8 w-full">{previousSessions.length>0 && <CustomButton onPress={()=>deleteAllSessions()} buttonText='Delete'/>}</View>
+                  }
+                  />
         
         {/*<FlatList data={sessions}
                   renderItem={({item})=>(<NameCardSesh {...item} />)}
