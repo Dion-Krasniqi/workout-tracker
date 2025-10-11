@@ -23,6 +23,7 @@ export const getExercise = async (id:number) => {
 }
 
 
+
 //Workout Related
 
 export const addExerciseToWorkout = async (workout_id:number, exercise_id:number,set_number:number): Promise<number> => {
@@ -161,4 +162,12 @@ export const getSetData = async(exercise_id:number, set_number:number): Promise<
     return {weight,reps};
 
 
+}
+export const getAllExerciseSets = async(exercise_id:number)=>{
+    const result = await db.getAllAsync<{weight:number;reps:number}>(`SELECT weight, reps 
+                                         FROM session_sets
+                                         WHERE exercise_id = ?
+                                         ORDER BY id DESC`, [exercise_id])
+    console.log(result);
+    return result;
 }

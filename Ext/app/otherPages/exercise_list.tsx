@@ -42,11 +42,6 @@ const Exercise_list = () => {
         </>
       </View>
           
-        
-        
-      
-      
-      
     </SafeAreaView>
 
     </SafeAreaProvider>
