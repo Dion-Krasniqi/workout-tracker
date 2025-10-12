@@ -1,7 +1,7 @@
 // This is the active session page, not gonna rename it bcuz routing is being weird
 
-import { View, Text, FlatList,} from 'react-native'
-import React, { useEffect} from 'react'
+import { View, Text, FlatList, Image, TouchableOpacity,} from 'react-native'
+import React, { useEffect, useState} from 'react'
 import CustomButton from '@/Components/button';
 import { getAllNotes} from '../db/queries';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -16,9 +16,11 @@ const Exercise_creation = () => {
   const endSession = useSessionStore((state)=>state.endSession);
   const loadExercises = useSessionStore((state)=>state.loadExercisesWithSets);
   const {activeSession, loading} = useSessionStore();
+
+  const [elapsed,setElapsed] = useState(0);
   
  
-
+  const sessionTime = activeSession?.time_started || Date.now();
   
   useEffect(()=>{
     //@ts-ignore
@@ -27,22 +29,44 @@ const Exercise_creation = () => {
       loadExercises(activeSession?.workout_id,activeSession?.id)
       getAllNotes();
     }
-  },[])
+  },[]);
 
+  useEffect(()=>{
+    const interval = setInterval(()=>{
+      setElapsed(Date.now()-sessionTime)
+    },1000);
+    return ()=>clearInterval(interval);
+  },[sessionTime]);
+
+  const formatWatch = (milliseconds:number) => {
+    const totalSeconds = Math.floor(milliseconds/1000);
+    const hours = Math.floor(totalSeconds/3600);
+    const minutes = Math.floor((totalSeconds%3600)/60);
+    const seconds = (totalSeconds % 3600)%60;
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+  }
 
   //@ts-ignore
-  const time = new Date(activeSession?.time_started).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  const time = new Date(sessionTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   return (
     <SafeAreaProvider>
       <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}> 
         <View  className='border-b-4 border-b-light-100 pb-5'>
          
          <View className="mx-2 px-5 mt-2">
-            <View className='flex-row justify-between mb-5 items-center'>
-                <Text className='text-light-100'>Started at {time}</Text>
+          <View className='flex-row justify-between mb-5 items-center'>
+                
+                <TouchableOpacity className='items-center' onPress={()=>(router.push('/(tabs)'))}>
+                  <Image source={require('../../assets/icons/arrow.png')} style={{tintColor:'white', transform:[{scaleX:-1.2},{scaleY:1.2}]}}
+                  className='items-center'/>
+                 </TouchableOpacity>
                 {/*<Text className='text-light-100'>Ended at 01:30</Text>*/}
                 <CustomButton buttonText='Finish' onPress={()=>{endSession();router.push('/(tabs)')}}/>
             </View>
+          
+          
+            
             <View className=' rounded-md h-[50] justify-center px-2 bg-white'>
                 <Text className='font-bold text-center'>{activeSession?.session_name}</Text>
             </View>
@@ -57,10 +81,15 @@ const Exercise_creation = () => {
                                           <ExerciseView exercise={item}/>
                                         </View>)}
                  contentContainerStyle={{paddingBottom:120}}
+                 ListFooterComponent={<View className='self-center'>
+                                        <Text className='text-white font-bold text-2xl'>{formatWatch(elapsed)}</Text>
+                                      </View>}
                  />
+      
         
         
       </View>
+      
         
       
       

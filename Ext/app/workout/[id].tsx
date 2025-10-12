@@ -62,7 +62,7 @@ const WorkoutInformation = () => {
              <View className='mt-4'>
                                          
                                          <CustomButton buttonText='Back' 
-                                                                onPress={()=>router.replace('/(tabs)/workouts')}/>
+                                                                onPress={()=>router.push('/(tabs)/workouts')}/>
             </View>
              
 

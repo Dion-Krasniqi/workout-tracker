@@ -1,5 +1,5 @@
 import { View, Text, TextInput, FlatList, Dimensions } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Session, SessionExercise, SessionSet} from '@/interfaces/interfaces';
 import { useSessionStore } from '@/state/stateStore';
 import { getAllNotes, getSetData } from '@/app/db/queries';

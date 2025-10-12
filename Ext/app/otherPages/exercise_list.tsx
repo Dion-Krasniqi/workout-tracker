@@ -1,4 +1,4 @@
-import { View, FlatList } from 'react-native'
+import { View, FlatList, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { getAllExercises } from '../db/queries';
@@ -24,9 +24,13 @@ const Exercise_list = () => {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView className='flex-1 bg-dark-100' style={{ alignItems: "center"}}> 
+      <SafeAreaView className='flex-1 bg-dark-100' > 
 
-      <View className='mt-6'>
+      <View className='flex-row justify-between mb-5 items-center px-5 mt-5'>
+          <TouchableOpacity className='items-center' onPress={()=>(router.push('/(tabs)/workouts'))}>
+                            <Image source={require('../../assets/icons/arrow.png')} style={{tintColor:'white', transform:[{scaleX:-1.2},{scaleY:1.2}]}}
+                            className='items-center'/>
+          </TouchableOpacity>
           <CustomButton onPress={()=>router.push('/otherPages/exercise_creation')} buttonText='Create Exercise' />
         </View>
       <View className='w-full flex-1'>
