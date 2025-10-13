@@ -1,13 +1,10 @@
 import CustomButton from "@/Components/button";
-import Search from "@/Components/search";
-import { useEffect, useState } from "react";
-import { FlatList, ScrollView, Text, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { FinishedSessionView } from "@/Components/sessionComponents";
 import { useSessionStore, useStore } from "@/state/stateStore";
 import { router } from "expo-router";
-import { FinishedSessionView } from "@/Components/sessionComponents";
-import { Session } from "@/interfaces/interfaces";
-import { deleteAllSessions } from "../db/queries";
+import { useEffect, useState } from "react";
+import { FlatList, Text, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 
 
@@ -53,7 +50,7 @@ export default function Index() {
                   ListEmptyComponent={<Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>
                                        }
                   ListFooterComponent={
-                  <View className="mb-24 mt-8 w-full">{previousSessions.length>0 && <CustomButton onPress={()=>delSessions()} buttonText='Delete'/>}</View>
+                  <View className="mb-24 mt-8 w-full">{previousSessions.length>0 && <CustomButton onPress={()=>delSessions()} buttonText='Delete All'/>}</View>
                   }
                   />
         
