@@ -1,19 +1,20 @@
 // This is the active session page, not gonna rename it bcuz routing is being weird
 
-import { View, Text, FlatList, Image, TouchableOpacity,} from 'react-native'
-import React, { useEffect, useState} from 'react'
 import CustomButton from '@/Components/button';
-import { getAllNotes} from '../db/queries';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { ExerciseView} from '@/Components/sessionComponents';
+import { ExerciseView } from '@/Components/sessionComponents';
 import { useSessionStore } from '@/state/stateStore';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, Text, TouchableOpacity, View, } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { getAllNotes } from '../db/queries';
 
 const Exercise_creation = () => {
 
   const router = useRouter();
   const beginSession = useSessionStore((state)=>state.startSession);
   const endSession = useSessionStore((state)=>state.endSession);
+  const quitSession = useSessionStore((state)=>state.quitSession);
   const loadExercises = useSessionStore((state)=>state.loadExercisesWithSets);
   const {activeSession, loading} = useSessionStore();
 
@@ -83,6 +84,7 @@ const Exercise_creation = () => {
                  contentContainerStyle={{paddingBottom:120}}
                  ListFooterComponent={<View className='self-center'>
                                         <Text className='text-white font-bold text-2xl'>{formatWatch(elapsed)}</Text>
+                                        <CustomButton buttonText='Quit' onPress={()=>{quitSession();router.replace(`/(tabs)`)}}/>
                                       </View>}
                  />
       

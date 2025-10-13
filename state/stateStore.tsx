@@ -1,4 +1,4 @@
-import { addExerciseToWorkout, createCustomWorkout, createSession, deleteAllSessions, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, writeNotes, writeSet } from '@/app/db/queries';
+import { addExerciseToWorkout, createCustomWorkout, createSession, deleteAllSessions, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, writeNotes, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { Alert } from 'react-native';
 import { create } from 'zustand';
@@ -19,6 +19,7 @@ interface WorkoutStore {
     loadWorkouts: ()=>Promise<void>;
     addWorkout: (workout_name: string)=>Promise<number>;
     addExerciseToWorkout: (workout_id:number,exercise_id:number,exercise_name:string, set_number:number) =>void;
+    removeExerciseFromWorkout:(workout_id:number,exercise_id:number) => void;
     loadExercises: (workout_id:number) =>Promise<void>;
 }
 
@@ -40,14 +41,22 @@ export const useWorkoutStore = create<WorkoutStore>((set)=>({
         
     },
     addExerciseToWorkout: async(workout_id,exercise_id,exercise_name,set_number)=>{
-        const id = await addExerciseToWorkout(workout_id, exercise_id, set_number)
-        const newExercise = {id:id, exercise_id:exercise_id, name:exercise_name, set_number:set_number}
+        const id = await addExerciseToWorkout(workout_id, exercise_id, set_number);
+        const newExercise = {id:id, exercise_id:exercise_id, name:exercise_name, set_number:set_number};
         set((state)=>({
             workouts: state.workouts.map((w)=>w.id==workout_id ? 
                                               {...w, exercises:[...w.exercises,newExercise]} :
                                               w)
         }))
 
+    },
+    removeExerciseFromWorkout:async(workout_id,exercise_id) => {
+        const id = await removeExercise(exercise_id);
+        set((state)=>({
+            workouts: state.workouts.map((w)=>w.id==workout_id ? 
+                                              {...w, exercises:w.exercises.filter((ex)=>ex.id !=exercise_id)} :
+                                              w)
+        }))
     },
     loadExercises: async(workout_id)=>{
         const exercises = await getWorkoutExercises(workout_id) as ExerciseTemplate[];
@@ -69,6 +78,7 @@ interface SessionStore {
     deletePreviousSessions: ()=>void;
     startSession: (workout_id:number)=>Session;
     endSession: ()=>void;
+    quitSession: ()=>void;
     loadExercisesWithSets: (workout_id:number, session_id:number)=>Promise<void>;
     updateNotes: (exercise_id:number,content:string)=>void;
     updateSet: (set_id:number, weight:number, reps:number)=>void;
@@ -142,6 +152,18 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         })
 
         
+    },
+    quitSession: async()=>{
+        const { activeSession } = get();
+        // if yes nulls out session, then new start session proceeds as usual
+        if(activeSession){
+            Alert.alert('Session information will be lost','Do you wish to proceed?',
+            [{text: 'Cancel',onPress: () => {},style: 'cancel',},
+             { text: 'YES', onPress: () => ({activeSession:null}) },],
+             { cancelable: false });
+
+        }
+
     },
     // loads exercises using WorkoutStore and workout id, then creates the session exercise instances and sets arrays
     // of exercises based on set_number set at the exercise table

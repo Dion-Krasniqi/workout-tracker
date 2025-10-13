@@ -1,10 +1,9 @@
-import { View, Text, TextInput, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '@/Components/button';
-import { NameCardExec } from '@/Components/nameCard';
 import { useSessionStore, useWorkoutStore } from '@/state/stateStore';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const WorkoutInformation = () => {
 
@@ -12,6 +11,7 @@ const WorkoutInformation = () => {
   const {workouts, loading} = useWorkoutStore();
   const workout = workouts.find((w) => w.id === Number(id));
   const beginSession = useSessionStore((state)=>state.startSession);
+  const deleteExercise = useWorkoutStore((state)=>state.removeExerciseFromWorkout)
 
   if(loading){
     return(<Text>Loading Workouts</Text>)
@@ -45,6 +45,9 @@ const WorkoutInformation = () => {
                        renderItem={({item})=>(<View className='flex-row w-[90%] mt-2 py-4 px-4 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between self-center'>
                                                 <Text className='text-white text-lg font-bold'>{item.name}</Text>
                                                 <Text className='text-white '>{item.set_number} Sets</Text>
+                                                <TouchableOpacity onPress={()=>{deleteExercise(workout.id,item.id)}}>
+                                                  <Text className='text-white font-bold'>X</Text>
+                                                </TouchableOpacity>
                                               </View>)}
                        keyExtractor={(item) =>item.id.toString()}
                        className="mt-6 w-full"

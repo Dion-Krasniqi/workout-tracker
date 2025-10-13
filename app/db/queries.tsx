@@ -1,4 +1,4 @@
-import { ExerciseInfo, ExerciseTemplate, Session, SetData, WorkoutTemplate } from "@/interfaces/interfaces";
+import { ExerciseInfo, Session, WorkoutTemplate } from "@/interfaces/interfaces";
 import db from "./db";
 
 
@@ -29,6 +29,13 @@ export const getExercise = async (id:number) => {
 export const addExerciseToWorkout = async (workout_id:number, exercise_id:number,set_number:number): Promise<number> => {
     const result = await db.runAsync(`INSERT INTO exercises (workout_id,exercise_id,set_number) VALUES (?,?,?)`,
                                                                           workout_id,exercise_id,set_number);
+    const test = await db.getAllSync('SELECT * FROM exercises');
+    console.log(test);
+    return result.lastInsertRowId as number;
+}
+export const removeExercise = async (exercise_id:number): Promise<number> => {
+    const result = await db.runAsync(`DELETE FROM exercises 
+                                      WHERE id = ?`, exercise_id);
     const test = await db.getAllSync('SELECT * FROM exercises');
     console.log(test);
     return result.lastInsertRowId as number;
