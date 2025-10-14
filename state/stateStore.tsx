@@ -153,16 +153,11 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
 
         
     },
-    quitSession: async()=>{
+    //nulls out activesession
+    quitSession: async()=> {
         const { activeSession } = get();
-        // if yes nulls out session, then new start session proceeds as usual
-        if(activeSession){
-            Alert.alert('Session information will be lost','Do you wish to proceed?',
-            [{text: 'Cancel',onPress: () => {},style: 'cancel',},
-             { text: 'YES', onPress: () => ({activeSession:null}) },],
-             { cancelable: false });
-
-        }
+        if(activeSession){set({activeSession:null})};
+        
 
     },
     // loads exercises using WorkoutStore and workout id, then creates the session exercise instances and sets arrays

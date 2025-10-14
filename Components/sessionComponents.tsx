@@ -1,15 +1,19 @@
-import { View, Text, TextInput, FlatList, Dimensions } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
-import { Session, SessionExercise, SessionSet} from '@/interfaces/interfaces';
+import { Session, SessionExercise, SessionSet } from '@/interfaces/interfaces';
 import { useSessionStore } from '@/state/stateStore';
-import { getAllNotes, getSetData } from '@/app/db/queries';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, FlatList, Text, TextInput, View } from 'react-native';
 
 
 // renders sets in exercises
 export const SetView = ({set}:{set:SessionSet}) => {
+  const [oldW, setOldW] = useState(set.weight);
+  const [oldR, setOldR] = useState(Number(set.reps));
   const [weight, setWeight] = useState(set.weight);
   const [reps, setReps] = useState(Number(set.reps));
   const updateSet = useSessionStore((state)=>state.updateSet)
+
+  const inputWidth = Dimensions.get("window").width/6;
+
   useEffect(()=>{
     //calls useSessionStore updateSet when weight or reps changes in the text input
     updateSet(set.id,weight,reps);
@@ -20,18 +24,25 @@ export const SetView = ({set}:{set:SessionSet}) => {
       <View className='flex-row justify-around mt-2 items-center' >
         <Text className='text-light-100 text-xl mb-1'>Set {set.set_number}</Text>
         <View className='flex-row gap-5 justify-end'>
-          <TextInput placeholder={(set.weight).toString()+' kg'}
+          <View className='flex-row'>
+            <TextInput placeholder={(oldW).toString()}
+                 
                  keyboardType='numeric' 
                  onChangeText={(text)=>{setWeight(Number(text));}}
                  placeholderTextColor={'darkgrey'}
                  scrollEnabled={false}
-                 className='text-start px-2 text-white border-2 border-light-100 rounded-md h-[40] w-[40%]'/>
-          <TextInput placeholder={(set.reps).toString()}
+                 className='text-center text-white border-2 border-light-100 rounded-md h-[40]' style={{width:inputWidth}}/>
+          <Text className='ml-2 text-white self-center font-bold'>Kg</Text>
+          </View>
+          <View className='flex-row'>
+            <TextInput placeholder={(oldR).toString()}
                  keyboardType='numeric' 
                  onChangeText={(text)=>setReps(Number(text))}
                  placeholderTextColor={'darkgrey'}
                  scrollEnabled={false}
-                 className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[40] w-[20%]'/>
+                 className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[40]' style={{width:inputWidth/1.5}}/>
+            <Text className='ml-2 text-white self-center font-bold'>Reps</Text>
+          </View>
         </View>
       </View>
   

@@ -5,7 +5,7 @@ import { ExerciseView } from '@/Components/sessionComponents';
 import { useSessionStore } from '@/state/stateStore';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, Text, TouchableOpacity, View, } from 'react-native';
+import { Alert, FlatList, Image, Text, TouchableOpacity, View, } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { getAllNotes } from '../db/queries';
 
@@ -84,7 +84,14 @@ const Exercise_creation = () => {
                  contentContainerStyle={{paddingBottom:120}}
                  ListFooterComponent={<View className='self-center'>
                                         <Text className='text-white font-bold text-2xl'>{formatWatch(elapsed)}</Text>
-                                        <CustomButton buttonText='Quit' onPress={()=>{quitSession();router.replace(`/(tabs)`)}}/>
+                                        <CustomButton buttonText='Quit' onPress={()=>{
+                                          if(activeSession){
+                                                      Alert.alert('Session information will be lost','Do you wish to proceed?',
+                                                      [{text: 'Cancel',onPress: () => {},style: 'cancel',},
+                                                      { text: 'YES', onPress: 
+                                                        async() => {await quitSession();
+                                                                    router.replace('/(tabs)')}},],
+                                                      { cancelable: false });}}}/>
                                       </View>}
                  />
       
