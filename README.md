@@ -3,6 +3,10 @@
 Ext is a workout tracking app built with React Native + Expo. It uses Zustand for state management and Sqlite for persistent data storage.
 The app allows the user to create their own exercises and workouts,track workouts as sessions by logging weights and reps used for each set of each exercise of a workout, check data of a given exercise, and more.
 
+## Using the app
+* To use the application out of the box head over at the playstore link where you can find a downloadable version.
+* If you want to build the app yourself, you need to have node and npm installed. Start by cloning the repo locally or downloading the files. 
+
 
 ## Exercises
 The apps comes with a few built in exercises and workouts. To view all exercises navigate to the exercise list by pressing the Exercise List button found in the workouts tab, there you can also find the Create Exercise button which allows you to create a custom exercise using a unique name and optional muscle group.

@@ -1,17 +1,19 @@
-import { View, Text, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useLocalSearchParams } from 'expo-router';
-import { getAllExerciseSets, getExercise } from '../db/queries';
 import { ExerciseInfo } from '@/interfaces/interfaces';
+import { useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { getAllExerciseSets, getExercise } from '../db/queries';
 
 
 
 
-const setEntry = (weight:number,reps:number)=>{
+const setEntry = (weight:number,reps:number,date:number)=>{
+  const time = new Date(date).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'});
   return (
+    
     <View className='items-center border-t-2 w-full self-center py-4 rounded-xl'>
-      <Text className='text-white font-bold text-xl'>{weight}kg for {reps} reps</Text>
+      <Text className='text-white font-bold text-xl'>{weight}kg for {reps} reps at {time}</Text>
     </View>
   )
 }
@@ -19,7 +21,7 @@ const setEntry = (weight:number,reps:number)=>{
 const ExerciseInformation = () => {
   const {id} = useLocalSearchParams();
   const [exercise, setExercise] = useState<ExerciseInfo | null>(null);
-  const [sets, setSets] = useState<{weight:number;reps:number}[] | null>(null);
+  const [sets, setSets] = useState<{weight:number;reps:number;date:number}[] | null>(null);
   
   useEffect(()=>{
     async function setup(){
@@ -33,7 +35,7 @@ const ExerciseInformation = () => {
     setup();
   },[])
 
-
+  
   return (
     
     <SafeAreaProvider>
@@ -47,7 +49,7 @@ const ExerciseInformation = () => {
             
         <>
             {sets && sets.length>0 ? (<FlatList data={sets}
-            renderItem={({item})=>(setEntry(item.weight,item.reps))}
+            renderItem={({item})=>(setEntry(item.weight,item.reps,item.date))}
             className="mt-6 w-full"
             contentContainerStyle={{justifyContent:'space-between'}}
             />):(<View><Text className='text-white self-center mt-20'>There exists no data for this exercise</Text></View>)}

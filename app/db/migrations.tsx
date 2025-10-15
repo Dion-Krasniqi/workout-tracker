@@ -192,4 +192,20 @@ export const migrations = [
          );
       `
     },
+    {id:8,
+      up:`
+        DROP TABLE IF EXISTS session_sets;
+        CREATE TABLE IF NOT EXISTS session_sets(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        session_id INTEGER NOT NULL,
+        exercise_id INTEGER NOT NULL,
+        set_number INTEGER,
+        weight REAL,
+        reps INTEGER,
+        date INTEGER,
+        FOREIGN KEY (session_id) REFERENCES sessions(id),
+        FOREIGN KEY (exercise_id) REFERENCES exercises_info(id)
+        );
+      `
+    },
 ]

@@ -144,7 +144,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             
             
             ex.sets.forEach(async(set)=>{
-                await writeSet(ex.exercise_id,actual_id,set.set_number,set.weight,Number(set.reps));
+                await writeSet(ex.exercise_id,actual_id,set.set_number,set.weight,Number(set.reps),activeSession.time_started);
             })
         })
         set({previousSessions:[...previousSessions,finishedSession],

@@ -146,9 +146,9 @@ export const writeNotes = async(exercise_id:number,content:string)=>{
 // Set Related
 
 
-export const writeSet = async (exercise_id:number, session_id:number, set_number:number, weight:number, reps:number)=>{
-    await db.runAsync(`INSERT INTO session_sets (exercise_id,session_id,set_number,weight,reps) VALUES (?,?,?,?,?)`,
-                                                                          [exercise_id,session_id,set_number,weight,reps]);
+export const writeSet = async (exercise_id:number, session_id:number, set_number:number, weight:number, reps:number,date:number)=>{
+    await db.runAsync(`INSERT INTO session_sets (exercise_id,session_id,set_number,weight,reps,date) VALUES (?,?,?,?,?,?)`,
+                                                                          [exercise_id,session_id,set_number,weight,reps,date]);
 
 }
 
@@ -171,7 +171,7 @@ export const getSetData = async(exercise_id:number, set_number:number): Promise<
 
 }
 export const getAllExerciseSets = async(exercise_id:number)=>{
-    const result = await db.getAllAsync<{weight:number;reps:number}>(`SELECT weight, reps 
+    const result = await db.getAllAsync<{weight:number;reps:number;date:number}>(`SELECT weight, reps, date 
                                          FROM session_sets
                                          WHERE exercise_id = ?
                                          ORDER BY id DESC`, [exercise_id])

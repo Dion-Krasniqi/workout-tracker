@@ -53,7 +53,7 @@ const Exercise_creation = () => {
   return (
     <SafeAreaProvider>
       <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}> 
-        <View  className='border-b-4 border-b-light-100 pb-5'>
+        <View  className='border-b-4 border-b-light-100 pb-5 rounded-xl'>
          
          <View className="mx-2 px-5 mt-2">
           <View className='flex-row justify-between mb-5 items-center'>
@@ -71,6 +71,14 @@ const Exercise_creation = () => {
             <View className=' rounded-md h-[50] justify-center px-2 bg-white'>
                 <Text className='font-bold text-center'>{activeSession?.session_name}</Text>
             </View>
+            <View className='flex-row justify-between mt-3'>
+                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%]'>
+                  <Text className='font-bold text-center'>00:00</Text>
+                </View>
+                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%] '>
+                  <Text className='font-bold text-center'>Reset Stopwatch</Text>
+                </View>
+            </View>
          </View>
         </View>
 
@@ -82,9 +90,9 @@ const Exercise_creation = () => {
                                           <ExerciseView exercise={item}/>
                                         </View>)}
                  contentContainerStyle={{paddingBottom:120}}
-                 ListFooterComponent={<View className='self-center'>
-                                        <Text className='text-white font-bold text-2xl'>{formatWatch(elapsed)}</Text>
-                                        <CustomButton buttonText='Quit' onPress={()=>{
+                 ListFooterComponent={<View className='self-center mb-24'>
+                                        <Text className='text-white font-bold text-4xl mb-7'>{formatWatch(elapsed)}</Text>
+                                        <CustomButton buttonText='Quit Session' onPress={()=>{
                                           if(activeSession){
                                                       Alert.alert('Session information will be lost','Do you wish to proceed?',
                                                       [{text: 'Cancel',onPress: () => {},style: 'cancel',},

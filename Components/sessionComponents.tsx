@@ -3,7 +3,7 @@ import { useSessionStore } from '@/state/stateStore';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Text, TextInput, View } from 'react-native';
 
-
+const Width = Dimensions.get("window").width;
 // renders sets in exercises
 export const SetView = ({set}:{set:SessionSet}) => {
   const [oldW, setOldW] = useState(set.weight);
@@ -12,7 +12,7 @@ export const SetView = ({set}:{set:SessionSet}) => {
   const [reps, setReps] = useState(Number(set.reps));
   const updateSet = useSessionStore((state)=>state.updateSet)
 
-  const inputWidth = Dimensions.get("window").width/6;
+  const inputWidth = Width/6;
 
   useEffect(()=>{
     //calls useSessionStore updateSet when weight or reps changes in the text input
@@ -22,8 +22,8 @@ export const SetView = ({set}:{set:SessionSet}) => {
   return (
       
       <View className='flex-row justify-around mt-2 items-center' >
-        <Text className='text-light-100 text-xl mb-1'>Set {set.set_number}</Text>
-        <View className='flex-row gap-5 justify-end'>
+        <View><Text className='text-white text-xl self-center'>Set {set.set_number}</Text></View>
+        <View className='flex-row justify-between'>
           <View className='flex-row'>
             <TextInput placeholder={(oldW).toString()}
                  
@@ -32,16 +32,16 @@ export const SetView = ({set}:{set:SessionSet}) => {
                  placeholderTextColor={'darkgrey'}
                  scrollEnabled={false}
                  className='text-center text-white border-2 border-light-100 rounded-md h-[40]' style={{width:inputWidth}}/>
-          <Text className='ml-2 text-white self-center font-bold'>Kg</Text>
+          <Text className='ml-2 text-white self-center'>Kg</Text>
           </View>
-          <View className='flex-row'>
+          <View className='flex-row ml-5'>
             <TextInput placeholder={(oldR).toString()}
                  keyboardType='numeric' 
                  onChangeText={(text)=>setReps(Number(text))}
                  placeholderTextColor={'darkgrey'}
                  scrollEnabled={false}
                  className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[40]' style={{width:inputWidth/1.5}}/>
-            <Text className='ml-2 text-white self-center font-bold'>Reps</Text>
+            <Text className='ml-2 text-white self-center '>Reps</Text>
           </View>
         </View>
       </View>
@@ -58,13 +58,13 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
     //calls useSessionStore updateSet when weight or reps changes in the text input
     updateNotes(exercise.exercise_id,notes)
   },[notes])
-
+  const inputWidth = Width;
   return (
-    <View className='mb-5 px-7'>
-      <View className='mt-5 mb-3'>
+    <View className='mb-5 px-7 mt-5'>
+      <View className=''>
         <Text className='text-white font-semibold text-xl'>{exercise.name}</Text>
       </View>
-      <View className='justify-center'>
+      <View className='justify-center mt-5'>
         <FlatList data={exercise.sets}
                 renderItem={(item)=>(<SetView set={item.item}/>)}
                 contentContainerStyle={{margin:0}}/>
@@ -73,7 +73,10 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
                  onChangeText={(text)=>{setNotes(text)}}
                  placeholderTextColor={'darkgrey'}
                  scrollEnabled={false}
-                 className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[60] mt-5 w-[90%] self-center'/>
+                 maxLength={250}
+                 multiline
+                 className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[80] mt-5 self-center'
+                 style={{width:inputWidth*.85}}/>
       </View>
     </View>
   )
