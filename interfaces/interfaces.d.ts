@@ -1,9 +1,5 @@
 
 
-
-
-
-
 // Fine grained
 export interface ExerciseInfo {
     id: number;
@@ -46,6 +42,7 @@ export interface Session {
     time_started:number;
     time_ended?:number;
     exercises: SessionExercise[];
+    setNumber:number;
     active?:boolean;
     
 }

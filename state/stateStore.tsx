@@ -120,6 +120,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             workout_id: workout_id,
             time_started:Date.now(),
             exercises: [],
+            setNumber:0,
         };
         set({activeSession:newSession});
         return newSession;
@@ -182,11 +183,13 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         const sessionExercises = await Promise.all(
             
             workout.exercises.map(async(ex,index)=>{
+            
             const SessionExerciseId = ex.id;
             const notes = await getNotes(ex.exercise_id);
             console.log('this shi',notes,ex.exercise_id);
             
             const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
+                activeSession.setNumber++;
                 const result = await getSetData(ex.exercise_id,i+1);
                 // this should give unique temp ids
                 setId=setId+1;

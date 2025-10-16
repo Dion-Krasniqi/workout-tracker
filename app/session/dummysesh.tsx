@@ -72,12 +72,23 @@ const Exercise_creation = () => {
                 <Text className='font-bold text-center'>{activeSession?.session_name}</Text>
             </View>
             <View className='flex-row justify-between mt-3'>
-                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%]'>
-                  <Text className='font-bold text-center'>00:00</Text>
+                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[32%]'>
+                  <Text className='font-bold text-center'>Exercises: {activeSession?.exercises.length}</Text>
                 </View>
-                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%] '>
-                  <Text className='font-bold text-center'>Reset Stopwatch</Text>
+                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[32%] '>
+                  <Text className='font-bold text-center'>Sets: {activeSession?.setNumber}</Text>
                 </View>
+                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[32%] '>
+                  <Text className='font-bold text-center'>Started at {time}</Text>
+                </View>
+            </View>
+            <View className='flex-row justify-between mt-3'>
+                <TouchableOpacity className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%]'>
+                    <Text className='font-bold text-center'>00:00</Text>
+                </TouchableOpacity>
+                <TouchableOpacity className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%] '>
+                    <Text className='font-bold text-center'>Reset Stopwatch</Text>
+                </TouchableOpacity>
             </View>
          </View>
         </View>
@@ -90,7 +101,7 @@ const Exercise_creation = () => {
                                           <ExerciseView exercise={item}/>
                                         </View>)}
                  contentContainerStyle={{paddingBottom:120}}
-                 ListFooterComponent={<View className='self-center mb-24'>
+                 ListFooterComponent={<View className='self-center mb-44'>
                                         <Text className='text-white font-bold text-4xl mb-7'>{formatWatch(elapsed)}</Text>
                                         <CustomButton buttonText='Quit Session' onPress={()=>{
                                           if(activeSession){
