@@ -79,7 +79,7 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
                  scrollEnabled={false}
                  maxLength={250}
                  multiline
-                 className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[80] mt-5 self-center'
+                 className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[80] mt-5 self-center hover:border-white'
                  style={{width:inputWidth*.85}}/>
       </View>
       <Link className='self-end mt-5' href={`/exercise/${exercise.exercise_id}`}>
