@@ -42,16 +42,17 @@ const WorkoutInformation = () => {
             
              </View>
              <FlatList data={workout.exercises}
-                       renderItem={({item})=>(<View className='flex-row w-[90%] mt-2 py-4 px-4 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between self-center'>
+                       renderItem={({item})=>(<View className='flex-row self-center w-[90%] mt-2 py-4 px-4 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between'>
                                                 <Text className='text-white text-lg font-bold'>{item.name}</Text>
-                                                <Text className='text-white '>{item.set_number} Sets</Text>
-                                                <TouchableOpacity onPress={()=>{deleteExercise(workout.id,item.id)}}>
-                                                  <Text className='text-white font-bold'>X</Text>
-                                                </TouchableOpacity>
+                                                <View className='flex-row items-center'>
+                                                  <Text className='text-white mr-8'>{item.set_number} Sets</Text>
+                                                  <TouchableOpacity onPress={()=>{deleteExercise(workout.id,item.id)}} >
+                                                    <Text className='text-white font-bold'>X</Text>
+                                                  </TouchableOpacity>
+                                                </View>
                                               </View>)}
                        keyExtractor={(item) =>item.id.toString()}
-                       className="mt-6 w-full"
-                       contentContainerStyle={{justifyContent:'space-between'}}/>
+                       className="mt-6 w-full "/>
 
              <View className='mt-2'>
               <CustomButton buttonText='Add Exercise' onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',

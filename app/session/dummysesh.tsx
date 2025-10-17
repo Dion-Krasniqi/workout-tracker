@@ -1,7 +1,7 @@
 // This is the active session page, not gonna rename it bcuz routing is being weird
 
 import CustomButton from '@/Components/button';
-import { ExerciseView } from '@/Components/sessionComponents';
+import { ExerciseView, Stopwatch } from '@/Components/sessionComponents';
 import { useSessionStore } from '@/state/stateStore';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -82,15 +82,10 @@ const Exercise_creation = () => {
                   <Text className='font-bold text-center'>Started at {time}</Text>
                 </View>
             </View>
-            <View className='flex-row justify-between mt-3'>
-                <TouchableOpacity className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%]'>
-                    <Text className='font-bold text-center'>00:00</Text>
-                </TouchableOpacity>
-                <TouchableOpacity className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%] '>
-                    <Text className='font-bold text-center'>Reset Stopwatch</Text>
-                </TouchableOpacity>
-            </View>
-         </View>
+            {/*Stopwatch*/}
+              <Stopwatch />
+            
+          </View>
         </View>
 
       <View className="mx-2">

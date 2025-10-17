@@ -1,7 +1,7 @@
 import { Session, SessionExercise, SessionSet } from '@/interfaces/interfaces';
 import { useSessionStore } from '@/state/stateStore';
 import { Link } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const Width = Dimensions.get("window").width;
@@ -115,5 +115,68 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
          
       </View>
               )
+
+}
+
+export const Stopwatch = () => {
+    const [time, setTime] = useState(0);
+    const [running, setRunning] = useState(false);
+
+    const intervalRef = useRef(null);
+    const startTimeRef = useRef(0);
+
+    const startStopwatch = () => {
+      startTimeRef.current = Date.now() - time*1000;
+
+      intervalRef.current = setInterval(()=>{
+        setTime(Math.floor((Date.now()-startTimeRef.current)/1000));
+      },1000)
+
+      setRunning(true);
+
+    }
+
+    const pauseStopwatch = () => {
+      clearInterval(intervalRef.current);
+      setRunning(false);
+    }
+
+    const resetStopwatch = () => {
+      clearInterval(intervalRef.current);
+      setTime(0);
+      setRunning(false);
+    }
+
+    const resumeStopWatch = () => {
+      startTimeRef.current = Date.now() - time*1000;
+      intervalRef.current = setInterval(()=>{
+        setTime(Math.floor((Date.now()-startTimeRef.current)/1000));
+      },1000)
+
+      setRunning(true);
+    }
+    
+    const formatWatch = (seconds:number) => {
+    const minutes = Math.floor(seconds/60);
+    const sec = seconds%60;
+    return `${String(minutes).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+
+  }
+
+    return(
+      <View className='flex-row justify-between mt-3'>
+                      <TouchableOpacity className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%]'
+                                        onPress={()=>pauseStopwatch()}
+                                        onLongPress={()=>startStopwatch()}>
+                          <Text className='font-bold text-center'>{formatWatch(time)}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%]'
+                                        onPress={resetStopwatch}>
+                          <Text className='font-bold text-center'>Reset Stopwatch</Text>
+                      </TouchableOpacity>
+       </View>
+    )
+    
+
 
 }
