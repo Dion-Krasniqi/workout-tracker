@@ -22,7 +22,9 @@ Sessions are "active" instances of workout routines. To start a session click on
 * Loading of objects from Zustand needs work, both the functions and their implementation;
 * Most of UI needs to be improved and standardised;
 * When dropdown menu in exercise creation is active, there appears a black box at the bottom;
-* (Related ish) Better showcasing of exercise data
+* (Related ish) Better showcasing of exercise data;
+* Loading screen before actual loading the sessions/workouts;
+* Stopwatch resets if active session is exited;
 
 Planned features:
 * Search/filter sessions, workouts, and exercises;
@@ -33,4 +35,5 @@ Planned features:
 * Remove set/exercise in active workout;
 * Prior session data be viewable;
 * Data should be trasnfarable, either account or extracting and importing manually;
+
 
