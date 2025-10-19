@@ -52,8 +52,8 @@ const Exercise_creation = () => {
   const time = new Date(sessionTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   return (
     <SafeAreaProvider>
-      <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}> 
-        <View  className='border-b-4 border-b-light-100 pb-5 rounded-xl'>
+      <SafeAreaView className='flex-1 bg-dark-100 '> 
+        <View  className='flex border-b-4 border-b-light-100 pb-5 rounded-xl'>
          
          <View className="mx-2 px-5 mt-2">
           <View className='flex-row justify-between mb-5 items-center'>
@@ -83,7 +83,10 @@ const Exercise_creation = () => {
                 </View>
             </View>
             {/*Stopwatch*/}
+            <View>
               <Stopwatch />
+            </View>
+              
             
           </View>
         </View>

@@ -66,7 +66,7 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   },[notes])
   const inputWidth = Width;
   return (
-    <View className='mb-5 px-7 mt-5'>
+    <View className='flex mb-5 px-7 mt-5'>
       {/*width */}
       <View className='w-full'>
         <Text className='text-white font-semibold text-xl'>{exercise.name}</Text>
@@ -169,7 +169,7 @@ export const Stopwatch = () => {
   }
 
     return(
-      <View className='flex-row justify-between mt-3 w-full'>
+      <View className='flex flex-row justify-between mt-3 w-full'>
                       <TouchableOpacity className=' rounded-md h-[50] justify-center bg-white w-[66%]'
                                         onPress={()=>pauseStopwatch()}
                                         onLongPress={()=>startStopwatch()}>
