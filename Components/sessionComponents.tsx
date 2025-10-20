@@ -66,9 +66,9 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   },[notes])
   const inputWidth = Width;
   return (
-    <View className='flex mb-5 px-7 mt-5'>
+    <View style={{flex:1,marginBottom:10, marginTop:15,paddingHorizontal:28}}>
       {/*width */}
-      <View className='w-full'>
+      <View style={{width:'100%'}}>
         <Text className='text-white font-semibold text-xl'>{exercise.name}</Text>
       </View>
       {/*flex implementation */}
@@ -83,7 +83,7 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
                  scrollEnabled={false}
                  maxLength={250}
                  multiline
-                 className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[80] mt-5 self-center hover:border-white'
+                 className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[80] mt-5 self-center focus:border-white'
                  style={{width:inputWidth*.85}}/>
       </View>
       {/*Css */}
@@ -108,7 +108,7 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
   const screenWidth = Dimensions.get("window").width/1.1;
 
   return (
-      <View className='flex rounded-md h-[60] justify-center px-2 bg-white mt-4' style={{width:screenWidth}}>
+      <View className='flex rounded-md justify-center px-2 bg-white mt-4' style={{width:screenWidth, height:65}}>
         <View className='flex-row justify-between'>
           <Text className='font-bold text-center'>{sesh.session_name}</Text>
           <Text>{date}</Text>
@@ -169,13 +169,13 @@ export const Stopwatch = () => {
   }
 
     return(
-      <View className='flex flex-row justify-between mt-3 w-full'>
-                      <TouchableOpacity className=' rounded-md h-[50] justify-center bg-white w-[66%]'
+      <View style={{flex:1,flexDirection:'row',marginTop:10, marginBottom:50}}>
+                      <TouchableOpacity style={{borderRadius:5, height:50, backgroundColor:'white', justifyContent:'center', width:'66%'}}
                                         onPress={()=>pauseStopwatch()}
                                         onLongPress={()=>startStopwatch()}>
                           <Text className='font-bold text-center'>{formatWatch(time)}</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity className=' rounded-md h-[50] justify-center bg-white w-[32%]'
+                      <TouchableOpacity style={{marginLeft:7,borderRadius:5, height:50, backgroundColor:'white', justifyContent:'center', width:'32%'}}
                                         onPress={resetStopwatch}>
                           <Text className='font-bold text-center'>Reset Stopwatch</Text>
                       </TouchableOpacity>

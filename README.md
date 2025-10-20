@@ -25,6 +25,9 @@ Sessions are "active" instances of workout routines. To start a session click on
 * (Related ish) Better showcasing of exercise data;
 * Loading screen before actual loading the sessions/workouts;
 * Stopwatch resets if active session is exited;
+* Mix of tailwindCSS and CSS might mess up some styling;
+* Set view values are auto set so it looks completed off start;
+
 
 Planned features:
 * Search/filter sessions, workouts, and exercises;
@@ -35,5 +38,7 @@ Planned features:
 * Remove set/exercise in active workout;
 * Prior session data be viewable;
 * Data should be trasnfarable, either account or extracting and importing manually;
+* Session based memory option;
+
 
 
