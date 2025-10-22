@@ -39,6 +39,7 @@ Planned features:
 * Prior session data be viewable;
 * Data should be trasnfarable, either account or extracting and importing manually;
 * Session based memory option;
+* Reset exercise data and add optional marker;
 
 
 

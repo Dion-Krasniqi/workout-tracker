@@ -139,6 +139,10 @@ export const getNotes = async(exercise_id:number)=>{
 }
 
 export const writeNotes = async(exercise_id:number,content:string)=>{
+    if (content.trim()==''){
+        await db.runAsync(`INSERT INTO notes (ex_id,content) VALUES (?,?)`,[exercise_id,'Notes']);
+        return;
+    }
     await db.runAsync(`INSERT INTO notes (ex_id,content) VALUES (?,?)`,[exercise_id,content]);
 }
 

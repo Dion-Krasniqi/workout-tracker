@@ -7,8 +7,8 @@ import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from 'r
 const Width = Dimensions.get("window").width;
 // renders sets in exercises
 export const SetView = ({set}:{set:SessionSet}) => {
-  const [oldW, setOldW] = useState(set.weight);
-  const [oldR, setOldR] = useState(Number(set.reps));
+  const oldW = set.oldWeight;
+  const oldR = Number(set.oldReps);
   const [weight, setWeight] = useState(set.weight);
   const [reps, setReps] = useState(Number(set.reps));
   const updateSet = useSessionStore((state)=>state.updateSet)
@@ -126,6 +126,7 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
 export const Stopwatch = () => {
     const [time, setTime] = useState(0);
     const [running, setRunning] = useState(false);
+    const [bg,setBg] = useState('#fff');
 
     const intervalRef = useRef(null);
     const startTimeRef = useRef(0);
@@ -138,18 +139,21 @@ export const Stopwatch = () => {
       },1000)
 
       setRunning(true);
+      setBg('#baffa7ff')
 
     }
 
     const pauseStopwatch = () => {
       clearInterval(intervalRef.current);
       setRunning(false);
+      setBg('#ff9b9bff')
     }
 
     const resetStopwatch = () => {
       clearInterval(intervalRef.current);
       setTime(0);
       setRunning(false);
+      setBg('#fff')
     }
 
     const resumeStopWatch = () => {
@@ -159,6 +163,7 @@ export const Stopwatch = () => {
       },1000)
 
       setRunning(true);
+      setBg('#baffa7ff')
     }
     
     const formatWatch = (seconds:number) => {
@@ -170,9 +175,9 @@ export const Stopwatch = () => {
 
     return(
       <View style={{flex:1,flexDirection:'row',marginTop:10, marginBottom:50}}>
-                      <TouchableOpacity style={{borderRadius:5, height:50, backgroundColor:'white', justifyContent:'center', width:'66%'}}
-                                        onPress={()=>pauseStopwatch()}
-                                        onLongPress={()=>startStopwatch()}>
+                      <TouchableOpacity style={{borderRadius:5, height:50, backgroundColor:bg, justifyContent:'center', width:'66%'}}
+                                        onPress={()=>{if(!running){startStopwatch()}else{pauseStopwatch()}}}
+                                        onLongPress={()=>resumeStopWatch()}>
                           <Text className='font-bold text-center'>{formatWatch(time)}</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={{marginLeft:7,borderRadius:5, height:50, backgroundColor:'white', justifyContent:'center', width:'32%'}}

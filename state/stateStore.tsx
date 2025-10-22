@@ -98,9 +98,14 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
 
     },
     deletePreviousSessions: async()=>{
-        const {previousSessions} = get();
-        set({previousSessions:[],});
-        await deleteAllSessions();
+        Alert.alert('This will delete all data','Do you wish to proceed?',
+            [{text: 'Cancel',onPress: () => {},style: 'cancel',},
+             { text: 'YES', onPress: async() => {
+                set({previousSessions:[],});
+                await deleteAllSessions();
+             } },],
+             { cancelable: false });
+        
     },
     // starts session with a dummy id and sets start_time to when called and defaults exercises object to empty array
     // then assigns session object to activeSession
@@ -197,8 +202,10 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
                     id: setId,
                     session_exercise_id: SessionExerciseId,
                     set_number: i + 1,
-                    weight:result?.weight,
-                    reps:result?.reps,
+                    weight:0,
+                    reps:0,
+                    oldWeight:result?.weight,
+                    oldReps:result?.reps,
                 }
                 
             }));
