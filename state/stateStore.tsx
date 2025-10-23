@@ -74,6 +74,7 @@ interface SessionStore {
     previousSessions: Session[];
     activeSession: Session | null;
     loading: boolean;
+    loadingsessions: boolean;
     loadPreviousSession: ()=>void;
     deletePreviousSessions: ()=>void;
     startSession: (workout_id:number)=>Session;
@@ -89,11 +90,13 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
     previousSessions: [],
     activeSession: null,
     loading: true,
+    loadingsessions: true,
     //reads all entries in the sessions table 
     loadPreviousSession: async()=>{
         const sessions = await getAllSessions();
         const {previousSessions} = get();
-        set({previousSessions:[...sessions],});
+        set({previousSessions:[...sessions],loadingsessions:false});
+        
         
 
     },

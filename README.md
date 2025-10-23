@@ -4,7 +4,7 @@ Ext is a workout tracking app built with React Native + Expo. It uses Zustand fo
 The app allows the user to create their own exercises and workouts,track workouts as sessions by logging weights and reps used for each set of each exercise of a workout, check data of a given exercise, and more.
 
 ## Using the app
-* To use the application out of the box head over at the playstore link where you can find a downloadable version.
+* To use the application out of the box with the ads inlcuded(not currently), head over at the playstore link where you can find a downloadable version.
 * If you want to build the app yourself, you need to have node and npm installed. Start by cloning the repo locally or downloading the files. 
 
 
@@ -26,12 +26,11 @@ Sessions are "active" instances of workout routines. To start a session click on
 * Loading screen before actual loading the sessions/workouts;
 * Stopwatch resets if active session is exited;
 * Mix of tailwindCSS and CSS might mess up some styling;
-* Set view values are auto set so it looks completed off start;
 
 
 Planned features:
 * Search/filter sessions, workouts, and exercises;
-* Delete exercises
+* Delete exercises;
 * Change workout name;
 * Edit exercise set number;
 * Edit session start and end time;

@@ -3,7 +3,7 @@ import { FinishedSessionView } from "@/Components/sessionComponents";
 import { useSessionStore, useStore } from "@/state/stateStore";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 
@@ -17,6 +17,8 @@ export default function Index() {
   const loadAllSessions = useSessionStore((state)=>state.loadPreviousSession);
   const delSessions = useSessionStore((state)=>state.deletePreviousSessions);
   const {activeSession, previousSessions} = useSessionStore();
+  const loadingsessions = useSessionStore().loadingsessions;
+  
 
   
   
@@ -27,6 +29,11 @@ export default function Index() {
   return (
     <SafeAreaProvider>
       <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}> 
+      
+     
+        {loadingsessions ? (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>):(
+          <View>
+           
         {/*<View className="mx-2 items-center mt-10 px-2">
         <Search value={searchQuery}
                 onChangeText={(text: string) => setSearchQuery(text)}/>
@@ -39,7 +46,6 @@ export default function Index() {
             :(<Text className="text-white self-center font-bold">No active session</Text>)}
           </View>
         </View>
-        
         <FlatList data={previousSessions}
                   renderItem={({item})=>(<FinishedSessionView sesh={item}/>)}
                   //keyExtractor={({item})=>item.id.toString()}
@@ -59,13 +65,9 @@ export default function Index() {
                   keyExtractor={(item) =>item.id.toString()}
                   className="mt-8 w-full self-center"
                   scrollEnabled={false}/>*/}
-
-
-      
-      
-      
-      
-    </SafeAreaView>
+          </View>)}
+        
+        </SafeAreaView>
 
     </SafeAreaProvider>
     

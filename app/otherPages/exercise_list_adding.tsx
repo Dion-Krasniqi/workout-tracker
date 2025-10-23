@@ -1,11 +1,10 @@
-import { View, Text, FlatList, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { getAllExercises } from '../db/queries';
-import { Link, useLocalSearchParams, useRouter } from 'expo-router';
-import CustomButton from '@/Components/button';
 import { NameCardExecAdd } from '@/Components/nameCard';
 import { ExerciseInfo } from '@/interfaces/interfaces';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Text, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { getAllExercises } from '../db/queries';
 
 const Exercise_list_add = () => {
   const {workout_id} = useLocalSearchParams();

@@ -5,7 +5,7 @@ import { ExerciseView, Stopwatch } from '@/Components/sessionComponents';
 import { useSessionStore } from '@/state/stateStore';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, Image, Text, TouchableOpacity, View, } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { getAllNotes } from '../db/queries';
 
@@ -17,6 +17,8 @@ const Exercise_creation = () => {
   const quitSession = useSessionStore((state)=>state.quitSession);
   const loadExercises = useSessionStore((state)=>state.loadExercisesWithSets);
   const {activeSession, loading} = useSessionStore();
+
+  
 
   const [elapsed,setElapsed] = useState(0);
   
@@ -51,9 +53,13 @@ const Exercise_creation = () => {
   //@ts-ignore
   const time = new Date(sessionTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   return (
+    
     <SafeAreaProvider>
-      <SafeAreaView className='flex-1 bg-dark-100 '> 
-        <View  className='flex border-b-4 border-b-light-100 pb-5 rounded-xl'>
+      
+        {loading ? (<ActivityIndicator/>):
+        (
+        <SafeAreaView className='flex-1 bg-dark-100 '>
+         <View  className='flex border-b-4 border-b-light-100 pb-5 rounded-xl'>
          
          <View className="mx-2 px-5 mt-2">
           <View className='flex-row justify-between mb-5 items-center'>
@@ -82,7 +88,6 @@ const Exercise_creation = () => {
                   <Text className='font-bold text-center'>Started at {time}</Text>
                 </View>
             </View>
-            {/*Stopwatch*/}
             <View>
               <Stopwatch />
             </View>
@@ -114,15 +119,7 @@ const Exercise_creation = () => {
       
         
         
-      </View>
-      
-        
-      
-      
-      
-      
-    </SafeAreaView>
-
+      </View></SafeAreaView>)}
     </SafeAreaProvider>
     
   );
