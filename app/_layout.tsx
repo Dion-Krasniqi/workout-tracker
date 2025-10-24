@@ -1,9 +1,8 @@
+import { useWorkoutStore } from "@/state/stateStore";
 import { Stack } from "expo-router";
-import { StackScreen } from "react-native-screens";
-import './global.css';
 import { useEffect } from "react";
 import { initDB } from "./db/db";
-import { useWorkoutStore } from "@/state/stateStore";
+import './global.css';
 
 export default function RootLayout() {
 
