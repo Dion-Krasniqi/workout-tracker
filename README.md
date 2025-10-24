@@ -4,15 +4,18 @@ Ext is a workout tracking app built with React Native + Expo. It uses Zustand fo
 The app allows the user to create their own exercises and workouts,track workouts as sessions by logging weights and reps used for each set of each exercise of a workout, check data of a given exercise, and more.
 
 ## Using the app
-* To use the application out of the box with the ads inlcuded(not currently), head over at the playstore link where you can find a downloadable version.
-* If you want to build the app yourself, you need to have node and npm installed. Start by cloning the repo locally or downloading the files. 
-
+* To use the application out of the box with ads inlcuded(not currently), head over at the playstore link where you can find a downloadable version.
+* The apk build is listed in the assets section of each release
+* If you want to build the app yourself, donwload the source code listed in the assets or directly from the repo. You must have node and npm installed. After you've downloaded the files, run npm install(or equivalent line) to install the requirements. Lastly, if you decide to use expo run:
+"eas build -p android --profile apkrelease" for the apk build or
+"eas build -platform android" for the aab build.
+I have no idea how to make it work with IOS.
 
 ## Exercises
 The apps comes with a few built in exercises and workouts. To view all exercises navigate to the exercise list by pressing the Exercise List button found in the workouts tab, there you can also find the Create Exercise button which allows you to create a custom exercise using a unique name and optional muscle group.
 
 ## Workouts
-To view workouts or create a custom one, simply open the workouts tab where you can find a button and list. Clicking on a workout shows the workouts exercises and number of sets of a given exercise, while holding an entry starts a session(or prompts with a warning if there is an active session).
+To view workouts or create a custom one, simply open the workouts tab where you can find a button and list. Clicking on a workout shows the workouts exercises, number of sets of a given exercise and button to start workout, while holding an entry starts a session(or prompts with a warning if there is an active session).
 
 ## Sessions
 Sessions are "active" instances of workout routines. To start a session click on a workout to see the routine where you'll also find a start workout button, or simply hold the workout listing in the workouts tab. A session ends after clicking the finish button in an active session,after which it will save the session and write the set data. If stopped forcefully(by starting a new session while another is active), no data is saved.
@@ -39,6 +42,4 @@ Planned features:
 * Data should be trasnfarable, either account or extracting and importing manually;
 * Session based memory option;
 * Reset exercise data and add optional marker;
-
-
-
+* Exercise reordering;
