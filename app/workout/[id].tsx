@@ -51,9 +51,9 @@ const WorkoutInformation = () => {
                                                     {item.order_index>1 && (<TouchableOpacity >
                                                       <Text className='text-white font-bold' style={{transform:[{rotate:'-90deg'}]}}>➤</Text>
                                                     </TouchableOpacity>)}
-                                                    <TouchableOpacity >
+                                                    {item.order_index<workout.exercises.at(-1)?.order_index && <TouchableOpacity >
                                                       <Text className='text-white font-bold' style={{transform:[{rotate:'90deg'}]}}>➤</Text>
-                                                    </TouchableOpacity>
+                                                    </TouchableOpacity>}
                                                   
                                                   </View>
                                                 </View>
