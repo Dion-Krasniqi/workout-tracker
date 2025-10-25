@@ -1,19 +1,16 @@
 import CustomButton from "@/Components/button";
 import { FinishedSessionView } from "@/Components/sessionComponents";
-import { useSessionStore, useStore } from "@/state/stateStore";
+import { useSessionStore } from "@/state/stateStore";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { getAllExerciseInstances } from "../db/queries";
 
 
 
 export default function Index() {
-  
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const count = useStore((state)=>state.count);
-  const increment = useStore((state)=>state.increment);
   const loadAllSessions = useSessionStore((state)=>state.loadPreviousSession);
   const delSessions = useSessionStore((state)=>state.deletePreviousSessions);
   const {activeSession, previousSessions} = useSessionStore();
@@ -24,6 +21,7 @@ export default function Index() {
   
   useEffect(()=>{
     loadAllSessions();
+    getAllExerciseInstances();
   },[])
 
   return (

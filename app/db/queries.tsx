@@ -12,6 +12,11 @@ export const getAllExercises = async () => {
     return allRows;
 
 }
+export const getAllExerciseInstances = async () => {
+    const allRows = await db.getAllAsync('SELECT * FROM exercises');
+    console.log(allRows)
+
+}
 export const createCustomExercise = async (exercise_name:string, muscle_group_id:number) => {
     await db.runAsync(`INSERT INTO exercises_info (name,muscle_group) VALUES (?,?);`, exercise_name, muscle_group_id);
 
@@ -26,11 +31,9 @@ export const getExercise = async (id:number) => {
 
 //Workout Related
 
-export const addExerciseToWorkout = async (workout_id:number, exercise_id:number,set_number:number): Promise<number> => {
-    const result = await db.runAsync(`INSERT INTO exercises (workout_id,exercise_id,set_number) VALUES (?,?,?)`,
-                                                                          workout_id,exercise_id,set_number);
-    const test = await db.getAllSync('SELECT * FROM exercises');
-    console.log(test);
+export const addExerciseToWorkout = async (workout_id:number, exercise_id:number,set_number:number,order_index:number): Promise<number> => {
+    const result = await db.runAsync(`INSERT INTO exercises (workout_id,exercise_id,set_number,order_index) VALUES (?,?,?,?)`,
+                                                                          workout_id,exercise_id,set_number,order_index);
     return result.lastInsertRowId as number;
 }
 export const removeExercise = async (exercise_id:number): Promise<number> => {
@@ -68,10 +71,12 @@ export const getWorkoutExercises = async (id:number) => {
     )
     return detailedExercises as ExerciseTemplate[];*/}
     const result = db.getAllSync(`
-        SELECT ex.id, ex.exercise_id, ef.name, ex.set_number 
+        SELECT ex.id, ex.exercise_id, ef.name, ex.set_number, ex.order_index 
         FROM exercises ex 
         JOIN exercises_info ef ON ex.exercise_id = ef.id 
-        WHERE ex.workout_id = ?;`, [id]);
+        WHERE ex.workout_id = ?
+        ORDER BY order_index;`, [id]);
+    console.log(result);
     return result
     
 }

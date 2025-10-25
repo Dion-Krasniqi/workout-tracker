@@ -10,6 +10,7 @@ export interface ExerciseTemplate {
     exercise_id:number;
     name:string;
     set_number: number;
+    index:number;
 }
 
 export interface WorkoutTemplate {

@@ -4,14 +4,6 @@ import { Alert } from 'react-native';
 import { create } from 'zustand';
 
 
-export const useStore = create<{
-    count:number;
-    increment: ()=>void;
-}>((set)=>({
-    count:0,
-    increment: ()=> set((state) =>({count: state.count + 1})),
-}))
-
 
 interface WorkoutStore {
     workouts: WorkoutTemplate[];
@@ -24,7 +16,7 @@ interface WorkoutStore {
 }
 
 
-export const useWorkoutStore = create<WorkoutStore>((set)=>({
+export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
     workouts:[],
     loading: true,
     loadWorkouts: async()=> {
@@ -41,8 +33,12 @@ export const useWorkoutStore = create<WorkoutStore>((set)=>({
         
     },
     addExerciseToWorkout: async(workout_id,exercise_id,exercise_name,set_number)=>{
-        const id = await addExerciseToWorkout(workout_id, exercise_id, set_number);
-        const newExercise = {id:id, exercise_id:exercise_id, name:exercise_name, set_number:set_number};
+        const state = get(); 
+        const workout = state.workouts.find(w => w.id == workout_id);
+        const lastOrder = workout?.exercises.at(-1)?.index ?? 0;
+        const order_index = lastOrder + 1;
+        const id = await addExerciseToWorkout(workout_id, exercise_id, set_number,order_index);
+        const newExercise = {id:id, exercise_id:exercise_id, name:exercise_name, set_number:set_number, index:order_index};
         set((state)=>({
             workouts: state.workouts.map((w)=>w.id==workout_id ? 
                                               {...w, exercises:[...w.exercises,newExercise]} :

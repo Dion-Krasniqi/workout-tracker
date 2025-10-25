@@ -208,4 +208,17 @@ export const migrations = [
         );
       `
     },
+    {id:9,
+      up:`
+        ALTER TABLE exercises ADD COLUMN order_index INTEGER;
+        
+      `
+    },
+    {id:10,
+      up:`WITH updated AS (SELECT rowid,
+                         ROW_NUMBER() OVER (PARTITION BY workout_id ORDER BY id) AS rn
+                         FROM exercises)
+        UPDATE exercises
+        SET order_index = (SELECT rn from updated WHERE updated.rowid = exercises.rowid);`
+    }
 ]
