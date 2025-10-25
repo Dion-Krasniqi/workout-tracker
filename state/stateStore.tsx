@@ -35,10 +35,10 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
     addExerciseToWorkout: async(workout_id,exercise_id,exercise_name,set_number)=>{
         const state = get(); 
         const workout = state.workouts.find(w => w.id == workout_id);
-        const lastOrder = workout?.exercises.at(-1)?.index ?? 0;
+        const lastOrder = workout?.exercises.at(-1)?.order_index ?? 0;
         const order_index = lastOrder + 1;
         const id = await addExerciseToWorkout(workout_id, exercise_id, set_number,order_index);
-        const newExercise = {id:id, exercise_id:exercise_id, name:exercise_name, set_number:set_number, index:order_index};
+        const newExercise = {id:id, exercise_id:exercise_id, name:exercise_name, set_number:set_number, order_index:order_index};
         set((state)=>({
             workouts: state.workouts.map((w)=>w.id==workout_id ? 
                                               {...w, exercises:[...w.exercises,newExercise]} :
@@ -61,6 +61,7 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
                                              {...w, exercises:exercises}:
                                               w)
         }))
+        console.log('zustand:',exercises);
     },
 }));
 

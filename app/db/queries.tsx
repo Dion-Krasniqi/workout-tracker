@@ -70,7 +70,7 @@ export const getWorkoutExercises = async (id:number) => {
         })
     )
     return detailedExercises as ExerciseTemplate[];*/}
-    const result = db.getAllSync(`
+    const result = await  db.getAllSync(`
         SELECT ex.id, ex.exercise_id, ef.name, ex.set_number, ex.order_index 
         FROM exercises ex 
         JOIN exercises_info ef ON ex.exercise_id = ef.id 

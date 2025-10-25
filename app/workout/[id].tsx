@@ -42,15 +42,23 @@ const WorkoutInformation = () => {
             
              </View>
              <FlatList data={workout.exercises}
-                       renderItem={({item})=>(<View className='flex-row self-center w-[90%] mt-2 py-4 px-4 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between'>
+                       renderItem={({item})=>(<TouchableOpacity onLongPress={()=>deleteExercise(workout.id,item.id)}>
+                        <View className='flex-row self-center w-[90%] mt-2 py-4 px-4 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between'>
                                                 <Text className='text-white text-lg font-bold'>{item.name}</Text>
                                                 <View className='flex-row items-center'>
                                                   <Text className='text-white mr-8'>{item.set_number} Sets</Text>
-                                                  <TouchableOpacity onPress={()=>{deleteExercise(workout.id,item.id)}} >
-                                                    <Text className='text-white font-bold'>X</Text>
-                                                  </TouchableOpacity>
+                                                  <View className='flex flex-row gap-2'>
+                                                    {item.order_index>1 && (<TouchableOpacity >
+                                                      <Text className='text-white font-bold' style={{transform:[{rotate:'-90deg'}]}}>➤</Text>
+                                                    </TouchableOpacity>)}
+                                                    <TouchableOpacity >
+                                                      <Text className='text-white font-bold' style={{transform:[{rotate:'90deg'}]}}>➤</Text>
+                                                    </TouchableOpacity>
+                                                  
+                                                  </View>
                                                 </View>
-                                              </View>)}
+                                              </View>
+                       </TouchableOpacity>)}
                        keyExtractor={(item) =>item.id.toString()}
                        className="mt-6 w-full "/>
 
