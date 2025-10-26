@@ -67,10 +67,11 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
         const state = get();
         const workout = state.workouts.find(w => w.id == workout_id);
         const other_id = (workout?.exercises.find(e => e.order_index === new_index))?.id;
+        //sort to update the flatlist
         set((state)=>({
             workouts: state.workouts.map((w)=>w.id==workout_id ? 
                                          {...w, exercises: w.exercises.map((e)=> e.id == other_id ? { ...e, order_index: old_index }
-              : e.id == exercise_id ? { ...e, order_index: new_index } : e ),} : w),}));
+              : e.id == exercise_id ? { ...e, order_index: new_index } : e ).sort((a, b) => a.order_index - b.order_index),} : w),}));
         //@ts-ignore
         reorderExercise(exercise_id,new_index,old_index,other_id);
     },

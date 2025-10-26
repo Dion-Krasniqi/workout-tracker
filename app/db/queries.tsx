@@ -36,6 +36,8 @@ export const addExerciseToWorkout = async (workout_id:number, exercise_id:number
                                                                           workout_id,exercise_id,set_number,order_index);
     return result.lastInsertRowId as number;
 }
+
+//Possibly do this in one
 export const reorderExercise = async(exercise_id:number,order_index:number,old_index:number,other_id:number)=> {
     await db.runAsync(`UPDATE exercises 
                        SET order_index = (?)

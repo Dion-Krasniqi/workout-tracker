@@ -44,23 +44,29 @@ const WorkoutInformation = () => {
              </View>
              <FlatList data={workout.exercises}
                        renderItem={({item})=>(<TouchableOpacity onLongPress={()=>deleteExercise(workout.id,item.id)}>
-                        <View className='flex-row self-center w-[90%] mt-2 py-4 px-4 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between'>
-                                                <Text className='text-white text-lg font-bold'>{item.name}</Text>
-                                                <View className='flex-row items-center'>
-                                                  <Text className='text-white mr-8'>{item.set_number} Sets</Text>
-                                                  <View className='flex flex-row gap-2'>
+                        <View className='flex flex-row self-center w-[90%] mt-2 py-4 px-4 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between'>
+                                                
+                                                
+                                                  <View className='flex flex-cols'>
+                                                      <Text className='text-white text-lg font-bold'>{item.name}</Text>
+                                                      <Text className='text-white mr-10'>{item.set_number} Sets</Text>
+                                                  </View>
+                                                  
+                                                  <View className='flex flex-row gap-4'>
+                                                    {(item.order_index==workout.exercises.length ) && (<Text className='mr-2'></Text>)}
                                                     {item.order_index>1 && (<TouchableOpacity onPress={()=>
                                                       {changeOrder(Number(id),item.id,item.order_index-1, item.order_index)}}>
-                                                      <Text className='text-white font-bold' style={{transform:[{rotate:'-90deg'}]}}>➤</Text>
+                                                      <Text className='text-white font-bold ' style={{transform:[{scale:2}]}}>⇑</Text>
                                                     </TouchableOpacity>)}
                                                     
-                                                    {(item.order_index<workout.exercises.length ) && <TouchableOpacity onPress={()=>
+                                                    
+                                                    {(item.order_index<workout.exercises.length ) && (<TouchableOpacity onPress={()=>
                                                       changeOrder(Number(id),item.id,item.order_index+1, item.order_index)}>
-                                                      <Text className='text-white font-bold' style={{transform:[{rotate:'90deg'}]}}>➤</Text>
-                                                    </TouchableOpacity>}
+                                                      <Text className='text-white font-bold ' style={{transform:[{scale:2}]}}>⇓</Text>
+                                                    </TouchableOpacity>)}
                                                   
                                                   </View>
-                                                </View>
+                                                
                                               </View>
                        </TouchableOpacity>)}
                        keyExtractor={(item) =>item.id.toString()}
