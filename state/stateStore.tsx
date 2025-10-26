@@ -1,4 +1,4 @@
-import { addExerciseToWorkout, createCustomWorkout, createSession, deleteAllSessions, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, writeNotes, writeSet } from '@/app/db/queries';
+import { addExerciseToWorkout, createCustomWorkout, createSession, deleteAllSessions, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { Alert } from 'react-native';
 import { create } from 'zustand';
@@ -13,6 +13,7 @@ interface WorkoutStore {
     addExerciseToWorkout: (workout_id:number,exercise_id:number,exercise_name:string, set_number:number) =>void;
     removeExerciseFromWorkout:(workout_id:number,exercise_id:number) => void;
     loadExercises: (workout_id:number) =>Promise<void>;
+    changeOrder:(workout_id:number, exercise_id:number,new_index:number,old_index:number) => void;
 }
 
 
@@ -61,8 +62,19 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
                                              {...w, exercises:exercises}:
                                               w)
         }))
-        console.log('zustand:',exercises);
     },
+    changeOrder: async(workout_id,exercise_id,new_index,old_index)=>{
+        const state = get();
+        const workout = state.workouts.find(w => w.id == workout_id);
+        const other_id = (workout?.exercises.find(e => e.order_index === new_index))?.id;
+        set((state)=>({
+            workouts: state.workouts.map((w)=>w.id==workout_id ? 
+                                         {...w, exercises: w.exercises.map((e)=> e.id == other_id ? { ...e, order_index: old_index }
+              : e.id == exercise_id ? { ...e, order_index: new_index } : e ),} : w),}));
+        //@ts-ignore
+        reorderExercise(exercise_id,new_index,old_index,other_id);
+    },
+
 }));
 
 

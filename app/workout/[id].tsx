@@ -11,7 +11,8 @@ const WorkoutInformation = () => {
   const {workouts, loading} = useWorkoutStore();
   const workout = workouts.find((w) => w.id === Number(id));
   const beginSession = useSessionStore((state)=>state.startSession);
-  const deleteExercise = useWorkoutStore((state)=>state.removeExerciseFromWorkout)
+  const deleteExercise = useWorkoutStore((state)=>state.removeExerciseFromWorkout);
+  const changeOrder = useWorkoutStore((state)=>state.changeOrder)
 
   if(loading){
     return(<Text>Loading Workouts</Text>)
@@ -48,10 +49,13 @@ const WorkoutInformation = () => {
                                                 <View className='flex-row items-center'>
                                                   <Text className='text-white mr-8'>{item.set_number} Sets</Text>
                                                   <View className='flex flex-row gap-2'>
-                                                    {item.order_index>1 && (<TouchableOpacity >
+                                                    {item.order_index>1 && (<TouchableOpacity onPress={()=>
+                                                      {changeOrder(Number(id),item.id,item.order_index-1, item.order_index)}}>
                                                       <Text className='text-white font-bold' style={{transform:[{rotate:'-90deg'}]}}>➤</Text>
                                                     </TouchableOpacity>)}
-                                                    {item.order_index<workout.exercises.at(-1)?.order_index && <TouchableOpacity >
+                                                    
+                                                    {(item.order_index<workout.exercises.length ) && <TouchableOpacity onPress={()=>
+                                                      changeOrder(Number(id),item.id,item.order_index+1, item.order_index)}>
                                                       <Text className='text-white font-bold' style={{transform:[{rotate:'90deg'}]}}>➤</Text>
                                                     </TouchableOpacity>}
                                                   

@@ -36,6 +36,17 @@ export const addExerciseToWorkout = async (workout_id:number, exercise_id:number
                                                                           workout_id,exercise_id,set_number,order_index);
     return result.lastInsertRowId as number;
 }
+export const reorderExercise = async(exercise_id:number,order_index:number,old_index:number,other_id:number)=> {
+    await db.runAsync(`UPDATE exercises 
+                       SET order_index = (?)
+                       WHERE id = (?);`, order_index,exercise_id);
+    await db.runAsync(`UPDATE exercises 
+                       SET order_index = (?)
+                       WHERE id = (?);`, old_index,other_id);
+    
+}
+
+
 export const removeExercise = async (exercise_id:number): Promise<number> => {
     const result = await db.runAsync(`DELETE FROM exercises 
                                       WHERE id = ?`, exercise_id);
