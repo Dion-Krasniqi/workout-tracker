@@ -3,10 +3,12 @@
 Ext is a workout tracking app built with React Native + Expo. It uses Zustand for state management and Sqlite for persistent data storage.
 The app allows the user to create their own exercises and workouts,track workouts as sessions by logging weights and reps used for each set of each exercise of a workout, check data of a given exercise, and more.
 
-<img src="https://play-lh.googleusercontent.com/-Fw6-bjeeQS3haD0yR0VZJQoy6Ib69O0ymYBPXHh2A7JnuI7uWaI1xHhcFWj80um1UVkN4GWGdR70-5vBP7eUg=w1052-h592-rw" alt="Home Page" width="22%">
-<img src="https://play-lh.googleusercontent.com/Uj7Y8qvTN7IHObsS3185nIjNTmvw-Cz7b8DaZNQix3OK9rI3h24PSNaAThoITUm78LqJEnTGubjJmgi6vpksaXs=w1052-h592-rw" alt="Workout" width="22%">
-<img src="https://play-lh.googleusercontent.com/S-kpSekp_Y-6JEsdBjVcIU0PYQCR8yiOh7H_rVOcAUljVGzmSzZfnaeLymu0jhgftPxC1rPJiNc6pF-zv4UT=w1052-h592-rw" alt="Session" width="22%">
-<img src="https://play-lh.googleusercontent.com/i0ck0dmBzt9A4Sst7QyjlFuFL0A3cUTgJOwpudQaNf_ZfsvtA9TP48mXsLJtCsxu3xBHK8Near3nft2_Vgs9og=w5120-h2880-rw" alt="Exercise" width="22%">
+<div>
+  <img src="https://play-lh.googleusercontent.com/-Fw6-bjeeQS3haD0yR0VZJQoy6Ib69O0ymYBPXHh2A7JnuI7uWaI1xHhcFWj80um1UVkN4GWGdR70-5vBP7eUg=w1052-h592-rw" alt="Home Page" width="22%">
+  <img src="https://play-lh.googleusercontent.com/Uj7Y8qvTN7IHObsS3185nIjNTmvw-Cz7b8DaZNQix3OK9rI3h24PSNaAThoITUm78LqJEnTGubjJmgi6vpksaXs=w1052-h592-rw" alt="Workout" width="22%">
+  <img src="https://play-lh.googleusercontent.com/S-kpSekp_Y-6JEsdBjVcIU0PYQCR8yiOh7H_rVOcAUljVGzmSzZfnaeLymu0jhgftPxC1rPJiNc6pF-zv4UT=w1052-h592-rw" alt="Session" width="22%">
+  <img src="https://play-lh.googleusercontent.com/i0ck0dmBzt9A4Sst7QyjlFuFL0A3cUTgJOwpudQaNf_ZfsvtA9TP48mXsLJtCsxu3xBHK8Near3nft2_Vgs9og=w5120-h2880-rw" alt="Exercise" width="22%">
+</div>
 
 
 
