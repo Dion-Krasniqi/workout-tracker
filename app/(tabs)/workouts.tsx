@@ -1,11 +1,11 @@
-import { View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@/Components/button'
+import React, { useEffect } from 'react'
+import { FlatList, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 //import { createCustomExercise, createCustomWorkout, getAllWorkoutTemplates } from '../db/queries'
-import { Link, useRouter } from 'expo-router'
-import { NameCardWork } from '@/Components/nameCard'
 import { useSessionStore, useWorkoutStore } from '@/state/stateStore'
+import { Link, useRouter } from 'expo-router'
+import { exportAllSetData } from '../db/db'
 
 const Workouts = () => {
   
@@ -49,12 +49,16 @@ const Workouts = () => {
                                   </Link>)}
             keyExtractor={(item) =>item.id.toString()}
             className="mt-8 w-full self-center"
-            scrollEnabled={false}/>
+            scrollEnabled={false}
+            ListFooterComponent={<CustomButton onPress={()=>exportAllSetData()} buttonText='Extract All Data' />}
+            ListFooterComponentStyle={{marginTop:30}}/>
 
         
         </>
       </View>
+      
     </ScrollView>
+    
     
       
 
