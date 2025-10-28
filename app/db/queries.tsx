@@ -107,6 +107,13 @@ export const loadWorkouts = async (): Promise<WorkoutTemplate[]> => {
 
 }
 
+export const changeWorkoutName = async(workout_id:number,name:string)=>{
+    await db.runAsync(`UPDATE workouts
+                       SET name = (?)
+                       WHERE id = (?);`, name,workout_id);
+
+}
+
 
 
 

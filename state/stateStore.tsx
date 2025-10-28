@@ -1,4 +1,4 @@
-import { addExerciseToWorkout, createCustomWorkout, createSession, deleteAllSessions, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
+import { addExerciseToWorkout, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { Alert } from 'react-native';
 import { create } from 'zustand';
@@ -8,6 +8,7 @@ import { create } from 'zustand';
 interface WorkoutStore {
     workouts: WorkoutTemplate[];
     loading: boolean;
+    changeName: (workout_id:number,name:string)=>void;
     loadWorkouts: ()=>Promise<void>;
     addWorkout: (workout_name: string)=>Promise<number>;
     addExerciseToWorkout: (workout_id:number,exercise_id:number,exercise_name:string, set_number:number) =>void;
@@ -20,6 +21,15 @@ interface WorkoutStore {
 export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
     workouts:[],
     loading: true,
+    changeName: async(workout_id,name) =>{
+        set((state)=>({
+            workouts: state.workouts.map((w)=>w.id==workout_id ? 
+                                              {...w, name:name} :
+                                              w)
+        }))
+        await changeWorkoutName(workout_id,name);
+
+    },
     loadWorkouts: async()=> {
         const result = await loadWorkouts();
         set({workouts:result, loading:false});

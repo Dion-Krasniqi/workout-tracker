@@ -6,26 +6,45 @@ import { FlatList, LayoutAnimation, Platform, Text, TextInput, TouchableOpacity,
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
+
+
+
 
 
 
 const WorkoutInformation = () => {
+  if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+
   const [direction, setDirection] = useState('column');
   const { id } = useLocalSearchParams();
   const {workouts, loading} = useWorkoutStore();
   const workout = workouts.find((w) => w.id === Number(id));
-  const [name, setName] = useState(workout?.name);
+  const [name, setName] = useState('');
+
   const beginSession = useSessionStore((state)=>state.startSession);
   const deleteExercise = useWorkoutStore((state)=>state.removeExerciseFromWorkout);
-  const changeOrder = useWorkoutStore((state)=>state.changeOrder)
+  const changeOrder = useWorkoutStore((state)=>state.changeOrder);
+  const changeName = useWorkoutStore((state)=>state.changeName);
 
   const toggleLayout = () => {
-  LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-  setDirection((prev) => (prev === 'row' ? 'column' : 'row'));
+    // Not working
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setDirection((prev) => (prev === 'row' ? 'column' : 'row'));
   };
+
+  const changeWorkoutName = async (name:string,old_name:string) => {
+    if(name==old_name){
+      alert('Name is the same!');
+    }
+    if(name.trim() == ''){
+      alert('Name is empty!')
+    }
+    changeName(Number(id),name);
+  } 
 
   if(loading){
     return(<Text>Loading Workouts</Text>)
@@ -33,7 +52,7 @@ const WorkoutInformation = () => {
   if (!workout) {
     return(<Text>Workout not found</Text>)
   }
-  //const [exercises, setExercises] = useState<DetailedExercise[]>([]);
+
   const router = useRouter();
   
   useEffect(()=>{
@@ -43,24 +62,32 @@ const WorkoutInformation = () => {
   },[workout?.id])
 
 
-  // calling like this for testing
-  useEffect(()=>{
-    toggleLayout();
-  },[name?.length])
-
 
   return (
     <SafeAreaProvider>
          <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}}> 
-            <View className="items-center mt-10 w-[80%]" 
-                  style={{flexDirection: direction, }}>
+            <View className="items-center mt-10 w-[80%] flex flex-row">
                 <TextInput placeholder={workout.name} 
-                   onChangeText={(text)=>setName(text)}
+                   onChangeText={(text)=>{setName(text);
+                                          if(text?.length>0 && direction=='column' && text != workout.name){
+                                            toggleLayout();
+                                          }
+                                          if(text?.length==0 && direction=='row'){
+                                            toggleLayout();
+                                          }
+
+                   }}
                    placeholderTextColor={'darkgrey'}
                    className='text-center text-light-100 bg-white rounded-md px-4'
                    style={{width: (direction=='row') ? '90%':'100%'}}/>
                 {(direction=='row') && (
-                  <TouchableOpacity className='ml-2 bg-white py-2 items-center rounded-md h-auto' style={{width:'12%'}}>
+                  <TouchableOpacity className='ml-2 bg-white py-2 items-center rounded-r-md h-auto ' 
+                                    style={{width:(direction=='row')? '12%':'5%',
+                                    borderRadius: (direction=='row')? 5:0}}
+                                    //for now just hard replace but just figure out a way to empty text
+                                    onPress={()=>{changeWorkoutName(name,workout.name); 
+                                                  router.replace(`/workout/${id}`);
+                                    }}>
                     <Text className='items-center'>✓</Text>
                   </TouchableOpacity>
                 )}
