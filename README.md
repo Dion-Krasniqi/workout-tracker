@@ -3,7 +3,7 @@
 Ext is a workout tracking app built with React Native + Expo. It uses Zustand for state management and Sqlite for persistent data storage.
 The app allows the user to create their own exercises and workouts,track workouts as sessions by logging weights and reps used for each set of each exercise of a workout, check data of a given exercise, and more.
 
-<div>
+<div style="text-align: center;">
   <img src="https://play-lh.googleusercontent.com/-Fw6-bjeeQS3haD0yR0VZJQoy6Ib69O0ymYBPXHh2A7JnuI7uWaI1xHhcFWj80um1UVkN4GWGdR70-5vBP7eUg=w1052-h592-rw" alt="Home Page" width="22%">
   <img src="https://play-lh.googleusercontent.com/Uj7Y8qvTN7IHObsS3185nIjNTmvw-Cz7b8DaZNQix3OK9rI3h24PSNaAThoITUm78LqJEnTGubjJmgi6vpksaXs=w1052-h592-rw" alt="Workout" width="22%">
   <img src="https://play-lh.googleusercontent.com/S-kpSekp_Y-6JEsdBjVcIU0PYQCR8yiOh7H_rVOcAUljVGzmSzZfnaeLymu0jhgftPxC1rPJiNc6pF-zv4UT=w1052-h592-rw" alt="Session" width="22%">
@@ -13,8 +13,7 @@ The app allows the user to create their own exercises and workouts,track workout
 
 
 ## Using the app
-* To use the application out of the box with ads inlcuded(not currently), head over at the playstore link where you can find a downloadable version.
-* The apk build is listed in the assets section of each release
+* To use the application out of the box with ads inlcuded(not currently), head over at the playstore link where you can find a downloadable version. You can also find the apk build listed in the assets section of each release.
 * If you want to build the app yourself, donwload the source code listed in the assets or directly from the repo. You must have node and npm installed. After you've downloaded the files, run npm install(or equivalent line) to install the requirements. Lastly, if you decide to use expo run:
 "eas build -p android --profile apkrelease" for the apk build or
 "eas build -platform android" for the aab build.
