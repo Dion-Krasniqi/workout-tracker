@@ -108,7 +108,8 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
   const screenWidth = Dimensions.get("window").width/1.1;
 
   return (
-      <View className='flex rounded-md justify-center px-2 bg-white mt-4' style={{width:screenWidth, height:65}}>
+    <Link href={`/session/completed/${sesh.id}`} asChild>
+      <TouchableOpacity className='flex rounded-md justify-center px-2 bg-white mt-4' style={{width:screenWidth, height:65}}>
         <View className='flex-row justify-between'>
           <Text className='font-bold text-center'>{sesh.session_name}</Text>
           <Text>{date}</Text>
@@ -118,7 +119,8 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
           <Text className='font-bold text-center'>Duration: {hours}:{minutes}:{seconds}</Text>
         </View>
          
-      </View>
+      </TouchableOpacity>
+      </Link>
               )
 
 }
