@@ -2,17 +2,30 @@ import CustomButton from '@/Components/button';
 import { useSessionStore, useWorkoutStore } from '@/state/stateStore';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, LayoutAnimation, Platform, Text, TextInput, TouchableOpacity, UIManager, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-const WorkoutInformation = () => {
 
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+
+
+const WorkoutInformation = () => {
+  const [direction, setDirection] = useState('column');
   const { id } = useLocalSearchParams();
   const {workouts, loading} = useWorkoutStore();
   const workout = workouts.find((w) => w.id === Number(id));
+  const [name, setName] = useState(workout?.name);
   const beginSession = useSessionStore((state)=>state.startSession);
   const deleteExercise = useWorkoutStore((state)=>state.removeExerciseFromWorkout);
   const changeOrder = useWorkoutStore((state)=>state.changeOrder)
+
+  const toggleLayout = () => {
+  LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+  setDirection((prev) => (prev === 'row' ? 'column' : 'row'));
+  };
 
   if(loading){
     return(<Text>Loading Workouts</Text>)
@@ -29,16 +42,28 @@ const WorkoutInformation = () => {
     }
   },[workout?.id])
 
-  const [name, setName] = useState(workout.name);
+
+  // calling like this for testing
+  useEffect(()=>{
+    toggleLayout();
+  },[name?.length])
+
 
   return (
     <SafeAreaProvider>
          <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}}> 
-            <View className=" items-center mt-10 w-[80%]">
-                <TextInput placeholder={name} 
+            <View className="items-center mt-10 w-[80%]" 
+                  style={{flexDirection: direction, }}>
+                <TextInput placeholder={workout.name} 
                    onChangeText={(text)=>setName(text)}
                    placeholderTextColor={'darkgrey'}
-                   className='text-center text-light-100 bg-white rounded-md px-4 w-full'/>
+                   className='text-center text-light-100 bg-white rounded-md px-4'
+                   style={{width: (direction=='row') ? '90%':'100%'}}/>
+                {(direction=='row') && (
+                  <TouchableOpacity className='ml-2 bg-white py-2 items-center rounded-md h-auto' style={{width:'12%'}}>
+                    <Text className='items-center'>✓</Text>
+                  </TouchableOpacity>
+                )}
 
             
              </View>

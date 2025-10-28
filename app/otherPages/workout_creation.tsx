@@ -1,10 +1,9 @@
-import { View, Text, TextInput } from 'react-native'
-import React, { useState } from 'react'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@/Components/button';
-import { createCustomWorkout } from '../db/queries';
-import { useRouter } from 'expo-router';
 import { useWorkoutStore } from '@/state/stateStore';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { TextInput, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const Workout_creation = () => {
 
