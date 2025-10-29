@@ -11,7 +11,7 @@ import { getAllExerciseInstances } from "../db/queries";
 
 export default function Index() {
 
-  const loadAllSessions = useSessionStore((state)=>state.loadPreviousSession);
+  const loadAllSessions = useSessionStore((state)=>state.loadPreviousSessions);
   const delSessions = useSessionStore((state)=>state.deletePreviousSessions);
   const {activeSession, previousSessions} = useSessionStore();
   const loadingsessions = useSessionStore().loadingsessions;

@@ -12,14 +12,21 @@ const SessionDetails = () => {
     const router = useRouter();
     const { previousSessions } = useSessionStore();
     const [session,setSession] = useState<Session>();
+    const loadExercises = useSessionStore((state)=>state.loadPreviousSession);
 
     useEffect(()=>{
         setSession(previousSessions.find((s)=>s.id==Number(id)));
-
     },[]);
+    
+    let startTime = '';
+    let endTime = '';
 
-    const startTime = new Date(session?.time_started).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    const endTime = new Date(session?.time_ended).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    if (session){
+
+      startTime = new Date(session?.time_started).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      endTime = new Date(session?.time_ended).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      loadExercises(session?.id);
+    }
 
 
     return(
@@ -36,8 +43,9 @@ const SessionDetails = () => {
                  </TouchableOpacity>
                 {/*<Text className='text-light-100'>Ended at 01:30</Text>*/}
             </View>
-             <View className=' rounded-md h-[50] justify-center px-2 bg-white'>
+             <View className='rounded-md h-[50] justify-center px-2 bg-white'>
                             <Text className='font-bold text-center'>{session?.session_name}</Text>
+                            
              </View>
             
               <View className='flex-row justify-between mt-3'>

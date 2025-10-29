@@ -15,7 +15,7 @@ const Exercise_creation = () => {
   const beginSession = useSessionStore((state)=>state.startSession);
   const endSession = useSessionStore((state)=>state.endSession);
   const quitSession = useSessionStore((state)=>state.quitSession);
-  const loadExercises = useSessionStore((state)=>state.loadExercisesWithSets);
+  const loadExercises = useSessionStore((state)=>state.loadActiveExercisesWithSets);
   const {activeSession, loading} = useSessionStore();
 
   

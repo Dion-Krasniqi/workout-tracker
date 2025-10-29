@@ -95,12 +95,13 @@ interface SessionStore {
     activeSession: Session | null;
     loading: boolean;
     loadingsessions: boolean;
-    loadPreviousSession: ()=>void;
+    loadPreviousSessions: ()=>void;
     deletePreviousSessions: ()=>void;
+    loadPreviousSession: (session_id:number)=> Session;
     startSession: (workout_id:number)=>Session;
     endSession: ()=>void;
     quitSession: ()=>void;
-    loadExercisesWithSets: (workout_id:number, session_id:number)=>Promise<void>;
+    loadActiveExercisesWithSets: (workout_id:number, session_id:number)=>Promise<void>;
     updateNotes: (exercise_id:number,content:string)=>void;
     updateSet: (set_id:number, weight:number, reps:number)=>void;
     //removeSet: (set_id:number)=>void;
@@ -112,7 +113,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
     loading: true,
     loadingsessions: true,
     //reads all entries in the sessions table 
-    loadPreviousSession: async()=>{
+    loadPreviousSessions: async()=>{
         const sessions = await getAllSessions();
         const {previousSessions} = get();
         set({previousSessions:[...sessions],loadingsessions:false});
@@ -129,6 +130,47 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
              } },],
              { cancelable: false });
         
+    },
+    loadPreviousSession: async(session_id)=>{
+
+        const { previousSessions } = get();
+        const s = previousSessions.find((s)=>s.id==Number(session_id));
+        const session : Session = s || null;
+        
+        console.log(session);
+        
+        const w_id = session?.workout_id
+        const workoutStore = useWorkoutStore.getState();
+
+        if (workoutStore.workouts.length == 0){
+            await workoutStore.loadWorkouts();
+        }
+        const workout = workoutStore.workouts.find((w)=>w.id==w_id)
+        if (!workout){
+            //do something
+            return;
+        }
+        if(w_id){
+            await useWorkoutStore.getState().loadExercises(w_id);
+        }
+        
+        if (!session) return;
+        //dummy set Id so the updateSet can access
+        let setId = 1
+        const sessionExercises = await Promise.all(
+            
+            workout.exercises.map(async(ex,index)=>{
+            
+            const SessionExerciseId = ex.id;
+            const notes = await getNotes(ex.exercise_id);
+            
+            const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
+                session.setNumber++;
+                const result = await getSetData(ex.exercise_id,i+1);
+            }));
+        })); 
+        return session;
+
     },
     // starts session with a dummy id and sets start_time to when called and defaults exercises object to empty array
     // then assigns session object to activeSession
@@ -191,7 +233,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
     },
     // loads exercises using WorkoutStore and workout id, then creates the session exercise instances and sets arrays
     // of exercises based on set_number set at the exercise table
-    loadExercisesWithSets: async(workout_id, session_id)=>{
+    loadActiveExercisesWithSets: async(workout_id, session_id)=>{
 
         const workoutStore = useWorkoutStore.getState();
 
@@ -248,7 +290,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         set({activeSession:{...activeSession,session_name:workout.name, exercises: sessionExercises},loading:false});
         
        
-    },
+    },  
     // updates set object and reloads exercise array
     updateSet: async(set_id, weight, reps)=>{
 
