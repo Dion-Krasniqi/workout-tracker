@@ -1,10 +1,9 @@
 import CustomButton from '@/Components/button';
 import { FinishedExercise } from '@/Components/sessionComponents';
-import { Session } from '@/interfaces/interfaces';
 import { useSessionStore } from '@/state/stateStore';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 
@@ -17,13 +16,23 @@ const SessionDetails = () => {
 
     const {id} = useLocalSearchParams();
     const router = useRouter();
-    const { previousSessions } = useSessionStore();
-    const [session,setSession] = useState<Session>();
     const loadExercises = useSessionStore((state)=>state.loadPreviousSession);
+    const setSession = useSessionStore((state)=>state.setPreviousSession);
+    const [session, setsession] = useState(useSessionStore.getState().finishedSession);
+
+    const [loading, setLoading] = useState(true);
 
     useEffect(()=>{
-        setSession(previousSessions.find((s)=>s.id==Number(id)));
-    },[]);
+          async function setup(){
+            setLoading(true);
+            await setSession(Number(id));
+            await loadExercises(Number(id));
+            setsession(useSessionStore.getState().finishedSession);
+            setLoading(false);
+          };
+          setup();
+        
+    },[id]);
     
     let startTime = '';
     let endTime = '';
@@ -32,13 +41,14 @@ const SessionDetails = () => {
 
       startTime = new Date(session?.time_started).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       endTime = new Date(session?.time_ended!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      loadExercises(session?.id);
     }
 
 
     return(
         <SafeAreaProvider>
             <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}>
+                {loading ? (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>) :
+                (<View>
                 <View  className='flex border-b-4 border-b-light-100 pb-5 rounded-xl'>
                   <View className="mx-2 px-5 mt-2">
                     <View className='flex-row justify-between mb-5 items-center'>
@@ -78,6 +88,7 @@ const SessionDetails = () => {
                     }
                   </>
                 </View>
+              </View>)}
                 
                 
             </SafeAreaView>

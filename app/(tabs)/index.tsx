@@ -57,12 +57,6 @@ export default function Index() {
                   <View className="mb-24 mt-8 w-full">{previousSessions.length>0 && <CustomButton onPress={()=>delSessions()} buttonText='Delete All'/>}</View>
                   }
                   />
-        
-        {/*<FlatList data={sessions}
-                  renderItem={({item})=>(<NameCardSesh {...item} />)}
-                  keyExtractor={(item) =>item.id.toString()}
-                  className="mt-8 w-full self-center"
-                  scrollEnabled={false}/>*/}
           </View>)}
         
         </SafeAreaView>

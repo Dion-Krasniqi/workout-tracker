@@ -1,5 +1,5 @@
 import { addExerciseToWorkout, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
-import { ExerciseTemplate, Session, SessionExercise, WorkoutTemplate } from '@/interfaces/interfaces';
+import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { Alert } from 'react-native';
 import { create } from 'zustand';
 
@@ -93,10 +93,12 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
 interface SessionStore {
     previousSessions: Session[];
     activeSession: Session | null;
+    finishedSession: Session | null;
     loading: boolean;
     loadingsessions: boolean;
     loadPreviousSessions: ()=>void;
     deletePreviousSessions: ()=>void;
+    setPreviousSession: (session_id:number)=>void;
     loadPreviousSession: (session_id:number)=>void;
     startSession: (workout_id:number)=>Session;
     endSession: ()=>void;
@@ -110,12 +112,12 @@ interface SessionStore {
 export const useSessionStore = create<SessionStore>((set, get)=>({
     previousSessions: [],
     activeSession: null,
+    finishedSession: null,
     loading: true,
     loadingsessions: true,
     //reads all entries in the sessions table 
     loadPreviousSessions: async()=>{
         const sessions = await getAllSessions();
-        const {previousSessions} = get();
         set({previousSessions:[...sessions],loadingsessions:false});
         
         
@@ -131,15 +133,24 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
              { cancelable: false });
         
     },
-    loadPreviousSession: async(session_id)=>{
-
+    setPreviousSession: (session_id)=>{
+        const { finishedSession } = get();
+        if (finishedSession?.id == session_id){
+            return
+        }
+        if (finishedSession) {
+            set({finishedSession:null});
+        }
         const { previousSessions } = get();
         const s = previousSessions.find((s)=>s.id==Number(session_id));
-        if (!s) return;
-        const session : Session = s ;
+        set({finishedSession:s});
+
+    },
+    loadPreviousSession: async(session_id)=>{
+
+        const { finishedSession } = get();
         
-        
-        const w_id = session?.workout_id
+        const w_id = finishedSession?.workout_id
         const workoutStore = useWorkoutStore.getState();
 
         if (workoutStore.workouts.length == 0){
@@ -153,8 +164,9 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         if(w_id){
             await useWorkoutStore.getState().loadExercises(w_id);
         }
-        if (!session) return;
-
+        if (!finishedSession) return;
+        
+        console.log(finishedSession.setNumber);
         let setId = 1;   
         const sessionExercises = await Promise.all(
             
@@ -164,7 +176,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             const notes = await getNotes(ex.exercise_id);
             
             const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
-                session.setNumber++;
+                finishedSession.setNumber++;
                 const result = await getSetData(ex.exercise_id,i+1);
                 setId=setId+1;
                 return {
@@ -188,12 +200,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
                 notes:notes,
             };
         }));
-        if (!sessionExercises) return;
-        const casted : SessionExercise[]=sessionExercises;
-
-
-        session.exercises = casted;
-        return session;
+        set({finishedSession:{...finishedSession,session_name:workout.name, exercises: sessionExercises},loading:false});
 
     },
     // starts session with a dummy id and sets start_time to when called and defaults exercises object to empty array
