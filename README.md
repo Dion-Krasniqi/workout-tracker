@@ -36,6 +36,7 @@ Sessions are "active" instances of workout routines. To start a session click on
 * Loading screen before actual loading the sessions/workouts(partially);
 * Stopwatch resets if active session is exited;
 * Mix of tailwindCSS and CSS might mess up some styling;
+* First load for previous sessions is empty;
 
 
 Planned features:
