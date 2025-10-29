@@ -1,5 +1,5 @@
 import { addExerciseToWorkout, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
-import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
+import { ExerciseTemplate, Session, SessionExercise, WorkoutTemplate } from '@/interfaces/interfaces';
 import { Alert } from 'react-native';
 import { create } from 'zustand';
 
@@ -97,7 +97,7 @@ interface SessionStore {
     loadingsessions: boolean;
     loadPreviousSessions: ()=>void;
     deletePreviousSessions: ()=>void;
-    loadPreviousSession: (session_id:number)=> Session;
+    loadPreviousSession: (session_id:number)=>void;
     startSession: (workout_id:number)=>Session;
     endSession: ()=>void;
     quitSession: ()=>void;
@@ -135,9 +135,9 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
 
         const { previousSessions } = get();
         const s = previousSessions.find((s)=>s.id==Number(session_id));
-        const session : Session = s || null;
+        if (!s) return;
+        const session : Session = s ;
         
-        console.log(session);
         
         const w_id = session?.workout_id
         const workoutStore = useWorkoutStore.getState();
@@ -153,10 +153,9 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         if(w_id){
             await useWorkoutStore.getState().loadExercises(w_id);
         }
-        
         if (!session) return;
-        //dummy set Id so the updateSet can access
-        let setId = 1
+
+        let setId = 1;   
         const sessionExercises = await Promise.all(
             
             workout.exercises.map(async(ex,index)=>{
@@ -167,8 +166,33 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
                 session.setNumber++;
                 const result = await getSetData(ex.exercise_id,i+1);
+                setId=setId+1;
+                return {
+                    id: setId,
+                    session_exercise_id: SessionExerciseId,
+                    set_number: i + 1,
+                    weight:result?.weight,
+                    reps:result?.reps,
+                    oldWeight:result?.weight,
+                    oldReps:result?.reps,
+                }
+                
             }));
-        })); 
+            setId = setId + 1;
+            return {
+                id: SessionExerciseId,
+                session_id,
+                exercise_id: ex.exercise_id,
+                name: ex.name,
+                sets,
+                notes:notes,
+            };
+        }));
+        if (!sessionExercises) return;
+        const casted : SessionExercise[]=sessionExercises;
+
+
+        session.exercises = casted;
         return session;
 
     },

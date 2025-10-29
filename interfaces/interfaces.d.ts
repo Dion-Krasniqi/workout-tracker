@@ -24,9 +24,9 @@ export interface SessionSet {
     session_exercise_id:number;
     set_number:number;
     weight:number;
-    reps:string;
+    reps:number;
     oldWeight:number;
-    oldReps:string;
+    oldReps:number;
 }
 
 export interface SessionExercise {

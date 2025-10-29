@@ -67,11 +67,9 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   const inputWidth = Width;
   return (
     <View style={{flex:1,marginBottom:10, marginTop:15,paddingHorizontal:28}}>
-      {/*width */}
       <View style={{width:'100%'}}>
         <Text className='text-white font-semibold text-xl'>{exercise.name}</Text>
       </View>
-      {/*flex implementation */}
       <View style={{flex:1, justifyContent:'center'}}>
         <FlatList data={exercise.sets}
                 renderItem={(item)=>(<View><SetView set={item.item}/></View>)}
@@ -86,10 +84,59 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
                  className='border-2 border-light-100 rounded-md focus:border-white'
                  style={{width:inputWidth*.85, textAlign:'center', alignSelf:'center', color:'white', height:80, marginTop:20}}/>
       </View>
-      {/*Css */}
       <Link style={{alignSelf:'flex-end',marginTop:8}} href={`/exercise/${exercise.exercise_id}`}>
         <Text className='text-white'>Stats</Text>
       </Link>
+    </View>
+  )
+}
+
+export const FinishedSet = ({set}:{set:SessionSet}) => {
+  const oldW = set.oldWeight;
+  const oldR = Number(set.oldReps);
+
+  const inputWidth = Width/6;
+
+
+  return (
+      
+       <View style={{flexDirection:'row', marginTop:15, justifyContent:'space-around', alignItems:'center'}}
+             className='bg-white rounded-md justify-center px-2 py-2 bg-white border-light-100'>
+
+            <Text className='text-xl self-center font-bold'>Set {set.set_number}</Text>
+        
+            <Text className='text-center ml-4'>{oldW} Kg</Text>
+            <Text className='text-center ml-8'>{oldR} Reps</Text>
+  
+      </View>
+  )
+}
+
+export const FinishedExercise = ({exercise}:{exercise:SessionExercise}) => {
+
+  const notes = exercise.notes;
+
+  const inputWidth = Width;
+  return (
+    <View style={{flex:1,marginBottom:10, marginTop:15,paddingHorizontal:28}}>
+    
+      <View style={{width:'100%'}}>
+        <Text className='text-white font-semibold text-xl'>{exercise.name}</Text>
+      </View>
+      <View style={{flex:1,flexDirection:'row', justifyContent:'space-between', gap:'10'}}>
+        <FlatList data={exercise.sets}
+                renderItem={(item)=>(<View><FinishedSet set={item.item}/></View>)}
+                contentContainerStyle={{alignSelf:'center',alignItems:'center'}}/>
+        <Text className='border-2 border-light-100 rounded-md bg-white'
+              style={{width:inputWidth*.4, 
+                      textAlign:'center',
+                      textAlignVertical:'center',
+                      alignSelf:'center', 
+                      height:'100%', 
+                      marginTop:20}}>
+          {notes}
+        </Text>
+      </View>
     </View>
   )
 }
