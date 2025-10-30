@@ -36,6 +36,7 @@ export interface SessionExercise {
     name: string;
     sets: SessionSet[];
     notes: string;
+    oldNotes: string;
 }
 
 export interface Session {

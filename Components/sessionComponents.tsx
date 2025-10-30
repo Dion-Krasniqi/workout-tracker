@@ -58,13 +58,15 @@ export const SetView = ({set}:{set:SessionSet}) => {
 // renders exercise in sessions
 export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   const [notes, setNotes] = useState(exercise.notes);
-  const updateNotes = useSessionStore((state)=>state.updateNotes)
+  const [oldNotes, setOldNotes] = useState(exercise.oldNotes);
+  const updateNotes = useSessionStore((state)=>state.updateNotes);
 
   useEffect(()=>{
-    //calls useSessionStore updateSet when weight or reps changes in the text input
     updateNotes(exercise.exercise_id,notes)
   },[notes])
+
   const inputWidth = Width;
+
   return (
     <View style={{flex:1,marginBottom:10, marginTop:15,paddingHorizontal:28}}>
       <View style={{width:'100%'}}>
@@ -75,7 +77,8 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
                 renderItem={(item)=>(<View><SetView set={item.item}/></View>)}
                 contentContainerStyle={{alignSelf:'center',alignItems:'center'}}/>
         <TextInput 
-                 placeholder={notes}
+                 value={notes ? notes : ''}
+                 placeholder={oldNotes}
                  onChangeText={(text)=>{setNotes(text)}}
                  placeholderTextColor={'darkgrey'}
                  scrollEnabled={false}

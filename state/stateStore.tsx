@@ -198,6 +198,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
                 name: ex.name,
                 sets,
                 notes:notes,
+                oldNotes:notes,
             };
         }));
         set({finishedSession:{...finishedSession,session_name:workout.name, exercises: sessionExercises},loading:false});
@@ -312,7 +313,8 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
                 exercise_id: ex.exercise_id,
                 name: ex.name,
                 sets,
-                notes:notes,
+                notes:'',
+                oldNotes:notes,
 
             };
         }));

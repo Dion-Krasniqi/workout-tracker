@@ -12,7 +12,7 @@ const Workouts = () => {
   const workouts = useWorkoutStore((state)=>state.workouts)
   const router = useRouter();
   const beginSession = useSessionStore((state)=>state.startSession);
-  const loadExercises = useSessionStore((state)=>state.loadExercisesWithSets);
+  const loadExercises = useSessionStore((state)=>state.loadActiveExercisesWithSets);
   
 
   useEffect(() => {

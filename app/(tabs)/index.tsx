@@ -26,7 +26,7 @@ export default function Index() {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}> 
+      <SafeAreaView className='bg-dark-100 ' style={{flex: 1, paddingBottom:80}}> 
       
      
         {loadingsessions ? (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>):(
@@ -39,7 +39,7 @@ export default function Index() {
         
         </View>*/}
         <View className='mt-5 border-b-2 border-light-100 pb-6'>
-          <View className='mt-5'>{activeSession ? 
+          <View className='mt-2'>{activeSession ? 
             (<CustomButton onPress={()=>router.push('/session/dummysesh')} buttonText={activeSession?.session_name} />)
             :(<Text className="text-white self-center font-bold">No active session</Text>)}
           </View>
