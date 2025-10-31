@@ -137,7 +137,7 @@ export const FinishedExercise = ({exercise}:{exercise:SessionExercise}) => {
                       alignSelf:'center', 
                       height:'100%', 
                       marginTop:20}}>
-          {notes}
+          {notes=='Notes' ? ('No notes found'):notes}
         </Text>
       </View>
     </View>

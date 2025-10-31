@@ -35,5 +35,6 @@ export default function RootLayout() {
     <Stack.Screen name='otherPages/exercise_list' options={{headerShown:false}}/>
     <Stack.Screen name='otherPages/exercise_list_adding' options={{headerShown:false}}/>
     <Stack.Screen name='otherPages/workout_creation' options={{headerShown:false}}/>
+    <Stack.Screen name='otherPages/SearchPage' options={{headerShown:false}}/>
   </Stack>);
 }

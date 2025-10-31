@@ -3,7 +3,7 @@ import { FinishedExercise } from '@/Components/sessionComponents';
 import { useSessionStore } from '@/state/stateStore';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 
@@ -17,6 +17,7 @@ const SessionDetails = () => {
     const {id} = useLocalSearchParams();
     const router = useRouter();
     const loadExercises = useSessionStore((state)=>state.loadPreviousSession);
+    const deleteSession = useSessionStore((state)=>state.deletePreviousSession);
     const setSession = useSessionStore((state)=>state.setPreviousSession);
     const [session, setsession] = useState(useSessionStore.getState().finishedSession);
 
@@ -83,7 +84,14 @@ const SessionDetails = () => {
                                                        </View>)}
                                 contentContainerStyle={{paddingBottom:120}}
                                 ListFooterComponent={<View className='mb-24 mt-16 w-full'>
-                                                        <CustomButton buttonText='Delete Session' onPress={()=>deleteSession()}/>
+                                                        <CustomButton buttonText='Delete Session' onPress={()=>{if(session){
+                                                                                                              Alert.alert('Session information will be lost','Do you wish to proceed?',
+                                                                                                              [{text: 'Cancel',onPress: () => {},style: 'cancel',},
+                                                                                                              { text: 'YES', onPress: 
+                                                                                                                async() => {await deleteSession(Number(id));
+                                                                                                                            router.replace('/(tabs)')}},],
+                                                                                                              { cancelable: false });}
+                                                        }}/>
                                                       </View>}/>
                     }
                   </>

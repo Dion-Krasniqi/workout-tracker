@@ -1,4 +1,5 @@
 import CustomButton from "@/Components/button";
+import Search from "@/Components/search";
 import { FinishedSessionView } from "@/Components/sessionComponents";
 import { useSessionStore } from "@/state/stateStore";
 import { router } from "expo-router";
@@ -49,7 +50,8 @@ export default function Index() {
                   //keyExtractor={({item})=>item.id.toString()}
                   contentContainerStyle={{alignItems:'center',marginBottom:120}}
                   ListHeaderComponent={previousSessions.length>0 ? (<View>
-                                        <Text className='text-white font-semibold mt-5'>Previous Sessions</Text>
+                                        {/*<Text className='text-white font-semibold mt-5'>Previous Sessions</Text>*/}
+                                        <Search  onPress={()=>router.push('/otherPages/SearchPage')} />
                                        </View>):(<View></View>)}
                   ListEmptyComponent={<Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>
                                        }

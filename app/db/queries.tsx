@@ -140,6 +140,10 @@ export const createSession = async(workout_id:number, session_name:string, time_
 export const deleteAllSessions = async()=>{
     await db.getAllAsync(`DELETE FROM sessions;`)
 }
+export const deleteSession = async(session_id:number)=>{
+    await db.runAsync(`DELETE FROM sessions 
+                       WHERE id = (?)`, session_id);
+}
 
 //Notes
 export const getAllNotes = async()=>{

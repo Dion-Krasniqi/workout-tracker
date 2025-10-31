@@ -1,4 +1,4 @@
-import { addExerciseToWorkout, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
+import { addExerciseToWorkout, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, deleteSession, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { Alert } from 'react-native';
 import { create } from 'zustand';
@@ -35,6 +35,11 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
         set({workouts:result, loading:false});
     },
     addWorkout: async(workout_name:string)=> {
+        const state = get(); 
+        if (state.workouts.find(w => w.name == workout_name)){
+            Alert.alert('Workout with this name already exists!')
+            return -2;
+        }
         const id = await createCustomWorkout(workout_name);
         const newWorkout = {id:id, name:workout_name, exercises: []};
         set((state)=>({
@@ -100,6 +105,7 @@ interface SessionStore {
     deletePreviousSessions: ()=>void;
     setPreviousSession: (session_id:number)=>void;
     loadPreviousSession: (session_id:number)=>void;
+    deletePreviousSession:(session_id:number)=>void;
     startSession: (workout_id:number)=>Session;
     endSession: ()=>void;
     quitSession: ()=>void;
@@ -202,6 +208,12 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             };
         }));
         set({finishedSession:{...finishedSession,session_name:workout.name, exercises: sessionExercises},loading:false});
+
+    },
+    deletePreviousSession: async(session_id)=>{
+        
+        set({finishedSession:null,});
+        await deleteSession(session_id);
 
     },
     // starts session with a dummy id and sets start_time to when called and defaults exercises object to empty array

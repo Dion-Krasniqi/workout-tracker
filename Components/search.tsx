@@ -1,20 +1,17 @@
-import { View, Text, Image, TextInput } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { TextInput, View } from 'react-native';
 
 interface Props {
     onPress?: () => void;
-    value: string;
-    onChangeText: (text: string) => void;
 }
 
-const Search = ({onPress, value, onChangeText}:Props) => {
+const Search = ({onPress}:Props) => {
   return (
-    <View className='flex-row items-center bg-white rounded-2xl px-2 py-2 '>
-        <TextInput onPress={onPress} placeholder='Search for session' 
-                                   value={value} 
-                                   onChangeText={onChangeText} 
+    <View className='items-center bg-white rounded-2xl mt-4'>
+        <TextInput onPress={onPress} placeholder='Search for session'
                                    placeholderTextColor={'darkgrey'}
-                                   className='flex-1 text-center text-light-100'/>
+                                   style={{width:'90%'}}
+                                   className=' text-center text-light-100 mx-32'/>
       
     </View>
   )

@@ -44,7 +44,8 @@ Planned features:
 * Edit exercise set number;
 * Edit session start and end time;
 * Remove set/exercise in active workout;
-* Prior session data be viewable;
 * Data should be transfarable, either account or extracting and importing manually(partially implemented);
 * Session based memory option;
 * Reset exercise data and add optional marker;
+* Copy workout;
+* More information about exercises;
