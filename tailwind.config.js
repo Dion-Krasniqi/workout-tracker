@@ -12,6 +12,9 @@ module.exports = {
       },
       light: {
         100: '#666666'
+      },
+      blue: {
+        100: '#ace2ffff'
       }
       }
     },

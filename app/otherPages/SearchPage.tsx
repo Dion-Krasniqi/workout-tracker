@@ -40,7 +40,7 @@ const SearchPage = () => {
   return (
     <SafeAreaProvider>
           <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}} >
-            <View style={{width:Width*.8}}>
+            <View style={{width:Width*.8,marginBottom:50}}>
               <Search value={query} onChangeText={(text:string)=>setQuery(text)}/>
             </View>
             <View>
@@ -50,7 +50,9 @@ const SearchPage = () => {
                   //keyExtractor={({item})=>item.id.toString()}
                   contentContainerStyle={{alignItems:'center',marginBottom:120}}
                   ListHeaderComponent={foundSessions.length>0 ? (<View>
-                                        {/*<Text className='text-white font-semibold mt-5'>Previous Sessions</Text>*/}
+                                        {query.length>0 ? (<Text className='text-white font-semibold mt-5'>Results for 
+                                                    <Text className='text-blue-100'> {query}</Text></Text>)
+                                                    :(<Text className='text-light-100 font-semibold mt-5'>Search is Case Sensitive</Text>)}
                                        </View>):(<View></View>)}
                   ListEmptyComponent={<Text className='text-white font-semibold mt-5'>No Sessions Match The Query</Text>
                                        }

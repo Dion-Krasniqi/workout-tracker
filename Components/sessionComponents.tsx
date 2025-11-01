@@ -103,13 +103,13 @@ export const FinishedSet = ({set}:{set:SessionSet}) => {
 
   return (
       
-       <View style={{flexDirection:'row', marginTop:15, justifyContent:'space-around', alignItems:'center'}}
-             className='bg-white rounded-md justify-center px-2 py-2 bg-white border-light-100'>
+       <View style={{flexDirection:'row', marginTop:15, justifyContent:'space-around', alignItems:'center', gap:10,
+                      paddingVertical:5, paddingHorizontal:8}}
+             className='bg-white rounded-md bg-white border-light-100'>
 
             <Text className='text-xl self-center font-bold'>Set {set.set_number}</Text>
-        
-            <Text className='text-center ml-4'>{oldW} Kg</Text>
-            <Text className='text-center ml-8'>{oldR} Reps</Text>
+            <Text className='text-center'>{oldW} Kg</Text>
+            <Text className='text-center'>{oldR} Reps</Text>
   
       </View>
   )
@@ -126,7 +126,7 @@ export const FinishedExercise = ({exercise}:{exercise:SessionExercise}) => {
       <View style={{width:'100%'}}>
         <Text className='text-white font-semibold text-xl'>{exercise.name}</Text>
       </View>
-      <View style={{flex:1,flexDirection:'row', justifyContent:'space-between', gap:'10'}}>
+      <View style={{flex:1,flexDirection:'row', justifyContent:'space-between', gap:'10',paddingBottom:20}}>
         <FlatList data={exercise.sets}
                 renderItem={(item)=>(<View><FinishedSet set={item.item}/></View>)}
                 contentContainerStyle={{alignSelf:'center',alignItems:'center'}}/>
@@ -136,7 +136,8 @@ export const FinishedExercise = ({exercise}:{exercise:SessionExercise}) => {
                       textAlignVertical:'center',
                       alignSelf:'center', 
                       height:'100%', 
-                      marginTop:20}}>
+                      marginTop:20,
+                      }}>
           {notes=='Notes' ? ('No notes found'):notes}
         </Text>
       </View>

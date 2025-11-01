@@ -4,7 +4,7 @@ import { FinishedSessionView } from "@/Components/sessionComponents";
 import { useSessionStore } from "@/state/stateStore";
 import { router } from "expo-router";
 import { useEffect } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getAllExerciseInstances } from "../db/queries";
 
@@ -23,7 +23,8 @@ export default function Index() {
   useEffect(()=>{
     loadAllSessions();
     getAllExerciseInstances();
-  },[])
+  },[]);
+  const Width = Dimensions.get("window").width;
 
   return (
     <SafeAreaProvider>
@@ -49,7 +50,7 @@ export default function Index() {
                   renderItem={({item})=>(<FinishedSessionView sesh={item}/>)}
                   //keyExtractor={({item})=>item.id.toString()}
                   contentContainerStyle={{alignItems:'center',marginBottom:120}}
-                  ListHeaderComponent={previousSessions.length>0 ? (<View>
+                  ListHeaderComponent={previousSessions.length>0 ? (<View style={{width:Width*.8}}>
                                         {/*<Text className='text-white font-semibold mt-5'>Previous Sessions</Text>*/}
                                         <Search  onPress={()=>router.push('/otherPages/SearchPage')}/>
                                        </View>):(<View></View>)}
