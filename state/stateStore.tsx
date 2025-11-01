@@ -103,6 +103,7 @@ interface SessionStore {
     loadingsessions: boolean;
     loadPreviousSessions: ()=>void;
     deletePreviousSessions: ()=>void;
+    findPreviousSessions: (session_string:string)=>Session[]|null;
     setPreviousSession: (session_id:number)=>void;
     loadPreviousSession: (session_id:number)=>void;
     deletePreviousSession:(session_id:number)=>void;
@@ -138,6 +139,16 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
              } },],
              { cancelable: false });
         
+    },
+    findPreviousSessions: (session_string)=>{
+        const {previousSessions} = get();
+        if (!previousSessions) return null;
+
+        const S = previousSessions.filter((s)=>s.session_name.includes(session_string));
+        if (!S) return null;
+        const fSessions: Session[] = S;
+
+        return fSessions;
     },
     setPreviousSession: (session_id)=>{
         const { finishedSession } = get();
