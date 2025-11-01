@@ -40,7 +40,7 @@ Sessions are "active" instances of workout routines. To start a session click on
 
 
 Planned features:
-* Search/filter sessions, workouts, and exercises;
+* Search/filter sessions, workouts, and exercises(sessions can be searched by name);
 * Edit exercise set number;
 * Edit session start and end time;
 * Remove set/exercise in active workout;

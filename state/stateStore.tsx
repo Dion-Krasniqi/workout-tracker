@@ -141,6 +141,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         
     },
     findPreviousSessions: (session_string)=>{
+        console.log('ran');
         const {previousSessions} = get();
         if (!previousSessions) return null;
 
