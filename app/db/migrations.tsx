@@ -220,5 +220,9 @@ export const migrations = [
                          FROM exercises)
         UPDATE exercises
         SET order_index = (SELECT rn from updated WHERE updated.rowid = exercises.rowid);`
+    },
+    {id:11,
+      up:`
+        ALTER TABLE notes ADD COLUMN session_id INTEGER;`
     }
 ]

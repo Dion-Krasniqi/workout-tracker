@@ -153,26 +153,39 @@ export const getAllNotes = async()=>{
     console.log(result);    
 }
 
-export const getNotes = async(exercise_id:number)=>{
-    const result = await db.getFirstAsync<{content:string}>(`SELECT content 
+//maybe sets like this
+export const getNotes = async(exercise_id:number, session_id?:number)=>{
+    let result = null;
+    if (session_id){
+        result = await db.getFirstAsync<{content:string}>(`SELECT content 
+                                          FROM notes
+                                          WHERE ex_id = ? AND id
+                                          ORDER BY id DESC`, [exercise_id]);
+        
+
+    } else {
+        result = await db.getFirstAsync<{content:string}>(`SELECT content 
                                           FROM notes
                                           WHERE ex_id = ?
                                           ORDER BY id DESC`, [exercise_id]);
-                                          
-
-    if (!result){
-        return 'Notes';
+        
+    }
+    if (result == null){
+            return 'Notes';
     }
     const {content} = result;
     return content;
+                                          
+
+    
 }
 
-export const writeNotes = async(exercise_id:number,content:string)=>{
+export const writeNotes = async(exercise_id:number,content:string, session_id:number)=>{
     if (content.trim()==''){
-        await db.runAsync(`INSERT INTO notes (ex_id,content) VALUES (?,?)`,[exercise_id,'Notes']);
+        await db.runAsync(`INSERT INTO notes (ex_id,content,session_id) VALUES (?,?,?)`,[exercise_id,'Notes', session_id]);
         return;
     }
-    await db.runAsync(`INSERT INTO notes (ex_id,content) VALUES (?,?)`,[exercise_id,content]);
+    await db.runAsync(`INSERT INTO notes (ex_id,content,session_id) VALUES (?,?,?)`,[exercise_id,'Notes', session_id]);
 }
 
 
@@ -190,16 +203,31 @@ export const getAllSets = async() => {
     console.log(allRows);   
 }
 
-export const getSetData = async(exercise_id:number, set_number:number): Promise<{weight:number;reps:number;}>=>{
-    const result = await db.getFirstAsync<{weight:number;reps:number}>(`SELECT weight, reps
+// gotta be simpler
+export const getSetData = async(exercise_id:number, set_number:number, session_id?:number): Promise<{weight:number;reps:number;}>=>{
+
+    if ( !session_id ){
+        const result = await db.getFirstAsync<{weight:number;reps:number}>(`SELECT weight, reps
                                                                         FROM session_sets 
                                                                         WHERE exercise_id = ? AND set_number = ?
                                                                         ORDER BY id DESC`,[exercise_id,set_number]);
-    if (!result){
+        if (!result){
         return {weight:0,reps:0};
     } 
     const {weight,reps} = result;
     return {weight,reps};
+    } else {
+        const result = await db.getFirstAsync<{weight:number;reps:number}>(`SELECT weight, reps
+                                                                        FROM session_sets 
+                                                                        WHERE exercise_id = ? AND set_number = ? AND session_id = ?
+                                                                        ORDER BY id DESC`,[exercise_id,set_number, session_id]);
+        if (!result){
+        return {weight:0,reps:0};
+    } 
+    const {weight,reps} = result;
+    return {weight,reps};
+    }
+    
 
 
 }
