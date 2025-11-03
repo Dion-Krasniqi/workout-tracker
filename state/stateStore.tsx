@@ -271,6 +271,11 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             
             
             ex.sets.forEach(async(set)=>{
+                if (set.weight ==0 || set.reps == 0){
+                    set.weight = set.oldWeight;
+                    set.reps = set.oldReps;
+
+                }
                 await writeSet(ex.exercise_id,actual_id,set.set_number,set.weight,Number(set.reps),activeSession.time_started);
             })
         })
