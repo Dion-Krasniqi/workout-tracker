@@ -159,8 +159,8 @@ export const getNotes = async(exercise_id:number, session_id?:number)=>{
     if (session_id){
         result = await db.getFirstAsync<{content:string}>(`SELECT content 
                                           FROM notes
-                                          WHERE ex_id = ? AND id
-                                          ORDER BY id DESC`, [exercise_id]);
+                                          WHERE ex_id = ? AND session_id = ?
+                                          ORDER BY id DESC`, [exercise_id, session_id]);
         
 
     } else {
@@ -185,7 +185,9 @@ export const writeNotes = async(exercise_id:number,content:string, session_id:nu
         await db.runAsync(`INSERT INTO notes (ex_id,content,session_id) VALUES (?,?,?)`,[exercise_id,'Notes', session_id]);
         return;
     }
-    await db.runAsync(`INSERT INTO notes (ex_id,content,session_id) VALUES (?,?,?)`,[exercise_id,'Notes', session_id]);
+    
+        await db.runAsync(`INSERT INTO notes (ex_id,content,session_id) VALUES (?,?,?)`,[exercise_id,content, session_id]);
+    
 }
 
 
