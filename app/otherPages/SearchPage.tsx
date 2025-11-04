@@ -41,7 +41,7 @@ const SearchPage = () => {
     <SafeAreaProvider>
           <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}} >
             <View style={{width:Width*.8,marginBottom:50}}>
-              <Search value={query} onChangeText={(text:string)=>setQuery(text)}/>
+              <Search value={query} pholder='Search Session' onChangeText={(text:string)=>setQuery(text)}/>
             </View>
             <View>
               <>

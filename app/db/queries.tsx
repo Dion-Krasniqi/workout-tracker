@@ -12,6 +12,13 @@ export const getAllExercises = async () => {
     return allRows;
 
 }
+export const getAllExercisesSearch = async (name:string) => {
+    const allRows = await db.getAllAsync(`SELECT * 
+                                          FROM exercises_info
+                                          WHERE LOWER(name) LIKE LOWER(?)`, `${name}%`);
+    return allRows;
+
+}
 export const getAllExerciseInstances = async () => {
     const allRows = await db.getAllAsync('SELECT * FROM exercises');
     console.log(allRows)

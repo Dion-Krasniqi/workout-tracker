@@ -52,7 +52,7 @@ export default function Index() {
                   contentContainerStyle={{alignItems:'center',marginBottom:120}}
                   ListHeaderComponent={previousSessions.length>0 ? (<View style={{width:Width*.8}}>
                                         {/*<Text className='text-white font-semibold mt-5'>Previous Sessions</Text>*/}
-                                        <Search  onPress={()=>router.push('/otherPages/SearchPage')}/>
+                                        <Search  onPress={()=>router.push('/otherPages/SearchPage')} pholder="Search Session"/>
                                        </View>):(<View></View>)}
                   ListEmptyComponent={<Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>
                                        }
