@@ -1,5 +1,6 @@
 import { addExerciseToWorkout, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, deleteSession, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
+import { formatDate } from '@/utils';
 import { Alert } from 'react-native';
 import { create } from 'zustand';
 
@@ -141,11 +142,11 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         
     },
     findPreviousSessions: (session_string)=>{
-        console.log('ran');
         const {previousSessions} = get();
         if (!previousSessions) return null;
 
-        const S = previousSessions.filter((s)=>s.session_name.includes(session_string));
+        const S = previousSessions.filter((s)=>s.session_name.toLowerCase().includes(session_string.toLowerCase()) 
+                                            || formatDate(s.time_started).includes(session_string));
         if (!S) return null;
         const fSessions: Session[] = S;
 

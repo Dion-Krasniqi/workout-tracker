@@ -26,13 +26,13 @@ The app allows the user to create their own exercises and workouts,track workout
 I have no idea how to make it work with IOS.
 
 ## Exercises
-The app comes with a few built in exercises and workouts. To view all exercises navigate to the exercise list by pressing the Exercise List button found in the workouts tab, there you can also find the Create Exercise button which allows you to create a custom exercise using a unique name and optional muscle group.
+The app comes with a few built in exercises and workouts. To view all exercises navigate to the exercise list by pressing the Exercise List button found in the workouts tab, there you can also find the Create Exercise button which allows you to create a custom exercise using a unique name and optional muscle group. You can search/filter exercises in the add exercise list using name or muscle group.
 
 ## Workouts
 To view workouts or create a custom one, simply open the workouts tab where you can find a button and list. Clicking on a workout shows the workouts exercises, number of sets of a given exercise and button to start workout, while holding an entry starts a session(or prompts with a warning if there is an active session).
 
 ## Sessions
-Sessions are "active" instances of workout routines. To start a session click on a workout to see the routine where you'll also find a start workout button, or simply hold the workout listing in the workouts tab. A session ends after clicking the finish button in an active session,after which it will save the session and write the set data. If stopped forcefully(by starting a new session while another is active), no data is saved.
+Sessions are "active" instances of workout routines. To start a session click on a workout to see the routine where you'll also find a start workout button, or simply hold the workout listing in the workouts tab. A session ends after clicking the finish button in an active session,after which it will save the session and write the set data. If stopped forcefully(by starting a new session while another is active), no data is saved. Finished sessions can be searched/filtered using name or date(using same format as the finished sessions view).
 
 
 ## Known issues and future features:
@@ -46,9 +46,9 @@ Sessions are "active" instances of workout routines. To start a session click on
 
 
 Planned features:
-* Search workouts, and filter option for exercises;
+* Workout search;
 * Edit exercise set number;
-* Edit session start and end time;
+* Edit finished session start and end time;
 * Remove set/exercise in active workout;
 * Data should be transfarable, either account or extracting and importing manually(partially implemented);
 * Session based memory option;

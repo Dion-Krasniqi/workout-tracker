@@ -1,5 +1,6 @@
 import { Session, SessionExercise, SessionSet } from '@/interfaces/interfaces';
 import { useSessionStore } from '@/state/stateStore';
+import { formatDate } from '@/utils';
 import { Link } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -154,8 +155,7 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
   seconds = seconds % 3600;
   const minutes = Math.floor(seconds/60)
   seconds = Math.round(seconds%60);
-  const date = new Date(sesh.time_started).toLocaleTimeString([], {day: '2-digit', month: '2-digit', year: '2-digit'})
-  
+  const date = formatDate(sesh.time_started)
   const screenWidth = Dimensions.get("window").width/1.1;
 
   return (
