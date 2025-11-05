@@ -1,8 +1,9 @@
 import CustomButton from '@/Components/button';
 import { useSessionStore, useWorkoutStore } from '@/state/stateStore';
+import { Height } from '@/utils';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, LayoutAnimation, Platform, Text, TextInput, TouchableOpacity, UIManager, View } from 'react-native';
+import { Alert, FlatList, LayoutAnimation, Modal, Platform, Text, TextInput, TouchableOpacity, UIManager, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 
@@ -24,6 +25,8 @@ const WorkoutInformation = () => {
   const {workouts, loading} = useWorkoutStore();
   const workout = workouts.find((w) => w.id === Number(id));
   const [name, setName] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [exerciseModal,setExerciseModal] = useState(0);
 
   const beginSession = useSessionStore((state)=>state.startSession);
   const deleteExercise = useWorkoutStore((state)=>state.removeExerciseFromWorkout);
@@ -66,6 +69,41 @@ const WorkoutInformation = () => {
   return (
     <SafeAreaProvider>
          <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}}> 
+          <Modal 
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={{ margin: 30,
+                         marginTop:Height*.44,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,}}>
+              <Text >Change Number of Sets</Text>
+              <TextInput value={String(exerciseModal)} className='text-black border-2 border-light-100 px-8 rounded-md'/>
+              <View className='flex flex-row gap-10'>
+                <TouchableOpacity
+                  onPress={() => setModalVisible(!modalVisible)}>
+                  <Text>Return</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>{}}>
+                  <Text>Save</Text>
+                </TouchableOpacity>
+              </View>
+          </View>
+        </Modal>
             <View className="items-center mt-10 w-[80%] flex flex-row">
                 <TextInput placeholder={workout.name} 
                    onChangeText={(text)=>{setName(text);
@@ -95,7 +133,7 @@ const WorkoutInformation = () => {
             
              </View>
              <FlatList data={workout.exercises}
-                       renderItem={({item})=>(<TouchableOpacity onLongPress={()=>deleteExercise(workout.id,item.id)}>
+                       renderItem={({item})=>(<TouchableOpacity onPress={async()=>{setExerciseModal(item.set_number);setModalVisible(true)}} onLongPress={()=>deleteExercise(workout.id,item.id)}>
                         <View className='flex flex-row self-center w-[90%] mt-2 py-4 px-4 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between'>
                                                 
                                                 
