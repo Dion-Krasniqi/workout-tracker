@@ -3,7 +3,7 @@ import { useSessionStore, useWorkoutStore } from '@/state/stateStore';
 import { Height } from '@/utils';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, LayoutAnimation, Modal, Platform, Text, TextInput, TouchableOpacity, UIManager, View } from 'react-native';
+import { FlatList, LayoutAnimation, Modal, Platform, Text, TextInput, TouchableOpacity, UIManager, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 
@@ -26,12 +26,28 @@ const WorkoutInformation = () => {
   const workout = workouts.find((w) => w.id === Number(id));
   const [name, setName] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [exerciseModal,setExerciseModal] = useState(0);
+  const [setNumber,setSetNumber] = useState(0);
+  const [exerciseid, setExerciseId] = useState(-1);
 
   const beginSession = useSessionStore((state)=>state.startSession);
   const deleteExercise = useWorkoutStore((state)=>state.removeExerciseFromWorkout);
   const changeOrder = useWorkoutStore((state)=>state.changeOrder);
   const changeName = useWorkoutStore((state)=>state.changeName);
+  const changeSetNumber = useWorkoutStore((state)=>state.changeSetNumber)
+
+  const updateSetNumber = async(exercise_id:number,setNumber:number,workout_id:number) => {
+    if (exercise_id == -1){
+      setModalVisible(false);
+      return
+    }
+    if (setNumber==0){
+      await deleteExercise(workout_id,exercise_id);
+    }
+    await changeSetNumber(workout_id,exercise_id,setNumber);
+    setExerciseId(-1);
+    //aaaa
+    router.replace(`/workout/${id}`);
+  }
 
   const toggleLayout = () => {
     // Not working
@@ -69,39 +85,28 @@ const WorkoutInformation = () => {
   return (
     <SafeAreaProvider>
          <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}}> 
-          <Modal 
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={{ margin: 30,
-                         marginTop:Height*.44,
-    backgroundColor: 'white',
-    borderRadius: 5,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,}}>
-              <Text >Change Number of Sets</Text>
-              <TextInput value={String(exerciseModal)} className='text-black border-2 border-light-100 px-8 rounded-md'/>
-              <View className='flex flex-row gap-10'>
-                <TouchableOpacity
-                  onPress={() => setModalVisible(!modalVisible)}>
-                  <Text>Return</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                onPress={()=>{}}>
+          <Modal animationType="slide"
+                 transparent={true}
+                 visible={modalVisible}
+                 onRequestClose={() => {setModalVisible(!modalVisible);}}>
+          <View style={{ margin: 30, marginTop:Height*.44, backgroundColor: 'white',
+                         borderRadius: 5, padding: 35, alignItems: 'center', shadowColor: '#000',
+                         shadowOffset: {width: 0, height: 2,}, shadowOpacity: 0.25, shadowRadius: 4,}}>
+            <Text >Change Number of Sets</Text>
+            <TextInput value={setNumber>0 ? String(setNumber):''} 
+                       onChangeText={(text)=>setSetNumber(Number(text))}
+                       keyboardType='numeric'
+                       className='text-black border-2 border-light-100 px-8 rounded-md'/>
+            <View className='flex flex-row gap-10'>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <Text>Return</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={async()=>{try{await updateSetNumber(exerciseid,setNumber,Number(id));
+                                      } catch(error){console.log(error);
+                                      } finally {setModalVisible(false);}}}>
                   <Text>Save</Text>
-                </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
             <View className="items-center mt-10 w-[80%] flex flex-row">
@@ -133,7 +138,7 @@ const WorkoutInformation = () => {
             
              </View>
              <FlatList data={workout.exercises}
-                       renderItem={({item})=>(<TouchableOpacity onPress={async()=>{setExerciseModal(item.set_number);setModalVisible(true)}} onLongPress={()=>deleteExercise(workout.id,item.id)}>
+                       renderItem={({item})=>(<TouchableOpacity onPress={async()=>{setSetNumber(item.set_number);setExerciseId(item.id);setModalVisible(true)}} onLongPress={()=>deleteExercise(workout.id,item.id)}>
                         <View className='flex flex-row self-center w-[90%] mt-2 py-4 px-4 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between'>
                                                 
                                                 

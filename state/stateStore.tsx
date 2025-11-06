@@ -1,4 +1,4 @@
-import { addExerciseToWorkout, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, deleteSession, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
+import { addExerciseToWorkout, changeSetNumber, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, deleteSession, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { formatDate } from '@/utils';
 import { Alert } from 'react-native';
@@ -16,6 +16,7 @@ interface WorkoutStore {
     removeExerciseFromWorkout:(workout_id:number,exercise_id:number) => void;
     loadExercises: (workout_id:number) =>Promise<void>;
     changeOrder:(workout_id:number, exercise_id:number,new_index:number,old_index:number) => void;
+    changeSetNumber:(workout_id:number, exercise_id:number,setNumber:number) => void;
 }
 
 
@@ -90,6 +91,16 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
               : e.id == exercise_id ? { ...e, order_index: new_index } : e ).sort((a, b) => a.order_index - b.order_index),} : w),}));
         //@ts-ignore
         reorderExercise(exercise_id,new_index,old_index,other_id);
+    },
+    changeSetNumber: async(workout_id,exercise_id,setNumber)=>{
+        await changeSetNumber(exercise_id,setNumber);
+        set((state)=>({
+            workouts: state.workouts.map((w)=>w.id==workout_id ?
+                                             {...w, exercises:w.exercises.map((e)=>e.id==exercise_id ? {...e, setNumber:setNumber} : e)}:
+                                              w)
+        }))
+        
+
     },
 
 }));

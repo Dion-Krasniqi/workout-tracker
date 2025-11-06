@@ -38,6 +38,7 @@ export const getExercise = async (id:number) => {
 
 
 
+
 //Workout Related
 
 export const addExerciseToWorkout = async (workout_id:number, exercise_id:number,set_number:number,order_index:number): Promise<number> => {
@@ -45,6 +46,12 @@ export const addExerciseToWorkout = async (workout_id:number, exercise_id:number
                                                                           workout_id,exercise_id,set_number,order_index);
     return result.lastInsertRowId as number;
 }
+
+export const changeSetNumber = async(exercise_id:number,set_number:number)=> {
+    await db.runAsync(`UPDATE exercises 
+                       SET set_number = (?)
+                       WHERE id = (?);`, set_number,exercise_id);
+};
 
 //Possibly do this in one
 export const reorderExercise = async(exercise_id:number,order_index:number,old_index:number,other_id:number)=> {
