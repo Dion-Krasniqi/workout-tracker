@@ -1,10 +1,11 @@
 import CustomButton from "@/Components/button";
 import Search from "@/Components/search";
 import { FinishedSessionView } from "@/Components/sessionComponents";
+import { icons } from "@/constants/icons";
 import { useSessionStore } from "@/state/stateStore";
 import { router } from "expo-router";
 import { useEffect } from "react";
-import { ActivityIndicator, Dimensions, FlatList, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getAllExerciseInstances } from "../db/queries";
 
@@ -41,9 +42,18 @@ export default function Index() {
         
         </View>*/}
         <View className='mt-5 border-b-2 border-light-100 pb-6'>
-          <View className='mt-2'>{activeSession ? 
-            (<CustomButton onPress={()=>router.push('/session/dummysesh')} buttonText={activeSession?.session_name} />)
+          <View className='mt-2 flex-row items-center justify-between px-4'>
+            <TouchableOpacity onPress={()=>{}} style={{width:Width/14, height:Width/14}}>
+              <Image source={icons.hamburger} style={{tintColor:'white',width:Width/14, height:Width/14}}/>
+            </TouchableOpacity>
+            <View >
+              {activeSession ? 
+            (<TouchableOpacity onPress={()=>router.push('/session/dummysesh')}
+                              className="bg-white rounded-md" style={{width:Width/2.5}}>
+              <Text className="py-2 self-center font-bold">{activeSession?.session_name}</Text>
+            </TouchableOpacity>)
             :(<Text className="text-white self-center font-bold">No active session</Text>)}
+            </View>
           </View>
         </View>
         <FlatList data={previousSessions}

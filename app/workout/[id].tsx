@@ -80,24 +80,22 @@ const WorkoutInformation = () => {
     }
   },[workout?.id])
 
+  const renderModal = ()=> {
+    return (
+      <Modal animationType="slide" transparent={true} visible={modalVisible}
+             onRequestClose={() => {setModalVisible(!modalVisible)}}>
 
-
-  return (
-    <SafeAreaProvider>
-         <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}}> 
-          <Modal animationType="slide"
-                 transparent={true}
-                 visible={modalVisible}
-                 onRequestClose={() => {setModalVisible(!modalVisible);}}>
-          <View style={{ margin: 30, marginTop:Height*.44, backgroundColor: 'white',
-                         borderRadius: 5, padding: 35, alignItems: 'center', shadowColor: '#000',
+          <View style={{ margin: 70, marginTop:Height*.33, backgroundColor: 'white',
+                         borderRadius: 5, padding: 15, shadowColor: '#000',
                          shadowOffset: {width: 0, height: 2,}, shadowOpacity: 0.25, shadowRadius: 4,}}>
-            <Text >Change Number of Sets</Text>
-            <TextInput value={setNumber>0 ? String(setNumber):''} 
+            <View className='flex-row items-center justify-between'>
+              <Text >Change Number of Sets</Text>
+              <TextInput value={setNumber>0 ? String(setNumber):''} 
                        onChangeText={(text)=>setSetNumber(Number(text))}
                        keyboardType='numeric'
-                       className='text-black border-2 border-light-100 px-8 rounded-md'/>
-            <View className='flex flex-row gap-10'>
+                       className='text-black border-2 border-light-100 px-4 rounded-md py-1'/>
+            </View>
+            <View className='flex-row justify-between mt-10'>
               <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                 <Text>Return</Text>
               </TouchableOpacity>
@@ -109,6 +107,15 @@ const WorkoutInformation = () => {
             </View>
           </View>
         </Modal>
+    )
+  }
+
+
+
+  return (
+    <SafeAreaProvider>
+         <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}}> 
+            {renderModal()}
             <View className="items-center mt-10 w-[80%] flex flex-row">
                 <TextInput placeholder={workout.name} 
                    onChangeText={(text)=>{setName(text);

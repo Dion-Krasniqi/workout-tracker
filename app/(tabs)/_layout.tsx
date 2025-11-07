@@ -1,8 +1,7 @@
 
-import React from 'react'
-import { Stack, Tabs } from "expo-router";
-import HomeFilledIcon from '@mui/icons-material/HomeFilled';
-import { Text, View } from 'react-native';
+import { Tabs } from "expo-router";
+import React from 'react';
+import { Text } from 'react-native';
 
 const Ticon = ({focused, title}:any) => {
   if (focused) {
@@ -38,9 +37,6 @@ const TabLayout = () => {
               marginHorizontal:10,
               height:70,
               position:'absolute',
-              
-              
-
             }
     }}>
       <Tabs.Screen 
@@ -55,6 +51,7 @@ const TabLayout = () => {
             )}}
         />
     </Tabs>
+    
 
 
   )
