@@ -3,9 +3,10 @@ import Search from "@/Components/search";
 import { FinishedSessionView } from "@/Components/sessionComponents";
 import { icons } from "@/constants/icons";
 import { useSessionStore } from "@/state/stateStore";
+import { Height } from "@/utils";
 import { router } from "expo-router";
-import { useEffect } from "react";
-import { ActivityIndicator, Dimensions, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Dimensions, FlatList, Image, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getAllExerciseInstances } from "../db/queries";
 
@@ -17,9 +18,30 @@ export default function Index() {
   const delSessions = useSessionStore((state)=>state.deletePreviousSessions);
   const {activeSession, previousSessions} = useSessionStore();
   const loadingsessions = useSessionStore().loadingsessions;
-  
+  const [modalVisible, setModalVisible] = useState(false);
 
-  
+  const SideMenu = ()=> {
+    return (
+      <Modal animationType="slide" transparent={true} visible={modalVisible}
+                   onRequestClose={() => {setModalVisible(!modalVisible)}}>
+      
+                  <TouchableWithoutFeedback onPressOut={() => setModalVisible(!modalVisible)}>
+                    <View className="flex-1" style={{ width:Width, height:Height}}>
+                      <TouchableWithoutFeedback
+                               style={{ height:Height,
+                               width:Width*.5}}>
+                                <View style={{ backgroundColor: 'white', height:Height,
+                                               width:Width*.5, alignItems:'center'}}>
+                                  <Text className="font-bold text-2xl">User</Text>
+                                </View>
+                          
+                          
+                      </TouchableWithoutFeedback>
+                    </View>
+                </TouchableWithoutFeedback>
+              </Modal>
+    )
+  }
   
   useEffect(()=>{
     loadAllSessions();
@@ -29,7 +51,9 @@ export default function Index() {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView className='bg-dark-100 ' style={{flex: 1, paddingBottom:80}}> 
+      {SideMenu()}
+      <SafeAreaView className='bg-dark-100 ' style={{flex: 1, paddingBottom:80,left:modalVisible ? Width*.5 : 0}}
+      onPointerDown={()=>console.log('fr')}> 
       
      
         {loadingsessions ? (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>):(
@@ -43,7 +67,7 @@ export default function Index() {
         </View>*/}
         <View className='mt-5 border-b-2 border-light-100 pb-6'>
           <View className='mt-2 flex-row items-center justify-between px-4'>
-            <TouchableOpacity onPress={()=>{}} style={{width:Width/14, height:Width/14}}>
+            <TouchableOpacity onPress={()=>{setModalVisible(!modalVisible)}} style={{width:Width/14, height:Width/14}}>
               <Image source={icons.hamburger} style={{tintColor:'white',width:Width/14, height:Width/14}}/>
             </TouchableOpacity>
             <View >
