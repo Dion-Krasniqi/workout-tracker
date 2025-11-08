@@ -19,6 +19,7 @@ export default function Index() {
   const {activeSession, previousSessions} = useSessionStore();
   const loadingsessions = useSessionStore().loadingsessions;
   const [modalVisible, setModalVisible] = useState(false);
+  const [theme, setTheme] = useState('default');
 
   const SideMenu = ()=> {
     return (
@@ -33,6 +34,11 @@ export default function Index() {
                                 <View style={{ backgroundColor: 'white', height:Height,
                                                width:Width*.5, alignItems:'center'}}>
                                   <Text className="font-bold text-2xl">User</Text>
+                                  <TouchableOpacity onPress={()=>{if(theme=='default'){setTheme('dark');setTheme('dark')}
+                                                                  else{setTheme('default');setTheme('default')};}}
+                                                                  className="mt-4 rounded-md bg-black">
+                                    <Text className="color-white p-2">{theme}</Text>
+                                  </TouchableOpacity>
                                 </View>
                           
                           
