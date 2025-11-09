@@ -4,6 +4,7 @@ import { FinishedSessionView } from "@/Components/sessionComponents";
 import { icons } from "@/constants/icons";
 import { useSessionStore } from "@/state/stateStore";
 import { Height } from "@/utils";
+import { getSystemTheme, setSystemTheme } from "@/utils/ThemeHandler";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Dimensions, FlatList, Image, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
@@ -19,7 +20,20 @@ export default function Index() {
   const {activeSession, previousSessions} = useSessionStore();
   const loadingsessions = useSessionStore().loadingsessions;
   const [modalVisible, setModalVisible] = useState(false);
-  const [theme, setTheme] = useState('default');
+  const [theme, setTheme] = useState(getSystemTheme);
+
+
+  // maybe can be simplified a bit
+  const changeTheme = async()=> {
+    if(theme == 'default'){
+      setTheme('dark');
+    }else{
+      setTheme('default');
+    }
+    setSystemTheme(theme);
+    
+  }
+
 
   const SideMenu = ()=> {
     return (
@@ -34,8 +48,7 @@ export default function Index() {
                                 <View style={{ backgroundColor: 'white', height:Height,
                                                width:Width*.5, alignItems:'center'}}>
                                   <Text className="font-bold text-2xl">User</Text>
-                                  <TouchableOpacity onPress={()=>{if(theme=='default'){setTheme('dark');setTheme('dark')}
-                                                                  else{setTheme('default');setTheme('default')};}}
+                                  <TouchableOpacity onPress={()=>changeTheme()}
                                                                   className="mt-4 rounded-md bg-black">
                                     <Text className="color-white p-2">{theme}</Text>
                                   </TouchableOpacity>

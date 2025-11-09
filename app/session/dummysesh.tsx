@@ -3,6 +3,8 @@
 import CustomButton from '@/Components/button';
 import { ExerciseView, Stopwatch } from '@/Components/sessionComponents';
 import { useSessionStore } from '@/state/stateStore';
+//import ThemeHandler from '@/utils/ThemeHandler';
+import { getSystemTheme } from '@/utils/ThemeHandler';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
@@ -17,6 +19,7 @@ const Exercise_creation = () => {
   const quitSession = useSessionStore((state)=>state.quitSession);
   const loadExercises = useSessionStore((state)=>state.loadActiveExercisesWithSets);
   const {activeSession, loading} = useSessionStore();
+  const [theme, setTheme] = useState(getSystemTheme());
 
   
 
@@ -58,7 +61,7 @@ const Exercise_creation = () => {
       
         {loading ? (<ActivityIndicator/>):
         (
-        <SafeAreaView className='flex-1 bg-dark-100 '>
+        <SafeAreaView className='flex-1 bg-dark-100'>
          <View  className='flex border-b-4 border-b-light-100 pb-5 rounded-xl'>
          
          <View className="mx-2 px-5 mt-2">
@@ -96,7 +99,7 @@ const Exercise_creation = () => {
           </View>
         </View>
 
-      <View className="mx-2">
+      <View className="mx-2"style={{backgroundColor:theme=='default' ? 'white' : 'black'}}>
 
        <FlatList data={activeSession?.exercises}
                  keyExtractor={(item)=>item.id.toString()}
@@ -105,8 +108,8 @@ const Exercise_creation = () => {
                                         </View>)}
                  contentContainerStyle={{paddingBottom:120}}
                  ListFooterComponent={<View className='self-center mb-44'>
-                                        <Text className='text-white font-bold text-4xl mb-7'>{formatWatch(elapsed)}</Text>
-                                        <CustomButton buttonText='Quit Session' onPress={()=>{
+                                        <Text className='font-bold text-4xl mb-7' style={{color:theme=='default' ? 'black' : 'white'}}>{formatWatch(elapsed)}</Text>
+                                        <CustomButton buttonText='Quit Session' style ={`color:${'white'}`} onPress={()=>{
                                           if(activeSession){
                                                       Alert.alert('Session information will be lost','Do you wish to proceed?',
                                                       [{text: 'Cancel',onPress: () => {},style: 'cancel',},
