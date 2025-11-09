@@ -20,6 +20,7 @@ const Exercise_creation = () => {
   const loadExercises = useSessionStore((state)=>state.loadActiveExercisesWithSets);
   const {activeSession, loading} = useSessionStore();
   const [theme, setTheme] = useState(getSystemTheme());
+  const [color, setColor] = useState('white')
 
   
 
@@ -36,6 +37,16 @@ const Exercise_creation = () => {
       getAllNotes();
     }
   },[]);
+
+  useEffect(()=>{
+    setTheme(getSystemTheme);
+    if(theme=='default'){
+      setColor(' bg-black')
+    }else{
+      setColor(' bg-white')
+    }
+
+  }, [getSystemTheme]);
 
   useEffect(()=>{
     const interval = setInterval(()=>{
@@ -107,9 +118,9 @@ const Exercise_creation = () => {
                                           <ExerciseView exercise={item}/>
                                         </View>)}
                  contentContainerStyle={{paddingBottom:120}}
-                 ListFooterComponent={<View className='self-center mb-44'>
+                 ListFooterComponent={<View className='self-center mb-44 mt-5'>
                                         <Text className='font-bold text-4xl mb-7' style={{color:theme=='default' ? 'black' : 'white'}}>{formatWatch(elapsed)}</Text>
-                                        <CustomButton buttonText='Quit Session' style ={`color:${'white'}`} onPress={()=>{
+                                        <CustomButton buttonText='Quit Session' style={`bg-${color}`} onPress={()=>{
                                           if(activeSession){
                                                       Alert.alert('Session information will be lost','Do you wish to proceed?',
                                                       [{text: 'Cancel',onPress: () => {},style: 'cancel',},

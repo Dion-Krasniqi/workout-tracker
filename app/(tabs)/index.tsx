@@ -1,6 +1,7 @@
 import CustomButton from "@/Components/button";
 import Search from "@/Components/search";
 import { FinishedSessionView } from "@/Components/sessionComponents";
+import SideMenuItem from "@/Components/SideMenuItem";
 import { icons } from "@/constants/icons";
 import { useSessionStore } from "@/state/stateStore";
 import { Height } from "@/utils";
@@ -30,7 +31,8 @@ export default function Index() {
     }else{
       setTheme('default');
     }
-    setSystemTheme(theme);
+    console.log(theme);
+    await setSystemTheme(theme);
     
   }
 
@@ -47,11 +49,20 @@ export default function Index() {
                                width:Width*.5}}>
                                 <View style={{ backgroundColor: 'white', height:Height,
                                                width:Width*.5, alignItems:'center'}}>
-                                  <Text className="font-bold text-2xl">User</Text>
-                                  <TouchableOpacity onPress={()=>changeTheme()}
-                                                                  className="mt-4 rounded-md bg-black">
-                                    <Text className="color-white p-2">{theme}</Text>
+                                  <Text className="font-bold text-2xl mt-12">User</Text>
+                                  <TouchableOpacity onPress={async()=>await changeTheme()}
+                                                                  className="rounded-md bg-black" 
+                                                                  style={{width:Width/4, alignItems:'center', marginTop:12}}>
+                                    <Text className="color-white p-2 font-bold uppercase">{theme}</Text>
                                   </TouchableOpacity>
+                                  <View className="gap-4" style={{marginVertical:50}}>
+                                    <SideMenuItem label='Sessions this month' value='100'/>
+                                    <SideMenuItem label='Most Common Workout' value='Push A' />
+                                    
+                                  </View>
+                                  
+                                  <CustomButton buttonText="Reset Data" onPress={()=>console.log('reset')} style=" bg-black"/>
+                                  
                                 </View>
                           
                           
