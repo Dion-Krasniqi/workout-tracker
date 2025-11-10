@@ -3,9 +3,8 @@ import Search from "@/Components/search";
 import { FinishedSessionView } from "@/Components/sessionComponents";
 import SideMenuItem from "@/Components/SideMenuItem";
 import { icons } from "@/constants/icons";
-import { useSessionStore } from "@/state/stateStore";
+import { useSessionStore, useUserPreferences } from "@/state/stateStore";
 import { Height } from "@/utils";
-import { getSystemTheme, setSystemTheme } from "@/utils/ThemeHandler";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Dimensions, FlatList, Image, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
@@ -20,20 +19,20 @@ export default function Index() {
   const delSessions = useSessionStore((state)=>state.deletePreviousSessions);
   const {activeSession, previousSessions} = useSessionStore();
   const loadingsessions = useSessionStore().loadingsessions;
+
+  const { systemTheme } = useUserPreferences();
+  const updateSystemTheme = useUserPreferences((state)=>state.updateSystemTheme);
+  const loadSystemTheme = useUserPreferences((state)=>state.loadSystemTheme);
+
   const [modalVisible, setModalVisible] = useState(false);
-  const [theme, setTheme] = useState(getSystemTheme);
 
 
-  // maybe can be simplified a bit
   const changeTheme = async()=> {
-    if(theme == 'default'){
-      setTheme('dark');
+    if(systemTheme == 'default'){
+      await updateSystemTheme('dark');
     }else{
-      setTheme('default');
+      await updateSystemTheme('default');
     }
-    console.log(theme);
-    await setSystemTheme(theme);
-    
   }
 
 
@@ -50,10 +49,10 @@ export default function Index() {
                                 <View style={{ backgroundColor: 'white', height:Height,
                                                width:Width*.5, alignItems:'center'}}>
                                   <Text className="font-bold text-2xl mt-12">User</Text>
-                                  <TouchableOpacity onPress={async()=>await changeTheme()}
+                                  <TouchableOpacity onPress={changeTheme}
                                                                   className="rounded-md bg-black" 
                                                                   style={{width:Width/4, alignItems:'center', marginTop:12}}>
-                                    <Text className="color-white p-2 font-bold uppercase">{theme}</Text>
+                                    <Text className="color-white p-2 font-bold uppercase">{systemTheme}</Text>
                                   </TouchableOpacity>
                                   <View className="gap-4" style={{marginVertical:50}}>
                                     <SideMenuItem label='Sessions this month' value='100'/>
@@ -70,20 +69,19 @@ export default function Index() {
                     </View>
                 </TouchableWithoutFeedback>
               </Modal>
-    )
-  }
+    )};
   
   useEffect(()=>{
     loadAllSessions();
     getAllExerciseInstances();
+    loadSystemTheme();
   },[]);
   const Width = Dimensions.get("window").width;
 
   return (
     <SafeAreaProvider>
       {SideMenu()}
-      <SafeAreaView className='bg-dark-100 ' style={{flex: 1, paddingBottom:80,left:modalVisible ? Width*.5 : 0}}
-      onPointerDown={()=>console.log('fr')}> 
+      <SafeAreaView className='bg-dark-100 ' style={{flex: 1, paddingBottom:80,left:modalVisible ? Width*.5 : 0}}> 
       
      
         {loadingsessions ? (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>):(

@@ -1,10 +1,16 @@
+//not used
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-let currentTheme = 'default';
+let currentTheme = '';
 
 const loadTheme = async()=> {
   const savedTheme = await AsyncStorage.getItem('theme');
-  if(savedTheme) currentTheme = savedTheme;
+  if(savedTheme) {
+    currentTheme = savedTheme
+  }else{
+    currentTheme = 'default';
+  }
 }
 
 loadTheme();
@@ -18,4 +24,5 @@ export const setSystemTheme = async(value:string)=> {
           console.log('Falied to change theme', e);
         }
 };
+
 export const getSystemTheme = ()=> { return currentTheme };

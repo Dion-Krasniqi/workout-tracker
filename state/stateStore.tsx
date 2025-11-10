@@ -1,9 +1,35 @@
 import { addExerciseToWorkout, changeSetNumber, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, deleteSession, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { formatDate } from '@/utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import { create } from 'zustand';
 
+interface UserPreferences {
+    systemTheme: string;
+    loadSystemTheme:()=>void;
+    updateSystemTheme:(value:string)=>void;
+}
+
+export const useUserPreferences = create<UserPreferences>((set,get)=>({
+    systemTheme: 'default',
+    loadSystemTheme: async()=>{
+        const savedTheme = await AsyncStorage.getItem('theme');
+        if(savedTheme) {
+            set({systemTheme:savedTheme});
+        }
+    },
+    updateSystemTheme: async(value)=>{
+        set({systemTheme:value});
+        try {
+          await AsyncStorage.setItem('theme', value);
+
+        } catch (e){
+          console.log('Falied to change theme', e);
+        }
+    },
+
+}));
 
 
 interface WorkoutStore {
