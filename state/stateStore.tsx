@@ -189,18 +189,15 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
 
         return fSessions;
     },
-    setPreviousSession: (session_id)=>{
+    setPreviousSession: async(session_id)=>{
+        
         const { finishedSession } = get();
-        if (finishedSession?.id == session_id){
-            return
+        if (finishedSession && finishedSession.id == session_id) return;
+        if (finishedSession==null || finishedSession.id!=session_id) {
+            const { previousSessions } = get();
+            const s = previousSessions.find((s)=>s.id==Number(session_id));
+            set({finishedSession:s});
         }
-        if (finishedSession) {
-            set({finishedSession:null});
-        }
-        const { previousSessions } = get();
-        const s = previousSessions.find((s)=>s.id==Number(session_id));
-        set({finishedSession:s});
-
     },
     loadPreviousSession: async(session_id)=>{
 

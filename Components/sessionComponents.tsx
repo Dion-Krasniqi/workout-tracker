@@ -158,9 +158,18 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
   const date = formatDate(sesh.time_started)
   const screenWidth = Dimensions.get("window").width/1.1;
 
+  const setPrevSession = useSessionStore((state)=>state.setPreviousSession);
+  const loadExercises = useSessionStore((state)=>state.loadPreviousSession);
+  const setSession = async(id:number)=> {
+    const ses = await setPrevSession(id);
+    await loadExercises(id);
+  };
+
   return (
     <Link href={`/session/completed/${sesh.id}`} asChild>
-      <TouchableOpacity className='flex rounded-md justify-center px-2 bg-white mt-4' style={{width:screenWidth, height:65}}>
+      <TouchableOpacity className='flex rounded-md justify-center px-2 bg-white mt-4' 
+                        style={{width:screenWidth, height:65}} 
+                        onPress={async()=>{await setSession(Number(sesh.id))}}>
         <View className='flex-row justify-between'>
           <Text className='font-bold text-center'>{sesh.session_name}</Text>
           <Text>{date}</Text>

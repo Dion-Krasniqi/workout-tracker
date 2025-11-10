@@ -76,7 +76,7 @@ const WorkoutInformation = () => {
   
   useEffect(()=>{
     if (workout){
-      useWorkoutStore.getState().loadExercises(workout.id)
+      useWorkoutStore.getState().loadExercises(workout.id);
     }
   },[workout?.id])
 

@@ -18,30 +18,20 @@ const SessionDetails = () => {
     const router = useRouter();
     const loadExercises = useSessionStore((state)=>state.loadPreviousSession);
     const deleteSession = useSessionStore((state)=>state.deletePreviousSession);
-    const setSession = useSessionStore((state)=>state.setPreviousSession);
-    const [session, setsession] = useState(useSessionStore.getState().finishedSession);
-
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    //const [session, setSession] = useState<Session | null>();
+    const { finishedSession } = useSessionStore();
 
     useEffect(()=>{
-          async function setup(){
-            setLoading(true);
-            await setSession(Number(id));
-            await loadExercises(Number(id));
-            setsession(useSessionStore.getState().finishedSession);
-            setLoading(false);
-          };
-          setup();
-        
-    },[id]);
+      
+    },[]);
     
     let startTime = '';
     let endTime = '';
 
-    if (session){
-
-      startTime = new Date(session?.time_started).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      endTime = new Date(session?.time_ended!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (finishedSession){
+      startTime = new Date(finishedSession?.time_started).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      endTime = new Date(finishedSession?.time_ended!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
 
@@ -61,7 +51,7 @@ const SessionDetails = () => {
                       </TouchableOpacity>
                     </View>
                     <View className='rounded-md h-[50] justify-center px-2 bg-white'>
-                      <Text className='font-bold text-center'>{session?.session_name}</Text>             
+                      <Text className='font-bold text-center'>{finishedSession?.session_name}</Text>             
                     </View>
                     <View className='flex-row justify-between mt-3'>
                       <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%]'>
@@ -76,15 +66,15 @@ const SessionDetails = () => {
                 </View>
                 <View>
                   <>
-                    {session?.exercises && 
-                      <FlatList data={session.exercises}
+                    {finishedSession?.exercises && 
+                      <FlatList data={finishedSession.exercises}
                                 keyExtractor={(item)=>item.id.toString()}
                                 renderItem={({item})=>(<View className='rounded-lg bg-dark-200 mb-2'>
                                                           <FinishedExercise exercise={item}/>
                                                        </View>)}
                                 contentContainerStyle={{paddingBottom:120}}
                                 ListFooterComponent={<View className='mb-24 mt-16 w-full'>
-                                                        <CustomButton buttonText='Delete Session' onPress={()=>{if(session){
+                                                        <CustomButton buttonText='Delete Session' onPress={()=>{if(finishedSession){
                                                                                                               Alert.alert('Session information will be lost','Do you wish to proceed?',
                                                                                                               [{text: 'Cancel',onPress: () => {},style: 'cancel',},
                                                                                                               { text: 'YES', onPress: 

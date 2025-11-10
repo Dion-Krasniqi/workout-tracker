@@ -21,7 +21,7 @@ const Workouts = () => {
   const startSession = async (workout_id:number)=>{
     const sesh = await beginSession(workout_id);
     await loadExercises(workout_id, sesh.id)
-  }
+  };
   
   return (
     <SafeAreaProvider>
