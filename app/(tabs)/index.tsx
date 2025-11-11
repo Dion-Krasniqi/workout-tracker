@@ -20,9 +20,11 @@ export default function Index() {
   const {activeSession, previousSessions} = useSessionStore();
   const loadingsessions = useSessionStore().loadingsessions;
 
-  const { systemTheme } = useUserPreferences();
+  const { systemTheme, numberOfSessions, mostCommonWorkout } = useUserPreferences();
   const updateSystemTheme = useUserPreferences((state)=>state.updateSystemTheme);
   const loadSystemTheme = useUserPreferences((state)=>state.loadSystemTheme);
+  const syncData = useUserPreferences((state)=>state.syncData);
+
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -55,8 +57,12 @@ export default function Index() {
                                     <Text className="color-white p-2 font-bold uppercase">{systemTheme}</Text>
                                   </TouchableOpacity>
                                   <View className="gap-4" style={{marginVertical:50}}>
-                                    <SideMenuItem label='Sessions this month' value='100'/>
-                                    <SideMenuItem label='Most Common Workout' value='Push A' />
+                                    <SideMenuItem label='Sessions this month:' value={String(numberOfSessions)}/>
+                                    <SideMenuItem label='Most Common Workout:' value={mostCommonWorkout} />
+                                    <TouchableOpacity onPress={syncData} 
+                                                      style={{alignSelf:'center',borderRadius:5, marginTop:30}} className='bg-dark-200'>
+                                      <Text className="color-white font-bold" style={{padding:10}}>Sync Data</Text>
+                                    </TouchableOpacity>
                                     
                                   </View>
                                   
@@ -75,6 +81,7 @@ export default function Index() {
     loadAllSessions();
     getAllExerciseInstances();
     loadSystemTheme();
+    syncData();
   },[]);
   const Width = Dimensions.get("window").width;
 

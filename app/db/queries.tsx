@@ -148,19 +148,39 @@ export const getAllSessions = async():Promise<Session[]> => {
     console.log(allRows);
     return allRows;   
 }
+
 export const createSession = async(workout_id:number, session_name:string, time_started:number, time_ended:number): Promise<number>=>{
     const lastSession = await db.runAsync(`INSERT INTO sessions (workout_id,session_name,time_started,time_ended) VALUES (?,?,?,?)`,
                                                                           [workout_id,session_name,time_started,time_ended]);
     return lastSession.lastInsertRowId as number;
 }
+
 export const deleteAllSessions = async()=>{
     await db.getAllAsync(`DELETE FROM sessions;`)
 }
+
 export const deleteSession = async(session_id:number)=>{
     await db.runAsync(`DELETE FROM sessions 
                        WHERE id = (?)`, session_id);
 }
 
+export const getMonthSession = async()=> {
+    const amount = await db.getFirstAsync<{count:Number}>(`SELECT COUNT(*) AS count 
+                                           FROM sessions
+                                           WHERE strftime('%m', time_started/1000, 'unixepoch')=strftime('%m','now')`);
+    
+    return amount?.count || 0;
+
+}
+
+export const getMostCommon = async()=> {
+    const workout = await db.getFirstAsync<{name:string,count:number}>(`SELECT w.name as name, COUNT(*) AS count
+                                            FROM sessions s JOIN workouts w ON w.id=s.workout_id
+                                            GROUP BY w.id
+                                            ORDER BY count DESC`);
+    if(!workout) return 'No Workout Found';
+    return workout.name || 'No Workout Found';
+}
 //Notes
 export const getAllNotes = async()=>{
     const result = await db.getAllAsync(`SELECT *

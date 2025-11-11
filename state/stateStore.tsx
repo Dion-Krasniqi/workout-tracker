@@ -1,18 +1,24 @@
-import { addExerciseToWorkout, changeSetNumber, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, deleteSession, getAllSessions, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
+import { addExerciseToWorkout, changeSetNumber, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, deleteSession, getAllSessions, getMonthSession, getMostCommon, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { formatDate } from '@/utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import { create } from 'zustand';
 
+
 interface UserPreferences {
     systemTheme: string;
+    numberOfSessions:number;
+    mostCommonWorkout:string;
     loadSystemTheme:()=>void;
     updateSystemTheme:(value:string)=>void;
+    syncData: ()=>void;
 }
 
 export const useUserPreferences = create<UserPreferences>((set,get)=>({
     systemTheme: 'default',
+    numberOfSessions:0,
+    mostCommonWorkout:'Workout Name',
     loadSystemTheme: async()=>{
         const savedTheme = await AsyncStorage.getItem('theme');
         if(savedTheme) {
@@ -27,6 +33,12 @@ export const useUserPreferences = create<UserPreferences>((set,get)=>({
         } catch (e){
           console.log('Falied to change theme', e);
         }
+    },
+    // probabaly should fetch from zustand first
+    syncData: async()=>{
+        const sessionNr = await getMonthSession();
+        const commonSession = await getMostCommon();
+        set({numberOfSessions:Number(sessionNr),mostCommonWorkout:commonSession});
     },
 
 }));
