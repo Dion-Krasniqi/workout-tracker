@@ -1,23 +1,46 @@
 import CustomButton from '@/Components/button'
-import React, { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { FlatList, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 //import { createCustomExercise, createCustomWorkout, getAllWorkoutTemplates } from '../db/queries'
+import Search from '@/Components/search'
+import { WorkoutTemplate } from '@/interfaces/interfaces'
 import { useSessionStore, useWorkoutStore } from '@/state/stateStore'
 import { Link, useRouter } from 'expo-router'
 import { exportAllSetData } from '../db/db'
 
+
 const Workouts = () => {
   
-  const workouts = useWorkoutStore((state)=>state.workouts)
   const router = useRouter();
+  const workoutControl = useWorkoutStore();
   const beginSession = useSessionStore((state)=>state.startSession);
   const loadExercises = useSessionStore((state)=>state.loadActiveExercisesWithSets);
+  const [workouts, setWorkouts] = useState<WorkoutTemplate[]>([]);
+  const [query, setQuery] = useState('');
+
+  useEffect(()=>{
+   const tempW = workoutControl.workouts;
+   setWorkouts(tempW);
+  },[]);
+  useEffect(()=>{
+      const timeOutId = setTimeout( async()=>{
+        if(query.trim()){
+          const qResult = workoutControl.workouts.filter((w)=>w.name.includes(query));
+           if (qResult){
+            setWorkouts(qResult)
+           }
+        } else {
+          const result = workoutControl.workouts;
+          setWorkouts(result);
+        };
+  },500);
+  return () => clearTimeout(timeOutId);
+  },[query]);
+
   
 
-  useEffect(() => {
-    
-  }, []);
+
   const startSession = async (workout_id:number)=>{
     const sesh = await beginSession(workout_id);
     await loadExercises(workout_id, sesh.id)
@@ -25,20 +48,15 @@ const Workouts = () => {
   
   return (
     <SafeAreaProvider>
-      <SafeAreaView
-      className='bg-dark-100'
-      style={{
-        flex: 1,
-        
-        alignItems: "center",
-      }} 
-    > 
+      <SafeAreaView className='bg-dark-100' style={{flex: 1,alignItems: "center",}}> 
     <ScrollView className="flex w-full px-5 mb-24" showsVerticalScrollIndicator={false} 
         contentContainerStyle={{ minHeight:'100%'}}>
-      <View className='mt-10 gap-5 w-auto'>
-        <CustomButton onPress={()=>router.push('/otherPages/workout_creation')} buttonText='Create Workout' />
+      <View style={{flexDirection:'row', marginTop:30, justifyContent:'space-between', 
+                    alignItems:'center', marginHorizontal:25}}>
+        <CustomButton onPress={()=>router.push('/otherPages/workout_creation')} buttonText='Create Workout'/>
         <CustomButton onPress={()=>router.push('/otherPages/exercise_list')} buttonText='Exercise List' />
       </View>
+
       <View className='flex-1 w-[100%]'>
         <>
           <FlatList data={workouts}
@@ -50,24 +68,17 @@ const Workouts = () => {
             keyExtractor={(item) =>item.id.toString()}
             className="mt-8 w-full self-center"
             scrollEnabled={false}
+            ListHeaderComponent={<View style={{width:'87%', alignSelf:'center', marginBottom:30}}>
+              <Search pholder='Search Workout' value={query} onChangeText={(text)=>{setQuery(text)}}/>
+                                </View>}
             ListFooterComponent={<CustomButton onPress={()=>exportAllSetData()} buttonText='Extract All Data' />}
             ListFooterComponentStyle={{marginTop:30}}/>
 
         
         </>
       </View>
-      
     </ScrollView>
-    
-    
-      
-
-      
-      
-      
-      
     </SafeAreaView>
-
     </SafeAreaProvider>
   )
 }

@@ -46,7 +46,6 @@ Sessions are "active" instances of workout routines. To start a session click on
 
 
 Planned features:
-* Workout search;
 * Edit finished session start and end time;
 * Remove set/exercise in active workout;
 * Data should be transferable, either account or extracting and importing manually(partially implemented);
@@ -55,3 +54,4 @@ Planned features:
 * Copy workout;
 * More information about exercises;
 * Customization and more user stats;
+* Add workout search based on focus of workout(eg.if a workout has majority leg exercises, leg focus);

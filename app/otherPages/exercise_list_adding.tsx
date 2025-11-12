@@ -9,7 +9,7 @@ import { getAllExercises, getAllExercisesSearch } from '../db/queries';
 
 const Exercise_list_add = () => {
   const {workout_id} = useLocalSearchParams();
-  const muscleGroups = ['None','Chest','Back','Shoulders','Arms','Legs','Abs']
+  const muscleGroups = ['None','Chest','Back','Shoulders','Arms','Legs','Abs'];
   const router = useRouter();
   const [exercises, setExercises] = useState<ExerciseInfo[]>([]);
   const [group, setGroup] = useState(0);
@@ -30,6 +30,7 @@ const Exercise_list_add = () => {
     const timeOutId = setTimeout( async()=>{
       if(query.trim() || group!=0){
         let qResult;
+        // kinda weird
         if(group!=0){
           qResult = await getAllExercisesSearch(query,group);
         }else{

@@ -40,7 +40,7 @@ export default function Index() {
 
   const SideMenu = ()=> {
     return (
-      <Modal animationType="slide" transparent={true} visible={modalVisible}
+      <Modal /*animationType="slide"*/ transparent={true} visible={modalVisible}
                    onRequestClose={() => {setModalVisible(!modalVisible)}}>
       
                   <TouchableWithoutFeedback onPressOut={() => setModalVisible(!modalVisible)}>
