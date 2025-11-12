@@ -12,13 +12,24 @@ export const getAllExercises = async () => {
     return allRows;
 
 }
-export const getAllExercisesSearch = async (name:string) => {
-    const allRows = await db.getAllAsync(`SELECT ex.id, ex.name, ex.muscle_group 
+export const getAllExercisesSearch = async (name:string, group?:number) => {
+    if (group) {
+        const allRows = await db.getAllAsync(`SELECT ex.id, ex.name, ex.muscle_group 
                                           FROM exercises_info as ex
                                           JOIN muscle_groups m ON ex.muscle_group = m.id
-                                          WHERE ex.name LIKE ? OR m.name LIKE ?
-                                          `, [`${name}%`,`${name}%`]);
-    return allRows;
+                                          WHERE ex.name LIKE ?  AND ex.muscle_group=?
+                                          `, [`${name}%`,group+1]);
+        return allRows;
+
+    } else {
+        const allRows = await db.getAllAsync(`SELECT ex.id, ex.name, ex.muscle_group 
+                                          FROM exercises_info as ex
+                                          JOIN muscle_groups m ON ex.muscle_group = m.id
+                                          WHERE ex.name LIKE 
+                                          `, [`${name}%`]);
+        return allRows;
+    }
+    
 
 }
 export const getAllExerciseInstances = async () => {
