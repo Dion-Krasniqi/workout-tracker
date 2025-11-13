@@ -241,8 +241,15 @@ export const writeNotes = async(exercise_id:number,content:string, session_id:nu
 // Set Related
 
 
-export const writeSet = async (exercise_id:number, session_id:number, set_number:number, weight:number, reps:number,date:number)=>{
-    if (weight==0 || reps==0){
+export const writeSet = async (exercise_id:number,session_id:number,set_number:number,weight:number,reps:number,date:number,marked?:boolean)=>{
+    
+    if (marked){
+        await db.runAsync(`INSERT INTO session_sets (exercise_id,session_id,set_number,weight,reps,date,marked) VALUES (?,?,?,?,?,?,?)`,
+                                                                          [exercise_id,session_id,set_number,weight,reps,date,marked]);
+        return;
+        
+    } else if (weight==0 || reps==0){
+        // if not marked and reps or weight 0, doesnt save
         return
     }
     await db.runAsync(`INSERT INTO session_sets (exercise_id,session_id,set_number,weight,reps,date) VALUES (?,?,?,?,?,?)`,
@@ -284,7 +291,7 @@ export const getSetData = async(exercise_id:number, set_number:number, session_i
 
 }
 export const getAllExerciseSets = async(exercise_id:number)=>{
-    const result = await db.getAllAsync<{weight:number;reps:number;date:number}>(`SELECT weight, reps, date 
+    const result = await db.getAllAsync<{weight:number;reps:number;date:number;marked?:boolean}>(`SELECT weight, reps, date, marked 
                                          FROM session_sets
                                          WHERE exercise_id = ?
                                          ORDER BY id DESC`, [exercise_id])

@@ -7,12 +7,12 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { getAllExerciseSets, getExercise } from '../db/queries';
 
 
-const setEntry = (weight:number,reps:number,date:number)=>{
+const setEntry = (weight:number,reps:number,date:number,marked?:boolean)=>{
   const time = new Date(date).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'});
   return (
     
     <View className='items-center border-t-2 w-full self-center py-4 rounded-xl'>
-      <Text className='text-white font-bold text-xl'>{weight}kg for {reps} reps at {time}</Text>
+      <Text className='text-white font-bold text-xl'>{marked && 'Marked:'}{weight}kg for {reps} reps at {time}</Text>
     </View>
   )
 }
@@ -23,7 +23,7 @@ const ExerciseInformation = () => {
   const {id} = useLocalSearchParams();
   const [exercise, setExercise] = useState<ExerciseInfo | null>(null);
   const [sets, setSets] = useState<{weight:number;reps:number;date:number}[] | null>(null);
-  const [weight,setWeight] = useState<{value:number,dataPointText:string, label:string}[] | []>([]);
+  const [weight,setWeight] = useState<{value:number,dataPointText:string,dataPointColor:string,label:string}[] | []>([]);
 
 
   useEffect(()=>{
@@ -34,7 +34,10 @@ const ExerciseInformation = () => {
       setSets(data);
       setExercise(result);
       // so doesnt change sets
-      setWeight([...data].reverse().map((s:any)=>({value: s.weight,dataPointText: s.reps + ' reps', label: new Date(s.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })})))
+      setWeight([...data].reverse().map((s:any)=>({value: s.weight,
+                                                   dataPointText: s.reps + ' reps',
+                                                   dataPointColor: (s.marked && s.marked == 1) ? '#ff0000ff' : '#ffffffff',
+                                                   label: new Date(s.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })})))
       
     }
     setup();
@@ -59,7 +62,6 @@ const ExerciseInformation = () => {
               <LineChart 
                          color={'#177AD5'}
                          thickness1={5}
-                         dataPointsColor={'white'}
                          textColor1="white"
                          textFontSize1={10}
                          yAxisTextStyle={{color: 'white'}}

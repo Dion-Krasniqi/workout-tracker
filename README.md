@@ -26,7 +26,7 @@ The app allows the user to create their own exercises and workouts,track workout
 I have no idea how to make it work with IOS.
 
 ## Exercises
-The app comes with a few built in exercises and workouts. To view all exercises navigate to the exercise list by pressing the Exercise List button found in the workouts tab, there you can also find the Create Exercise button which allows you to create a custom exercise using a unique name and optional muscle group. You can search/filter exercises in the add exercise list using name or muscle group.
+The app comes with a few built in exercises and workouts. To view all exercises navigate to the exercise list by pressing the Exercise List button found in the workouts tab, there you can also find the Create Exercise button which allows you to create a custom exercise using a unique name and optional muscle group. You can search/filter exercises in the add exercise list using name or muscle group. Exercise sets can be marked to indicate a reset for exercise progress.
 
 ## Workouts
 To view workouts or create a custom one, simply open the workouts tab where you can find a button and list. Clicking on a workout shows the workouts exercises, number of sets of a given exercise and button to start workout, while holding an entry starts a session(or prompts with a warning if there is an active session). Changing sets of a given exercise can be done by just clicking the exercise listing, while a long press removes the exercise completely.
@@ -50,7 +50,6 @@ Planned features:
 * Remove set/exercise in active workout;
 * Data should be transferable, either account or extracting and importing manually(partially implemented);
 * Session based memory option;
-* Reset exercise data and add optional marker;
 * Copy workout;
 * More information about exercises;
 * Customization and more user stats;

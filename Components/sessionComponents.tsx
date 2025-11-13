@@ -60,13 +60,23 @@ export const SetView = ({set}:{set:SessionSet}) => {
 export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   const [notes, setNotes] = useState(exercise.notes);
   const [oldNotes, setOldNotes] = useState(exercise.oldNotes);
+  const [resetted, setResetted] = useState(false);
   const updateNotes = useSessionStore((state)=>state.updateNotes);
+  const resetExercise = useSessionStore((state)=>state.resetExercise);
 
   useEffect(()=>{
     updateNotes(exercise.exercise_id,notes)
   },[notes])
 
   const inputWidth = Width;
+
+  const markExercise = async()=> {
+    console.log(exercise.marked);
+    await resetExercise(exercise.exercise_id);
+    setResetted(true);
+    console.log('done, did');
+    console.log(exercise.marked);
+  }
 
   return (
     <View style={{flex:1,marginBottom:10, marginTop:15,paddingHorizontal:28}}>
@@ -91,6 +101,9 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
       <Link style={{alignSelf:'flex-end',marginTop:8}} href={`/exercise/${exercise.exercise_id}`}>
         <Text className='text-white'>Stats</Text>
       </Link>
+      <TouchableOpacity style={{alignSelf:'flex-end',marginTop:8}} onPress={markExercise} disabled={resetted}>
+        <Text className='text-white'>Reset Exercise</Text>
+      </TouchableOpacity>
     </View>
   )
 }

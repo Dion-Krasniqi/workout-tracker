@@ -224,5 +224,14 @@ export const migrations = [
     {id:11,
       up:`
         ALTER TABLE notes ADD COLUMN session_id INTEGER;`
-    }
+    },
+    {id:12,
+      up:`
+        ALTER TABLE exercises ADD COLUMN marked BOOLEAN DEFAULT FALSE;`
+    },
+    {id:13,
+      up:`
+        ALTER TABLE exercises DROP COLUMN marked;
+        ALTER TABLE session_sets ADD COLUMN marked BOOLEAN DEFAULT FALSE;`
+    },
 ]

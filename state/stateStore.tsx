@@ -163,6 +163,7 @@ interface SessionStore {
     loadActiveExercisesWithSets: (workout_id:number, session_id:number)=>Promise<void>;
     updateNotes: (exercise_id:number,content:string)=>void;
     updateSet: (set_id:number, weight:number, reps:number)=>void;
+    resetExercise: (exercise_id:number)=>void;
     //removeSet: (set_id:number)=>void;
 }
 
@@ -318,12 +319,19 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             
             
             ex.sets.forEach(async(set)=>{
+                // if left empty, set info is set to 0 ONLY if its marked 
+                if(ex.marked){
+                    await writeSet(ex.exercise_id,actual_id,set.set_number,set.weight,Number(set.reps),activeSession.time_started, true);
+                    return;
+                    
+                }
                 if (set.weight ==0 || set.reps == 0){
                     set.weight = set.oldWeight;
                     set.reps = set.oldReps;
 
                 }
                 await writeSet(ex.exercise_id,actual_id,set.set_number,set.weight,Number(set.reps),activeSession.time_started);
+                
             })
         })
         set({previousSessions:[...previousSessions,finishedSession],
@@ -417,8 +425,6 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
 
     },
     updateNotes: async(exercise_id,content)=>{
-        console.log('legit',content);
-
         set((state)=>{
             if (!state.activeSession) return state;
 
@@ -429,6 +435,18 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
 
         });
         
+    },
+    resetExercise: async(exercise_id)=>{
+        set((state)=>{
+            if (!state.activeSession) return state;
+
+            const updatedExercises = state.activeSession.exercises.map((ex)=>ex.exercise_id==exercise_id ? {...ex,marked:true} : ex);
+            console.log('here');
+
+            return {...state, activeSession: {...state.activeSession, exercises: updatedExercises},};
+
+
+        });
     },
 
 }))

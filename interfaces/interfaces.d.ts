@@ -11,6 +11,7 @@ export interface ExerciseTemplate {
     name:string;
     set_number: number;
     order_index:number;
+    marked?:boolean;
 }
 
 export interface WorkoutTemplate {
@@ -37,6 +38,7 @@ export interface SessionExercise {
     sets: SessionSet[];
     notes: string;
     oldNotes: string;
+    marked?:boolean;
 }
 
 export interface Session {
