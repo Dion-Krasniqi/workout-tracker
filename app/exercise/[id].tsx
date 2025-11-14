@@ -23,7 +23,7 @@ const ExerciseInformation = () => {
   const {id} = useLocalSearchParams();
   const [exercise, setExercise] = useState<ExerciseInfo | null>(null);
   const [sets, setSets] = useState<{weight:number;reps:number;date:number}[] | null>(null);
-  const [weight,setWeight] = useState<{value:number,dataPointText:string,dataPointColor:string,label:string}[] | []>([]);
+  const [weight,setWeight] = useState<{value:number,dataPointText:string,dataPointColor:string,label:string,showVerticalLine?:boolean,verticalLineColor?:string}[] | []>([]);
 
 
   useEffect(()=>{
@@ -37,12 +37,15 @@ const ExerciseInformation = () => {
       setWeight([...data].reverse().map((s:any)=>({value: s.weight,
                                                    dataPointText: s.reps + ' reps',
                                                    dataPointColor: (s.marked && s.marked == 1) ? '#ff0000ff' : '#ffffffff',
+                                                   showVerticalLine: (s.marked && s.marked == 1),
+                                                   verticalLineColor: (s.marked && s.marked == 1) && 'rgba(255, 0, 0, 0.31)',
                                                    label: new Date(s.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })})))
       
     }
     setup();
   },[])
   const Width = Dimensions.get("window").width/1.2;
+  
 
   
   return (
@@ -69,13 +72,15 @@ const ExerciseInformation = () => {
                          textFontSize={13}
                          isAnimated
                          initialSpacing={5}
-                         disableScroll
                          endSpacing={20}                         
                          yAxisColor="lightgray"
                          xAxisColor="lightgray"
                          width={Width}
                          adjustToWidth
-                         data={weight} />
+                         data={weight}
+                         showScrollIndicator
+                         scrollToEnd
+                          />
                          <Text className='text-white text-lg font-bold mt-10'>Full Exercise History</Text>
                          <>
                          <FlatList data={sets}
