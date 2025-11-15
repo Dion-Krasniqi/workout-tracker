@@ -35,6 +35,7 @@ export const SetView = ({set}:{set:SessionSet}) => {
                  keyboardType='numeric' 
                  onChangeText={(text)=>{setWeight(Number(text));}}
                  placeholderTextColor={'darkgrey'}
+                 multiline={true}
                  scrollEnabled={false}
                  className='text-center text-white border-2 border-light-100 rounded-md h-[40] focus:border-white' style={{width:inputWidth}}/>
             <Text style={{marginLeft:4, color:'white',alignSelf:'center'}}>Kg</Text>
@@ -45,6 +46,7 @@ export const SetView = ({set}:{set:SessionSet}) => {
                  keyboardType='numeric' 
                  onChangeText={(text)=>setReps(Number(text))}
                  placeholderTextColor={'darkgrey'}
+                 multiline
                  scrollEnabled={false}
                  className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[40] focus:border-white' style={{width:inputWidth/1.5}}/>
             <Text style={{marginLeft:4, color:'white',alignSelf:'center'}}>Reps</Text>
@@ -102,7 +104,9 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
         <Text className='text-white'>Stats</Text>
       </Link>
       <TouchableOpacity style={{alignSelf:'flex-end',marginTop:8}} onPress={markExercise} disabled={resetted}>
-        <Text className='text-white'>Reset Exercise</Text>
+        <Text className='bg-white' style={{borderRadius:5, padding:4, 
+                                           backgroundColor:resetted ? ('#2e2e2eff'):('white')}}>
+                                          {resetted ? ('Marked'):('Reset Exercise')}</Text>
       </TouchableOpacity>
     </View>
   )

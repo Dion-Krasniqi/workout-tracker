@@ -5,9 +5,10 @@ import SideMenuItem from "@/Components/SideMenuItem";
 import { icons } from "@/constants/icons";
 import { useSessionStore, useUserPreferences } from "@/state/stateStore";
 import { Height } from "@/utils";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, FlatList, Image, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, Image, Modal, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getAllExerciseInstances } from "../db/queries";
 
@@ -39,6 +40,34 @@ export default function Index() {
 
 
   const SideMenu = ()=> {
+    const [userName, setuserName] = useState('User');
+    const [oldUserName, setOldUserName] = useState(userName);
+
+    useEffect(()=>{
+      async function setPref(){
+        const u = await AsyncStorage.getItem('username') || "User";
+        setuserName(u);
+        setOldUserName(u);
+      }
+      setPref();
+    },[]);
+
+    useEffect(()=>{
+      const timeOutId = setTimeout(async()=>{
+        if(userName.trim()){
+          if(userName.trim()==oldUserName){
+            return
+          } else{
+            await AsyncStorage.setItem('username', userName);
+            setOldUserName(userName);
+          }
+        } else {
+          setuserName(oldUserName);
+        }
+      }, 500);
+      return ()=> clearTimeout(timeOutId);
+    },[userName])
+    
     return (
       <Modal /*animationType="slide"*/ transparent={true} visible={modalVisible}
                    onRequestClose={() => {setModalVisible(!modalVisible)}}>
@@ -50,7 +79,9 @@ export default function Index() {
                                width:Width*.5}}>
                                 <View style={{ backgroundColor: 'white', height:Height,
                                                width:Width*.5, alignItems:'center'}}>
-                                  <Text className="font-bold text-2xl mt-12">User</Text>
+                                  <TextInput value={userName} 
+                                             className="font-bold text-2xl mt-12"
+                                             onChangeText={setuserName} />
                                   <TouchableOpacity onPress={changeTheme}
                                                                   className="rounded-md bg-black" 
                                                                   style={{width:Width/4, alignItems:'center', marginTop:12}}>
@@ -66,7 +97,7 @@ export default function Index() {
                                     
                                   </View>
                                   
-                                  <CustomButton buttonText="Reset Data" onPress={()=>console.log('reset')} style=" bg-black"/>
+                                  {/*<CustomButton buttonText="Reset Data" onPress={()=>console.log('reset')} style=" bg-black"/>*/}
                                   
                                 </View>
                           
