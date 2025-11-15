@@ -62,22 +62,19 @@ export const SetView = ({set}:{set:SessionSet}) => {
 export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   const [notes, setNotes] = useState(exercise.notes);
   const [oldNotes, setOldNotes] = useState(exercise.oldNotes);
-  const [resetted, setResetted] = useState(false);
+  const [resetted, setResetted] = useState(exercise.marked || false);
   const updateNotes = useSessionStore((state)=>state.updateNotes);
   const resetExercise = useSessionStore((state)=>state.resetExercise);
 
   useEffect(()=>{
     updateNotes(exercise.exercise_id,notes)
-  },[notes])
+  },[notes]);
 
   const inputWidth = Width;
 
-  const markExercise = async()=> {
-    console.log(exercise.marked);
+  const markExercise = async()=> {;
     await resetExercise(exercise.exercise_id);
     setResetted(true);
-    console.log('done, did');
-    console.log(exercise.marked);
   }
 
   return (
