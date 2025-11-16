@@ -14,20 +14,15 @@ import { getAllNotes } from '../db/queries';
 const Exercise_creation = () => {
 
   const router = useRouter();
-  const beginSession = useSessionStore((state)=>state.startSession);
   const endSession = useSessionStore((state)=>state.endSession);
   const quitSession = useSessionStore((state)=>state.quitSession);
   const loadExercises = useSessionStore((state)=>state.loadActiveExercisesWithSets);
   const {activeSession, loading} = useSessionStore();
-  const [color, setColor] = useState('white');
 
   const { systemTheme } = useUserPreferences();
-
-  
+  const [color, setColor] = useState('white');
 
   const [elapsed,setElapsed] = useState(0);
-  
- 
   const sessionTime = activeSession?.time_started || Date.now();
   
   useEffect(()=>{
@@ -45,7 +40,6 @@ const Exercise_creation = () => {
     }else{
       setColor(' bg-white')
     }
-
   }, [getSystemTheme]);
 
   useEffect(()=>{
@@ -66,77 +60,66 @@ const Exercise_creation = () => {
 
   //@ts-ignore
   const time = new Date(sessionTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+
   return (
-    
     <SafeAreaProvider>
-      
-        {loading ? (<ActivityIndicator/>):
-        (
-        <SafeAreaView className='flex-1 bg-dark-100'>
-         <View  className='flex border-b-4 border-b-light-100 pb-5 rounded-xl'>
-         
+     {loading ? 
+      (<ActivityIndicator/>):
+      (<SafeAreaView className='flex-1 bg-dark-100'>
+        <View  className='flex border-b-4 border-b-light-100 pb-5 rounded-xl'>
          <View className="mx-2 px-5 mt-2">
           <View className='flex-row justify-between mb-5 items-center'>
-                
-                <TouchableOpacity className='items-center' onPress={()=>(router.push('/(tabs)'))}>
-                  <Image source={require('../../assets/icons/arrow.png')} style={{tintColor:'white', transform:[{scaleX:-1.2},{scaleY:1.2}]}}
-                  className='items-center'/>
-                 </TouchableOpacity>
-                {/*<Text className='text-light-100'>Ended at 01:30</Text>*/}
-                <CustomButton buttonText='Finish' onPress={()=>{endSession();router.push('/(tabs)')}}/>
-            </View>
-          
-          
-            
-            <View className=' rounded-md h-[50] justify-center px-2 bg-white'>
-                <Text className='font-bold text-center'>{activeSession?.session_name}</Text>
-            </View>
-            <View className='flex-row justify-between mt-3'>
-                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[32%]'>
-                  <Text className='font-bold text-center'>Exercises: {activeSession?.exercises.length}</Text>
-                </View>
-                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[32%] '>
-                  <Text className='font-bold text-center'>Sets: {activeSession?.setNumber}</Text>
-                </View>
-                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[32%] '>
-                  <Text className='font-bold text-center'>Started at {time}</Text>
-                </View>
-            </View>
-            <View>
-              <Stopwatch />
-            </View>
-              
-            
+           <TouchableOpacity className='items-center' onPress={()=>(router.push('/(tabs)'))}>
+            <Image source={require('../../assets/icons/arrow.png')} style={{tintColor:'white', transform:[{scaleX:-1.2},{scaleY:1.2}]}}
+                   className='items-center'/>
+           </TouchableOpacity>
+           <CustomButton buttonText='Finish' onPress={()=>{endSession();router.push('/(tabs)')}}/>
           </View>
-        </View>
-
-      <View className="mx-2"style={{backgroundColor:systemTheme=='default' ? 'white' : 'black'}}>
-
-       <FlatList data={activeSession?.exercises}
-                 keyExtractor={(item)=>item.id.toString()}
-                 renderItem={({item})=>(<View className='rounded-lg bg-dark-200 mb-2'>
-                                          <ExerciseView exercise={item}/>
-                                        </View>)}
-                 contentContainerStyle={{paddingBottom:120}}
-                 ListFooterComponent={<View className='self-center mb-44 mt-5'>
-                                        <Text className='font-bold text-4xl mb-7' style={{color:systemTheme=='default' ? 'black' : 'white'}}>{formatWatch(elapsed)}</Text>
-                                        <CustomButton buttonText='Quit Session' style={`bg-${color}`} onPress={()=>{
-                                          if(activeSession){
+          {/*Possible make a component with width var */}
+          <View className='rounded-md h-[50] justify-center px-2 bg-white'>
+           <Text className='font-bold text-center'>{activeSession?.session_name}</Text>
+          </View>
+          <View className='flex-row justify-between mt-3'>
+          <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[32%]'>
+           <Text className='font-bold text-center'>Exercises: {activeSession?.exercises.length}</Text>
+          </View>
+          <View className='rounded-md h-[50] justify-center px-2 bg-white w-[32%] '>
+           <Text className='font-bold text-center'>Sets: {activeSession?.setNumber}</Text>
+          </View>
+          <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[32%] '>
+           <Text className='font-bold text-center'>Started at {time}</Text>
+          </View>
+         </View>
+        <View>
+        <Stopwatch />
+       </View>
+      </View>
+     </View>
+     <View className="mx-2"style={{backgroundColor:systemTheme=='default' ? 'white' : 'black'}}>
+      <FlatList data={activeSession?.exercises} keyExtractor={(item)=>item.id.toString()}
+                renderItem={({item})=>(<View className='rounded-lg bg-dark-200 mb-2'>
+                                        <ExerciseView exercise={item}/>
+                                       </View>)}
+                contentContainerStyle={{paddingBottom:120}}
+                ListFooterComponent={<View className='self-center mb-44 mt-5'>
+                                      <Text className='font-bold text-4xl mb-7' style={{color:systemTheme=='default' ? 'black' : 'white'}}>{formatWatch(elapsed)}</Text>
+                                      <CustomButton buttonText='Quit Session' style={`bg-${color}`} 
+                                       onPress={()=>{
+                                                     if(activeSession){
                                                       Alert.alert('Session information will be lost','Do you wish to proceed?',
-                                                      [{text: 'Cancel',onPress: () => {},style: 'cancel',},
-                                                      { text: 'YES', onPress: 
-                                                        async() => {await quitSession();
-                                                                    router.replace('/(tabs)')}},],
-                                                      { cancelable: false });}}}/>
-                                      </View>}
-                 />
+                                                        [{text: 'Cancel',onPress: () => {},style: 'cancel',},
+                                                         { text: 'YES', onPress: async() => {await quitSession();
+                                                                                             router.replace('/(tabs)')}},
+                                                        ],
+                                                        { cancelable: false })
+                                                     }}}/>
+                                     </View>} />
       
         
         
-      </View></SafeAreaView>)}
-    </SafeAreaProvider>
-    
-  );
+     </View>
+    </SafeAreaView>)}
+   </SafeAreaProvider>)
 }
 
 export default Exercise_creation

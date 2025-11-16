@@ -12,9 +12,7 @@ import { ActivityIndicator, Dimensions, FlatList, Image, Modal, Text, TextInput,
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getAllExerciseInstances } from "../db/queries";
 
-
-
-export default function Index() {
+const Index = ()=> {
 
   const loadAllSessions = useSessionStore((state)=>state.loadPreviousSessions);
   const delSessions = useSessionStore((state)=>state.deletePreviousSessions);
@@ -26,9 +24,7 @@ export default function Index() {
   const loadSystemTheme = useUserPreferences((state)=>state.loadSystemTheme);
   const syncData = useUserPreferences((state)=>state.syncData);
 
-
   const [modalVisible, setModalVisible] = useState(false);
-
 
   const changeTheme = async()=> {
     if(systemTheme == 'default'){
@@ -38,7 +34,7 @@ export default function Index() {
     }
   }
 
-
+  // side menu def
   const SideMenu = ()=> {
     const [userName, setuserName] = useState('User');
     const [oldUserName, setOldUserName] = useState(userName);
@@ -66,7 +62,7 @@ export default function Index() {
         }
       }, 500);
       return ()=> clearTimeout(timeOutId);
-    },[userName])
+    },[userName]);
     
     return (
       <Modal /*animationType="slide"*/ transparent={true} visible={modalVisible}
@@ -105,66 +101,52 @@ export default function Index() {
                       </TouchableWithoutFeedback>
                     </View>
                 </TouchableWithoutFeedback>
-              </Modal>
-    )};
-  
+              </Modal>)};
+
+  // home page setup
   useEffect(()=>{
     loadAllSessions();
     getAllExerciseInstances();
     loadSystemTheme();
     syncData();
   },[]);
+
   const Width = Dimensions.get("window").width;
 
   return (
     <SafeAreaProvider>
-      {SideMenu()}
       <SafeAreaView className='bg-dark-100 ' style={{flex: 1, paddingBottom:80,left:modalVisible ? Width*.5 : 0}}> 
-      
-     
-        {loadingsessions ? (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>):(
-          <View>
-           
-        {/*<View className="mx-2 items-center mt-10 px-2">
-        <Search value={searchQuery}
-                onChangeText={(text: string) => setSearchQuery(text)}/>
-
-        
-        </View>*/}
-        <View className='mt-5 border-b-2 border-light-100 pb-6'>
-          <View className='mt-2 flex-row items-center justify-between px-4'>
-            <TouchableOpacity onPress={()=>{setModalVisible(!modalVisible)}} style={{width:Width/14, height:Width/14}}>
+        {SideMenu()}
+        {loadingsessions ? (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>):
+         (<View>
+           {/* Header */}
+           <View className='mt-5 border-b-2 border-light-100 pb-6'>
+            <View className='mt-2 flex-row items-center justify-between px-4'>
+             <TouchableOpacity onPress={()=>{setModalVisible(!modalVisible)}} style={{width:Width/14, height:Width/14}}>
               <Image source={icons.hamburger} style={{tintColor:'white',width:Width/14, height:Width/14}}/>
-            </TouchableOpacity>
-            <View >
-              {activeSession ? 
-            (<TouchableOpacity onPress={()=>router.push('/session/dummysesh')}
-                              className="bg-white rounded-md" style={{width:Width/2.5}}>
-              <Text className="py-2 self-center font-bold">{activeSession?.session_name}</Text>
-            </TouchableOpacity>)
-            :(<Text className="text-white self-center font-bold">No active session</Text>)}
+             </TouchableOpacity>
+             <View>{activeSession ? (<TouchableOpacity onPress={()=>router.push('/session/dummysesh')}
+                                                       className="bg-white rounded-md" style={{width:Width/2.5}}>
+                                      <Text className="py-2 self-center font-bold">{activeSession?.session_name}</Text>
+                                     </TouchableOpacity>):
+                                    (<Text className="text-white self-center font-bold">No active session</Text>)}
+             </View>
             </View>
-          </View>
-        </View>
-        <FlatList data={previousSessions}
+           </View>
+           {/* Body */}
+           <FlatList data={previousSessions}
                   renderItem={({item})=>(<FinishedSessionView sesh={item}/>)}
-                  //keyExtractor={({item})=>item.id.toString()}
                   contentContainerStyle={{alignItems:'center',marginBottom:120}}
-                  ListHeaderComponent={previousSessions.length>0 ? (<View style={{width:Width*.8}}>
-                                        {/*<Text className='text-white font-semibold mt-5'>Previous Sessions</Text>*/}
-                                        <Search  onPress={()=>router.push('/otherPages/SearchPage')} pholder="Search Session"/>
-                                       </View>):(<View></View>)}
-                  ListEmptyComponent={<Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>
-                                       }
-                  ListFooterComponent={
-                  <View className="mb-24 mt-8 w-full">{previousSessions.length>0 && <CustomButton onPress={()=>delSessions()} buttonText='Delete All'/>}</View>
-                  }
-                  />
+                  ListHeaderComponent={previousSessions.length>0 ? 
+                                       (<View style={{width:Width*.8}}>
+                                         <Search  onPress={()=>router.push('/otherPages/SearchPage')} pholder="Search Session"/>
+                                        </View>):
+                                       (<View></View>)}
+                  ListEmptyComponent={<Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>}
+                  ListFooterComponent={<View className="mb-24 mt-8 w-full">
+                                        {previousSessions.length>0 && <CustomButton onPress={()=>delSessions()} buttonText='Delete All'/>}
+                                       </View>}/>
           </View>)}
-        
-        </SafeAreaView>
-
-    </SafeAreaProvider>
-    
-  );
-}
+     </SafeAreaView>
+    </SafeAreaProvider>)}
+export default Index;

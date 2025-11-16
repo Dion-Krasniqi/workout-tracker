@@ -1,11 +1,11 @@
-import { View, Text, TextInput } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { addExerciseToWorkout, getExercise } from '../db/queries';
 import CustomButton from '@/Components/button';
-import { useWorkoutStore } from '@/state/stateStore';
 import { ExerciseInfo } from '@/interfaces/interfaces';
+import { useWorkoutStore } from '@/state/stateStore';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Text, TextInput } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { getExercise } from '../db/queries';
 
 const ExerciseAddPage = () => {
   const router = useRouter();
@@ -15,9 +15,6 @@ const ExerciseAddPage = () => {
 
   const addExerciseToWorkout = useWorkoutStore((state)=>state.addExerciseToWorkout);
 
-
-
-
   useEffect(()=>{
       async function setup(){
         //@ts-ignore
@@ -26,39 +23,25 @@ const ExerciseAddPage = () => {
       }
       setup();
     },[])
-
-
-  async function addExercise(){
-    //@ts-ignore
-    addExerciseToWorkout(parseInt(workout_id),id,sets);
-    router.push(`/workout/${workout_id}`)
-  }
-
   
   return (
     <SafeAreaProvider>
         <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}}>
             <Text className='text-white font-semibold text-2xl mt-12'>{exerciseRef?.name}</Text>
             <Text className='text-light-100 text-xl mt-12'>Number of Sets</Text>
-            <TextInput 
-                        defaultValue='1'
-                        onChangeText={(text)=>setSets(parseInt(text))}
-                        keyboardType="numeric"
-                        placeholder='1'
-                        placeholderTextColor={'darkgrey'}
-                        className='text-center
-                                   text-white
-                                   border-2 
-                                   border-light-100
-                                   rounded-md
-                                   w-[70%]
-                                   mb-4'/>
+            <TextInput defaultValue='1' placeholder='1'
+                       placeholderTextColor={'darkgrey'}
+                       keyboardType="numeric"
+                       onChangeText={(text)=>setSets(parseInt(text))} 
+                       className='text-center text-white border-2 
+                                  border-light-100 rounded-md
+                                  w-[70%] mb-4'/>
             
-            <CustomButton buttonText='Add Exercise' onPress={()=>{//@ts-ignore
-              addExerciseToWorkout(Number(workout_id),exerciseRef?.id,exerciseRef?.name,sets);router.push(`/workout/${workout_id}`)}}/>
+            <CustomButton buttonText='Add Exercise' 
+                          onPress={()=>{//@ts-ignore
+                                   addExerciseToWorkout(Number(workout_id),exerciseRef?.id,exerciseRef?.name,sets);
+                                   router.push(`/workout/${workout_id}`)}}/>
         </SafeAreaView>
-    </SafeAreaProvider>
-  )
-}
+    </SafeAreaProvider>)}
 
 export default ExerciseAddPage

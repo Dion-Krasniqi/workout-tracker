@@ -52,3 +52,13 @@ export interface Session {
     active?:boolean;
     
 }
+
+export interface extractedSet {
+    id:string;
+    session_id:string;
+    number:number;
+    weight:number;
+    reps:number;
+    date:Date;
+    name:string
+}

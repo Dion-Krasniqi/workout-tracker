@@ -6,12 +6,6 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-
-const deleteSession = () => {
-  console.log('deleted');
-}
-
-
 const SessionDetails = () => {
 
     const {id} = useLocalSearchParams();
@@ -19,13 +13,9 @@ const SessionDetails = () => {
     const loadExercises = useSessionStore((state)=>state.loadPreviousSession);
     const deleteSession = useSessionStore((state)=>state.deletePreviousSession);
     const [loading, setLoading] = useState(false);
-    //const [session, setSession] = useState<Session | null>();
     const { finishedSession } = useSessionStore();
 
-    useEffect(()=>{
-      
-    },[]);
-    
+    useEffect(()=>{},[]);
     let startTime = '';
     let endTime = '';
 
@@ -34,65 +24,61 @@ const SessionDetails = () => {
       endTime = new Date(finishedSession?.time_ended!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
-
     return(
         <SafeAreaProvider>
-            <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}>
-                {loading ? (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>) :
-                (<View>
-                <View  className='flex border-b-4 border-b-light-100 pb-5 rounded-xl'>
-                  <View className="mx-2 px-5 mt-2">
-                    <View className='flex-row justify-between mb-5 items-center'>
-                
-                      <TouchableOpacity className='items-center' onPress={()=>(router.push('/(tabs)'))}>
-                        <Image source={require('../../../assets/icons/arrow.png')} 
-                               style={{tintColor:'white', transform:[{scaleX:-1.2},{scaleY:1.2}]}}
-                               className='items-center'/>
-                      </TouchableOpacity>
-                    </View>
-                    <View className='rounded-md h-[50] justify-center px-2 bg-white'>
-                      <Text className='font-bold text-center'>{finishedSession?.session_name}</Text>             
-                    </View>
-                    <View className='flex-row justify-between mt-3'>
-                      <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%]'>
-                        <Text className='font-bold text-center'>Started at: {startTime}</Text>
-                      </View>
-                      <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%] '>
-                        <Text className='font-bold text-center'>Ended at: {endTime}</Text>
-                      </View>       
-                    </View>
-                
-                   </View>
+         <SafeAreaView className='bg-dark-100 ' style={{flex: 1}}>
+          {loading ? 
+           (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>) :
+           (<View>
+             <View  className='flex border-b-4 border-b-light-100 pb-5 rounded-xl'>
+              <View className="mx-2 px-5 mt-2">
+               <View className='flex-row justify-between mb-5 items-center'>
+                <TouchableOpacity className='items-center' onPress={()=>(router.push('/(tabs)'))}>
+                 <Image source={require('../../../assets/icons/arrow.png')} 
+                        style={{alignItems:'center',tintColor:'white', transform:[{scaleX:-1.2},{scaleY:1.2}]}}/>
+                </TouchableOpacity>
+               </View>
+               <View className='rounded-md h-[50] justify-center px-2 bg-white'>
+                <Text className='font-bold text-center'>{finishedSession?.session_name}</Text>             
+               </View>
+               <View className='flex-row justify-between mt-3'>
+                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%]'>
+                 <Text className='font-bold text-center'>Started at: {startTime}</Text>
                 </View>
-                <View>
-                  <>
-                    {finishedSession?.exercises && 
-                      <FlatList data={finishedSession.exercises}
-                                keyExtractor={(item)=>item.id.toString()}
-                                renderItem={({item})=>(<View className='rounded-lg bg-dark-200 mb-2'>
-                                                          <FinishedExercise exercise={item}/>
-                                                       </View>)}
-                                contentContainerStyle={{paddingBottom:120}}
-                                ListFooterComponent={<View className='mb-24 mt-16 w-full'>
-                                                        <CustomButton buttonText='Delete Session' onPress={()=>{if(finishedSession){
-                                                                                                              Alert.alert('Session information will be lost','Do you wish to proceed?',
-                                                                                                              [{text: 'Cancel',onPress: () => {},style: 'cancel',},
-                                                                                                              { text: 'YES', onPress: 
-                                                                                                                async() => {await deleteSession(Number(id));
-                                                                                                                            router.replace('/(tabs)')}},],
-                                                                                                              { cancelable: false });}
-                                                        }}/>
-                                                      </View>}/>
-                    }
-                  </>
-                </View>
-              </View>)}
-                
-                
-            </SafeAreaView>
-        </SafeAreaProvider>
-    )
-  
+                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%] '>
+                 <Text className='font-bold text-center'>Ended at: {endTime}</Text>
+                </View>       
+               </View>
+              </View>
+             </View>
+             <View>
+              <>
+               {finishedSession?.exercises && 
+                 <FlatList data={finishedSession.exercises}
+                           keyExtractor={(item)=>item.id.toString()}
+                           renderItem={({item})=>(<View className='rounded-lg bg-dark-200 mb-2'>
+                                                   <FinishedExercise exercise={item}/>
+                                                  </View>)}
+                           contentContainerStyle={{paddingBottom:120}}
+                           ListFooterComponent={<View className='mb-24 mt-16 w-full'>
+                                                 <CustomButton buttonText='Delete Session' 
+                                                   onPress={()=>{if(finishedSession){
+                                                                  Alert.alert('Session information will be lost',
+                                                                              'Do you wish to proceed?',
+                                                                       [{text: 'Cancel',onPress: () => {},style: 'cancel',},
+                                                                        { text: 'YES', onPress: 
+                                                                                       async() => {await deleteSession(Number(id));
+                                                                                                   router.replace('/(tabs)')}},
+                                                                       ],
+                                                                       { cancelable: false });}
+                                                            }}/>
+                                                 </View>}/>
+               }
+              </>
+             </View>
+            </View>)}   
+           </SafeAreaView>
+          </SafeAreaProvider>)
 }
 
 export default SessionDetails
