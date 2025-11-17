@@ -17,7 +17,7 @@ const Exercise_creation = () => {
   const endSession = useSessionStore((state)=>state.endSession);
   const quitSession = useSessionStore((state)=>state.quitSession);
   const loadExercises = useSessionStore((state)=>state.loadActiveExercisesWithSets);
-  const {activeSession, loading} = useSessionStore();
+  const {activeSession, loading, sessionMarked} = useSessionStore();
 
   const { systemTheme } = useUserPreferences();
   const [color, setColor] = useState('white');
@@ -58,6 +58,18 @@ const Exercise_creation = () => {
 
   }
 
+  const resetExercises = ()=> {
+    if(activeSession?.exercises && sessionMarked==false){
+      // this should mark only unmarked exercises
+      const updatedExercises = activeSession.exercises.map((ex)=>((ex.marked? (!ex.marked):(1)) ) ? {...ex,marked:true} : ex);
+      useSessionStore.setState({activeSession:{...activeSession, exercises:updatedExercises}});
+      useSessionStore.setState({sessionMarked:true});
+      // find a better way to do this
+      router.replace('/session/dummysesh');
+    }
+    
+  }
+
   //@ts-ignore
   const time = new Date(sessionTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 
@@ -96,12 +108,13 @@ const Exercise_creation = () => {
       </View>
      </View>
      <View className="mx-2"style={{backgroundColor:systemTheme=='default' ? 'white' : 'black'}}>
-      <FlatList data={activeSession?.exercises} keyExtractor={(item)=>item.id.toString()}
+      <FlatList 
+      data={activeSession?.exercises} keyExtractor={(item)=>item.id.toString()}
                 renderItem={({item})=>(<View className='rounded-lg bg-dark-200 mb-2'>
                                         <ExerciseView exercise={item}/>
                                        </View>)}
                 contentContainerStyle={{paddingBottom:120}}
-                ListFooterComponent={<View className='self-center mb-44 mt-5'>
+                ListFooterComponent={<View className='self-center mb-44 mt-5 items-center'>
                                       <Text className='font-bold text-4xl mb-7' style={{color:systemTheme=='default' ? 'black' : 'white'}}>{formatWatch(elapsed)}</Text>
                                       <CustomButton buttonText='Quit Session' style={`bg-${color}`} 
                                        onPress={()=>{
@@ -113,6 +126,19 @@ const Exercise_creation = () => {
                                                         ],
                                                         { cancelable: false })
                                                      }}}/>
+                                      {sessionMarked==false ? 
+                                      (<CustomButton buttonText='Reset Session' style={`bg-${color} mt-8 py-2`} 
+                                                     onPress={()=>{
+                                                     if(activeSession){
+                                                      Alert.alert('This will mark all exercises in this sessions',
+                                                        'Do you wish to proceed?',
+                                                        [{text: 'Cancel',onPress: () => {},style: 'cancel',},
+                                                         { text: 'YES', onPress: async() => {await resetExercises();
+                                                                                             }},
+                                                        ],
+                                                        { cancelable: false })
+                                                     }}}/>):
+                                      (<Text className='text-light-100 mt-4'>This session has been reset</Text>)}
                                      </View>} />
       
         

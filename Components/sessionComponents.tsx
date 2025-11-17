@@ -102,8 +102,9 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
       </Link>
       <TouchableOpacity style={{alignSelf:'flex-end',marginTop:8}} onPress={markExercise} disabled={resetted}>
         <Text className='bg-white' style={{borderRadius:5, padding:4, 
-                                           backgroundColor:resetted ? ('#2e2e2eff'):('white')}}>
-                                          {resetted ? ('Marked'):('Reset Exercise')}</Text>
+                                           backgroundColor:resetted ? ('#2e2e2eff'):('white'),
+                                           fontSize:resetted ? (10):(12)}}>
+                                          {resetted ? ('Marked'):('Reset')}</Text>
       </TouchableOpacity>
     </View>
   )

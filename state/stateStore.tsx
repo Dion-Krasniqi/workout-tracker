@@ -149,6 +149,7 @@ interface SessionStore {
     previousSessions: Session[];
     activeSession: Session | null;
     finishedSession: Session | null;
+    sessionMarked: boolean;
     loading: boolean;
     loadingsessions: boolean;
     loadPreviousSessions: ()=>void;
@@ -171,6 +172,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
     previousSessions: [],
     activeSession: null,
     finishedSession: null,
+    sessionMarked:false,
     loading: true,
     loadingsessions: true,
     //reads all entries in the sessions table 
@@ -296,6 +298,8 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             exercises: [],
             setNumber:0,
         };
+        const { sessionMarked } = get();
+        if (sessionMarked) set({sessionMarked:false});
         set({activeSession:newSession});
         return newSession;
     },
@@ -336,6 +340,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         })
         set({previousSessions:[...previousSessions,finishedSession],
             activeSession:null,
+            sessionMarked:false,
         })
 
         
@@ -343,7 +348,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
     //nulls out activesession
     quitSession: async()=> {
         const { activeSession } = get();
-        if(activeSession){set({activeSession:null})};
+        if(activeSession){set({activeSession:null,sessionMarked:false})};
         
 
     },
@@ -372,7 +377,6 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             
             const SessionExerciseId = ex.id;
             const notes = await getNotes(ex.exercise_id);
-            console.log('this shi',notes,ex.exercise_id);
             
             const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
                 activeSession.setNumber++;
@@ -440,9 +444,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         set((state)=>{
             if (!state.activeSession) return state;
 
-            const updatedExercises = state.activeSession.exercises.map((ex)=>ex.exercise_id==exercise_id ? {...ex,marked:true} : ex);
-            console.log('here');
-
+            const updatedExercises = state.activeSession.exercises.map((ex)=>(ex.exercise_id==exercise_id && (ex.marked? (!ex.marked):(1)) ) ? {...ex,marked:true} : ex);
             return {...state, activeSession: {...state.activeSession, exercises: updatedExercises},};
 
 
