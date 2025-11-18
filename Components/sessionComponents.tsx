@@ -78,6 +78,7 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   }
 
   return (
+    <View className='rounded-lg bg-dark-200 mb-2'>
     <View style={{flex:1,marginBottom:10, marginTop:15,paddingHorizontal:28}}>
       <View style={{width:'100%'}}>
         <Text className='text-white font-semibold text-xl'>{exercise.name}</Text>
@@ -107,6 +108,7 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
                                           {resetted ? ('Marked'):('Reset')}</Text>
       </TouchableOpacity>
     </View>
+   </View>
   )
 }
 

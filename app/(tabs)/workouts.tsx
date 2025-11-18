@@ -28,14 +28,22 @@ const Workouts = () => {
    const timeOutId = setTimeout( async()=>{
     if(query.trim()){
       const qResult = workoutControl.workouts.filter((w)=>w.name.includes(query));
-      if (qResult)setWorkouts(qResult);
-      else { const result = workoutControl.workouts;
-             setWorkouts(result);
-        };
-   }},500);
+      if (qResult) {setWorkouts(qResult)};
+    }else{ 
+        const result = workoutControl.workouts;
+        setWorkouts(result);
+    }
+        
+   },500);
 
    return () => clearTimeout(timeOutId);
 
+  },[query]);
+
+  useEffect(()=>{
+    if(!query){
+      setQuery("");
+    }
   },[query]);
 
   const startSession = async (workout_id:number)=>{

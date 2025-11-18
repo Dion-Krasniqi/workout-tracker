@@ -1,27 +1,43 @@
 import CustomButton from '@/Components/button';
 import { FinishedExercise } from '@/Components/sessionComponents';
+import { SessionHeaderComponent } from '@/Components/SessionHeaderComponent';
 import { useSessionStore } from '@/state/stateStore';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const SessionDetails = () => {
 
     const {id} = useLocalSearchParams();
     const router = useRouter();
-    const loadExercises = useSessionStore((state)=>state.loadPreviousSession);
     const deleteSession = useSessionStore((state)=>state.deletePreviousSession);
     const [loading, setLoading] = useState(false);
     const { finishedSession } = useSessionStore();
 
     useEffect(()=>{},[]);
+
     let startTime = '';
     let endTime = '';
 
     if (finishedSession){
       startTime = new Date(finishedSession?.time_started).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       endTime = new Date(finishedSession?.time_ended!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    const DeleteButton = ()=> {
+      return (
+        <View className='mb-24 mt-16 w-full'>
+         <CustomButton buttonText='Delete Session' 
+                       onPress={()=>{if(finishedSession)
+                        {Alert.alert('Session information will be lost',
+                                     'Do you wish to proceed?',
+                                    [{text: 'Cancel',onPress: () => {},style: 'cancel',},
+                                     { text: 'YES', onPress: async() => {await deleteSession(Number(id));
+                                                                         router.replace('/(tabs)')}},
+                                    ],
+                                     { cancelable: false });}}}/>
+        </View>)
     }
 
     return(
@@ -38,16 +54,10 @@ const SessionDetails = () => {
                         style={{alignItems:'center',tintColor:'white', transform:[{scaleX:-1.2},{scaleY:1.2}]}}/>
                 </TouchableOpacity>
                </View>
-               <View className='rounded-md h-[50] justify-center px-2 bg-white'>
-                <Text className='font-bold text-center'>{finishedSession?.session_name}</Text>             
-               </View>
+               <SessionHeaderComponent text= {finishedSession?.session_name || ''} />
                <View className='flex-row justify-between mt-3'>
-                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%]'>
-                 <Text className='font-bold text-center'>Started at: {startTime}</Text>
-                </View>
-                <View className=' rounded-md h-[50] justify-center px-2 bg-white w-[49%] '>
-                 <Text className='font-bold text-center'>Ended at: {endTime}</Text>
-                </View>       
+                <SessionHeaderComponent text={`Exercises: ${startTime}`} width={49}/>
+                <SessionHeaderComponent text={`Exercises: ${endTime}`} width={49}/>
                </View>
               </View>
              </View>
@@ -56,23 +66,9 @@ const SessionDetails = () => {
                {finishedSession?.exercises && 
                  <FlatList data={finishedSession.exercises}
                            keyExtractor={(item)=>item.id.toString()}
-                           renderItem={({item})=>(<View className='rounded-lg bg-dark-200 mb-2'>
-                                                   <FinishedExercise exercise={item}/>
-                                                  </View>)}
+                           renderItem={({item})=>(<FinishedExercise exercise={item}/>)}
                            contentContainerStyle={{paddingBottom:120}}
-                           ListFooterComponent={<View className='mb-24 mt-16 w-full'>
-                                                 <CustomButton buttonText='Delete Session' 
-                                                   onPress={()=>{if(finishedSession){
-                                                                  Alert.alert('Session information will be lost',
-                                                                              'Do you wish to proceed?',
-                                                                       [{text: 'Cancel',onPress: () => {},style: 'cancel',},
-                                                                        { text: 'YES', onPress: 
-                                                                                       async() => {await deleteSession(Number(id));
-                                                                                                   router.replace('/(tabs)')}},
-                                                                       ],
-                                                                       { cancelable: false });}
-                                                            }}/>
-                                                 </View>}/>
+                           ListFooterComponent={<DeleteButton />}/>
                }
               </>
              </View>
@@ -82,6 +78,3 @@ const SessionDetails = () => {
 }
 
 export default SessionDetails
-
-
-
