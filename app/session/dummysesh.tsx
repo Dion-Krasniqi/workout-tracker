@@ -5,6 +5,7 @@ import { ExerciseView, Stopwatch } from '@/Components/sessionComponents';
 import { SessionHeaderComponent } from '@/Components/SessionHeaderComponent';
 import { useSessionStore, useUserPreferences } from '@/state/stateStore';
 //import ThemeHandler from '@/utils/ThemeHandler';
+import { general, session } from '@/constants/content';
 import { getSystemTheme } from '@/utils/ThemeHandler';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -72,11 +73,11 @@ const Exercise_creation = () => {
 
   const QuitButton = ()=> {
     return (
-      <CustomButton buttonText='Quit Session' style={`bg-${color}`} 
+      <CustomButton buttonText={session.quitMessage[0]} style={`bg-${color}`} 
                     onPress={()=>{if(activeSession)
-                      {Alert.alert('Session information will be lost','Do you wish to proceed?',
-                                   [{text: 'Cancel',onPress: () => {},style: 'cancel',},
-                                    { text: 'YES', onPress: async() => {await quitSession();
+                      {Alert.alert(session.quitMessage[0], general.alertQuestion[0],
+                                   [{text: general.alertCancel[0],onPress: () => {},style: 'cancel',},
+                                    { text: general.alertYes[0], onPress: async() => {await quitSession();
                                                                         router.replace('/(tabs)')}},
                                    ],
                                     { cancelable: false })}}}/>
@@ -85,11 +86,11 @@ const Exercise_creation = () => {
 
   const RestButton = ()=> {
     return (
-      <CustomButton buttonText='Reset Session' style={`bg-${color} mt-8 py-2`} 
+      <CustomButton buttonText={session.reset[0]} style={`bg-${color} mt-8 py-2`} 
                     onPress={()=>{if(activeSession)
-                      {Alert.alert('This will mark all exercises in this sessions','Do you wish to proceed?',
-                                   [{text: 'Cancel',onPress: () => {},style: 'cancel',},
-                                    { text: 'YES', onPress: async() => {await resetExercises();
+                      {Alert.alert(session.resetMessage[0],general.alertQuestion[0],
+                                   [{text: general.alertCancel[0], onPress: () => {},style: 'cancel',},
+                                    { text: general.alertYes[0], onPress: async() => {await resetExercises();
                                     }},
                                    ],
                                     { cancelable: false })}}}/>
@@ -111,13 +112,13 @@ const Exercise_creation = () => {
             <Image source={require('../../assets/icons/arrow.png')} style={{tintColor:'white', transform:[{scaleX:-1.2},{scaleY:1.2}]}}
                    className='items-center'/>
            </TouchableOpacity>
-           <CustomButton buttonText='Finish' onPress={()=>{endSession();router.push('/(tabs)')}}/>
+           <CustomButton buttonText={session.finish[0]} onPress={()=>{endSession();router.push('/(tabs)')}}/>
           </View>
-          <SessionHeaderComponent text={`Exercises: ${activeSession?.session_name}`}/>
+          <SessionHeaderComponent text={`${activeSession?.session_name}`}/>
           <View className='flex-row justify-between mt-3'>
-           <SessionHeaderComponent text={`Exercises: ${activeSession?.exercises.length}`} width={32}/>
-           <SessionHeaderComponent text={`Sets: ${activeSession?.setNumber}`} width={32}/>
-           <SessionHeaderComponent text={`Started at ${time}`} width={32}/>
+           <SessionHeaderComponent text={`${session.exercises[0]}: ${activeSession?.exercises.length}`} width={32}/>
+           <SessionHeaderComponent text={`${session.sets[0]}: ${activeSession?.setNumber}`} width={32}/>
+           <SessionHeaderComponent text={`${session.startedAt[0]} ${time}`} width={32}/>
           </View>
           <View>
            <Stopwatch />
@@ -134,7 +135,7 @@ const Exercise_creation = () => {
                                       <QuitButton />
                                       {sessionMarked==false ? 
                                       (<RestButton />):
-                                      (<Text className='text-light-100 mt-4'>This session has been reset</Text>)}
+                                      (<Text className='text-light-100 mt-4'>{session.resetDisclaimer[0]}</Text>)}
                                      </View>} />
       </View>
     </SafeAreaView>)}

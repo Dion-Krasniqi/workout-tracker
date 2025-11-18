@@ -62,6 +62,11 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
     workouts:[],
     loading: true,
     changeName: async(workout_id,name) =>{
+        const state = get(); 
+        if(state.workouts.find((w)=>w.name==name)){
+            alert('Workout with this name already exists!');
+            return;
+        }
         set((state)=>({
             workouts: state.workouts.map((w)=>w.id==workout_id ? 
                                               {...w, name:name} :
