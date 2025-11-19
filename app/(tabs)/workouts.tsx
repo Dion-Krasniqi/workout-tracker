@@ -33,17 +33,9 @@ const Workouts = () => {
         const result = workoutControl.workouts;
         setWorkouts(result);
     }
-        
    },500);
 
    return () => clearTimeout(timeOutId);
-
-  },[query]);
-
-  useEffect(()=>{
-    if(!query){
-      setQuery("");
-    }
   },[query]);
 
   const startSession = async (workout_id:number)=>{

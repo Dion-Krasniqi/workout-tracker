@@ -1,5 +1,11 @@
 // mainly for supporting translations in different languages
 // for now English[0], Albanian[1], ...
+
+export const lang = {
+    'en':0,
+    'al':1
+}
+
 export const session = {
     reset: ['Reset Session',],
     resetMessage: ['This will mark all exercises in this sessions', 'Kjo do të etiketojë cdo ushtrimë në sesion'],

@@ -57,3 +57,4 @@ Planned features:
 * More information about exercises;
 * Customization and more user stats;
 * Add workout search based on focus of workout(eg.if a workout has majority leg exercises, leg focus);
+* Huge lack of translations, so options in other languages

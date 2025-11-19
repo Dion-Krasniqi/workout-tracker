@@ -23,7 +23,7 @@ export const getAllExercisesSearch = async (name:string, group?:number) => {
         const allRows = await db.getAllAsync(`SELECT ex.id, ex.name, ex.muscle_group 
                                           FROM exercises_info as ex
                                           JOIN muscle_groups m ON ex.muscle_group = m.id
-                                          WHERE ex.name LIKE 
+                                          WHERE ex.name LIKE  ?
                                           `, [`${name}%`]);
         return allRows;
     }

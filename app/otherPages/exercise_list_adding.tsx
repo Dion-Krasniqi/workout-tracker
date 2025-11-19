@@ -31,6 +31,9 @@ const Exercise_list_add = () => {
       if(query.trim() || group!=0){
         let qResult;
         // kinda weird
+        if (!query.trim()){
+          qResult = await getAllExercisesSearch(query,group);
+        }
         if(group!=0){
           qResult = await getAllExercisesSearch(query,group);
         }else{
@@ -56,8 +59,6 @@ const Exercise_list_add = () => {
       setGroup(group+1);
     }
   }
-
-
 
   return (
     <SafeAreaProvider>

@@ -20,8 +20,8 @@ const SearchPage = () => {
       if(query.trim()){
         const s = await findSessions(query);
         if (s) setFoundSessions(s);
-        else setFoundSessions(previousSessions)
-      }
+       
+      } else setFoundSessions(previousSessions)
     },500);
     return () => clearTimeout(timeOutId);
   },[query]);

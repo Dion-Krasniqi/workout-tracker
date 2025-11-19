@@ -10,8 +10,10 @@ interface UserPreferences {
     systemTheme: string;
     numberOfSessions:number;
     mostCommonWorkout:string;
+    language: number;
     loadSystemTheme:()=>void;
     updateSystemTheme:(value:string)=>void;
+    changeLanguage:(value:number)=>void;
     syncData: ()=>void;
 }
 
@@ -19,10 +21,15 @@ export const useUserPreferences = create<UserPreferences>((set,get)=>({
     systemTheme: 'default',
     numberOfSessions:0,
     mostCommonWorkout:'Workout Name',
+    language: 0,
     loadSystemTheme: async()=>{
         const savedTheme = await AsyncStorage.getItem('theme');
+        const savedLang = await AsyncStorage.getItem('language');
         if(savedTheme) {
             set({systemTheme:savedTheme});
+        }
+        if(savedLang) {
+            set({language:Number(savedLang)});
         }
     },
     updateSystemTheme: async(value)=>{
@@ -32,6 +39,15 @@ export const useUserPreferences = create<UserPreferences>((set,get)=>({
 
         } catch (e){
           console.log('Falied to change theme', e);
+        }
+    },
+    changeLanguage: async(value)=>{
+        set({language:value});
+        try {
+          await AsyncStorage.setItem('language', String(value));
+
+        } catch (e){
+          console.log('Falied to change language', e);
         }
     },
     // probabaly should fetch from zustand first
@@ -170,6 +186,8 @@ interface SessionStore {
     updateNotes: (exercise_id:number,content:string)=>void;
     updateSet: (set_id:number, weight:number, reps:number)=>void;
     resetExercise: (exercise_id:number)=>void;
+    getDeadSession: ()=>void;
+    onInactive: ()=>void;
     //removeSet: (set_id:number)=>void;
 }
 
@@ -454,6 +472,21 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
 
 
         });
+    },
+    getDeadSession: async()=>{
+        const deadSession = await AsyncStorage.getItem('deadSession');
+        if (!deadSession) return;
+        const reloadedSession = null;
+        set({activeSession:reloadedSession})
+
+    },
+    onInactive: async()=>{
+        const { activeSession } = get();
+        if (!activeSession) {
+            await AsyncStorage.setItem('deadSession', '');
+            return;
+        }
+        // save the data up until the point to async storage, but idk about the structure for now
     },
 
 }))
