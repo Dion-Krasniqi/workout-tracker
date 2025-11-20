@@ -246,3 +246,27 @@ export const getAllExerciseSets = async(exercise_id:number)=>{
                                          ORDER BY id DESC`, [exercise_id]);
     return result;
 }
+
+// backup data stuff
+
+export const backupSession = async(workout_id:number,session_name:string,time_started:number)=>{
+    const backupSession = await db.runAsync(` UPDATE sessions
+                                              SET workout_id = ?, session_name = ?, time_started = ?
+                                              WHERE id=-1`,
+                                                                [workout_id,session_name,time_started]);
+}
+
+export const getSavedSession = async()=>{
+    const result = await db.getFirstAsync<Session>(`SELECT * FROM sessions WHERE id=-1`);
+    console.log('called');
+    return result;
+}
+
+export const deleteSavedLeftovers = async()=>{
+    await db.runAsync(`DELETE
+                       FROM session_sets
+                       WHERE session_id = -1`);
+    await db.runAsync(`DELETE
+                       FROM notes
+                       WHERE session_id = -1`);
+}

@@ -1,10 +1,29 @@
-import { useWorkoutStore } from "@/state/stateStore";
+import { useSessionStore, useWorkoutStore } from "@/state/stateStore";
 import { Stack } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { AppState } from "react-native";
 import { initDB } from "./db/db";
 import './global.css';
 
 export default function RootLayout() {
+  const onInactive = useSessionStore((state)=>state.onInactive);
+  const getDeadSession = useSessionStore((state)=>state.getDeadSession);
+
+  
+  const appState = useRef(AppState.currentState);
+  
+    useEffect(() => {
+      const subscription = AppState.addEventListener('change', nextAppState => {
+        appState.current = nextAppState;
+        if(appState.current=='background'){
+          console.log('exited'); 
+          onInactive();
+        }
+      });
+      return () => {
+        subscription.remove();
+      };
+    }, []);
 
   const loadWorkouts = useWorkoutStore((state)=>state.loadWorkouts);
 
@@ -17,6 +36,7 @@ export default function RootLayout() {
         console.log(err);
       }
     }
+    getDeadSession();
     setupDB();
     loadWorkouts();
   }, []);

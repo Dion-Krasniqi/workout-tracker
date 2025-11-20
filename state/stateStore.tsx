@@ -1,4 +1,4 @@
-import { addExerciseToWorkout, changeSetNumber, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, deleteSession, getAllSessions, getMonthSession, getMostCommon, getNotes, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
+import { addExerciseToWorkout, backupSession, changeSetNumber, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, deleteSavedLeftovers, deleteSession, getAllSessions, getMonthSession, getMostCommon, getNotes, getSavedSession, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
 import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
 import { formatDate } from '@/utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -474,19 +474,50 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         });
     },
     getDeadSession: async()=>{
-        const deadSession = await AsyncStorage.getItem('deadSession');
-        if (!deadSession) return;
-        const reloadedSession = null;
-        set({activeSession:reloadedSession})
+        const { activeSession } = get();
+        if (activeSession) return;
+        const deadSession = await getSavedSession();
+        if (!deadSession || !deadSession.session_name) return;
+        const reloadedSession: Session = {
+            id: Date.now(),
+            session_name: deadSession.session_name,
+            workout_id: deadSession.workout_id,
+            time_started:deadSession.time_started,
+            exercises: [],
+            setNumber:0,
+        };
+        set({activeSession:reloadedSession});
+        await backupSession(0,'',0);
+        //sets are auto reloaded by the loadExercises functions
+        ;
 
     },
     onInactive: async()=>{
         const { activeSession } = get();
         if (!activeSession) {
-            await AsyncStorage.setItem('deadSession', '');
+            await backupSession(0,'',0)
             return;
         }
-        // save the data up until the point to async storage, but idk about the structure for now
+        await deleteSavedLeftovers();
+        await backupSession(activeSession.workout_id,activeSession.session_name,activeSession.time_started);
+        activeSession.exercises.forEach((ex)=>{
+            writeNotes(ex.exercise_id,ex.notes, -1);
+            ex.sets.forEach(async(set)=>{
+                // if left empty, set info is set to 0 ONLY if its marked 
+                if(ex.marked){
+                    await writeSet(ex.exercise_id,-1,set.set_number,set.weight,Number(set.reps),activeSession.time_started, true);
+                    return;
+                    
+                }
+                if (set.weight ==0 || set.reps == 0){
+                    set.weight = set.oldWeight;
+                    set.reps = set.oldReps;
+
+                }
+                await writeSet(ex.exercise_id,-1,set.set_number,set.weight,Number(set.reps),activeSession.time_started);
+                
+            })
+        })
     },
 
 }))

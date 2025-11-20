@@ -234,4 +234,8 @@ export const migrations = [
         ALTER TABLE exercises DROP COLUMN marked;
         ALTER TABLE session_sets ADD COLUMN marked BOOLEAN DEFAULT FALSE;`
     },
+    {id:14,
+      up:`
+        INSERT INTO sessions (id, workout_id,session_name,time_started) VALUES (-1,0,NULL,1)`
+    },
 ]

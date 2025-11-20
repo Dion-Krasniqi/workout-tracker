@@ -14,11 +14,11 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { getAllNotes } from '../db/queries';
 
 const Exercise_creation = () => {
-
   const router = useRouter();
   const endSession = useSessionStore((state)=>state.endSession);
   const quitSession = useSessionStore((state)=>state.quitSession);
   const loadExercises = useSessionStore((state)=>state.loadActiveExercisesWithSets);
+  
   const {activeSession, loading, sessionMarked} = useSessionStore();
 
   const { systemTheme, language } = useUserPreferences();
