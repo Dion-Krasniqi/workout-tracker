@@ -104,7 +104,7 @@ const Exercise_creation = () => {
     <SafeAreaProvider>
      {loading ? 
       (<ActivityIndicator/>):
-      (<SafeAreaView className='flex-1 bg-dark-100'>
+      (<SafeAreaView className='flex-1 bg-[#0d121bff]'>
         <View  className='flex border-b-4 border-b-light-100 pb-5 rounded-xl'>
          <View className="mx-2 px-5 mt-2">
           <View className='flex-row justify-between mb-5 items-center'>
@@ -125,7 +125,7 @@ const Exercise_creation = () => {
           </View>
          </View>
         </View>
-      <View className="mx-2"style={{backgroundColor:systemTheme=='default' ? 'white' : 'black'}}>
+      <View className="mx-2"style={{backgroundColor:systemTheme=='default' ? 'white' : '#111823'}}>
        <FlatList 
                 data={activeSession?.exercises} keyExtractor={(item)=>item.id.toString()}
                 renderItem={({item})=>(<ExerciseView exercise={item}/>)}

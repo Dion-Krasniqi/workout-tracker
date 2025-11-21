@@ -403,6 +403,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             
             const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
                 activeSession.setNumber++;
+                // have to update it so when its loading data where session_id -1, load the previous saved set
                 const result = await getSetData(ex.exercise_id,i+1);
                 // this should give unique temp ids
                 setId=setId+1;

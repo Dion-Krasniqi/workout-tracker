@@ -24,12 +24,15 @@ export const SetView = ({set}:{set:SessionSet}) => {
   return (
       
      <TouchableOpacity onLongPress={async()=>{setWeight(oldW);setReps(oldR)}}>
-       <View style={{flexDirection:'row', marginTop:15, justifyContent:'space-around',alignItems:'center'}}>
+       <View style={{flexDirection:'row', marginHorizontal:10,
+                     marginTop:18, justifyContent:'space-between', 
+                     alignItems:'center'}}>
         <View>
-          <Text className='text-white text-xl self-center'>Set {set.set_number}</Text>
+          <Text className='text-white text-xl self-center border-white'
+                style={{borderWidth:0.5, borderRadius:20, padding:8, textAlign:'center'}}>{set.set_number}</Text>
         </View>
         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-          <View style={{flexDirection:'row'}}>
+          <View style={{flexDirection:'row', marginRight:15}}>
             <TextInput placeholder={(oldW).toString()}
                  value={weight ? String(weight) : ''}
                  keyboardType='numeric' 
@@ -37,10 +40,11 @@ export const SetView = ({set}:{set:SessionSet}) => {
                  placeholderTextColor={'darkgrey'}
                  multiline={true}
                  scrollEnabled={false}
-                 className='text-center text-white border-2 border-light-100 rounded-md h-[40] focus:border-white' style={{width:inputWidth}}/>
+                 className='text-center text-white border-light-100 rounded-md h-[40] focus:border-white' 
+                 style={{width:inputWidth, borderWidth:1}}/>
             <Text style={{marginLeft:4, color:'white',alignSelf:'center'}}>Kg</Text>
           </View>
-          <View style={{flexDirection:'row', marginLeft:10}}>
+          <View style={{flexDirection:'row', marginLeft:15}}>
             <TextInput placeholder={(oldR).toString()}
                  value={reps ? String(reps) : ''}
                  keyboardType='numeric' 
@@ -48,7 +52,8 @@ export const SetView = ({set}:{set:SessionSet}) => {
                  placeholderTextColor={'darkgrey'}
                  multiline
                  scrollEnabled={false}
-                 className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[40] focus:border-white' style={{width:inputWidth/1.5}}/>
+                 className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[40] focus:border-white' 
+                 style={{width:inputWidth/1.5, borderWidth:1}}/>
             <Text style={{marginLeft:4, color:'white',alignSelf:'center'}}>Reps</Text>
           </View>
         </View>
@@ -78,8 +83,8 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   }
 
   return (
-    <View className='rounded-lg bg-dark-200 mb-2'>
-    <View style={{flex:1,marginBottom:10, marginTop:15,paddingHorizontal:28}}>
+    <View className='rounded-lg bg-dark-100 mt-2' style={{borderWidth:0.5, borderColor:'rgba(255, 255, 255, 0.33)'}}>
+    <View style={{flex:1,marginBottom:18, marginTop:15,paddingHorizontal:28}}>
       <View style={{width:'100%'}}>
         <Text className='text-white font-semibold text-xl'>{exercise.name}</Text>
       </View>

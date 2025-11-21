@@ -115,7 +115,7 @@ const Index = ()=> {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView className='bg-dark-100 ' style={{flex: 1, paddingBottom:80,left:modalVisible ? Width*.5 : 0}}> 
+      <SafeAreaView className='bg-dark-100' style={{flex: 1, paddingBottom:80,left:modalVisible ? Width*.5 : 0}}> 
         {SideMenu()}
         {loadingsessions ? (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>):
          (<View>
