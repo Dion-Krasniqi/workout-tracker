@@ -8,7 +8,7 @@ module.exports = {
         dark: {
         100: '#080c11ff',
         200: '#0c0c0cff',
-        300: '#111823'
+        300: '#0f141eff'
         
       },
       light: {

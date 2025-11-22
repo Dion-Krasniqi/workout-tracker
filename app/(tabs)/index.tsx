@@ -19,8 +19,9 @@ const Index = ()=> {
   const {activeSession, previousSessions} = useSessionStore();
   const loadingsessions = useSessionStore().loadingsessions;
 
-  const { systemTheme, numberOfSessions, mostCommonWorkout } = useUserPreferences();
+  const { systemTheme,language, numberOfSessions, mostCommonWorkout } = useUserPreferences();
   const updateSystemTheme = useUserPreferences((state)=>state.updateSystemTheme);
+  const changeLang = useUserPreferences((state)=>state.changeLanguage);
   const loadSystemTheme = useUserPreferences((state)=>state.loadSystemTheme);
   const syncData = useUserPreferences((state)=>state.syncData);
 
@@ -31,6 +32,13 @@ const Index = ()=> {
       await updateSystemTheme('dark');
     }else{
       await updateSystemTheme('default');
+    }
+  }
+  const changeLanguage = async()=> {
+    if(language == 0){
+      await changeLang(1);
+    }else{
+      await changeLang(0);
     }
   }
 
@@ -82,6 +90,11 @@ const Index = ()=> {
                                                                   className="rounded-md bg-black" 
                                                                   style={{width:Width/4, alignItems:'center', marginTop:12}}>
                                     <Text className="color-white p-2 font-bold uppercase">{systemTheme}</Text>
+                                  </TouchableOpacity>
+                                  <TouchableOpacity onPress={changeLanguage}
+                                                                  className="rounded-md bg-black" 
+                                                                  style={{width:Width/4, alignItems:'center', marginTop:12}}>
+                                    <Text className="color-white p-2 font-bold uppercase">{language}</Text>
                                   </TouchableOpacity>
                                   <View className="gap-4" style={{marginVertical:50}}>
                                     <SideMenuItem label='Sessions this month:' value={String(numberOfSessions)}/>

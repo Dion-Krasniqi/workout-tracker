@@ -122,6 +122,7 @@ export const getSessionById = async (id:number) => {
 export const getAllSessions = async():Promise<Session[]> => {
     const allRows = await db.getAllAsync<Session>(`SELECT * 
                                                   FROM sessions
+                                                  WHERE id > -1
                                                   ORDER BY id DESC`);
     return allRows;   
 }
