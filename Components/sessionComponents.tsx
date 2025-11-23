@@ -207,17 +207,21 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
 
 }
 
-export const Stopwatch = () => {
+export const Stopwatch = ({session}:{session?:Session | null}) => {
     const [time, setTime] = useState(0);
     const [running, setRunning] = useState(false);
     const [bg,setBg] = useState('#fff');
+    const updateTimer = useSessionStore((state)=>state.updateTimer);
+
+    const control = useSessionStore();
 
     const intervalRef = useRef(null);
-    const startTimeRef = useRef(0);
-
+    const startTimeRef =(useRef(control.activeSession?.timer));
+    
     const startStopwatch = () => {
-      startTimeRef.current = Date.now() - time*1000;
 
+      startTimeRef.current = (control.activeSession?.timer == 0) ? (Date.now() - time*1000):(startTimeRef.current);
+      updateTimer(startTimeRef.current, true);
       intervalRef.current = setInterval(()=>{
         setTime(Math.floor((Date.now()-startTimeRef.current)/1000));
       },1000)
@@ -229,23 +233,24 @@ export const Stopwatch = () => {
 
     const pauseStopwatch = () => {
       clearInterval(intervalRef.current);
+      updateTimer(0, false);
       setRunning(false);
       setBg('#ff9b9bff')
     }
 
     const resetStopwatch = () => {
       clearInterval(intervalRef.current);
+      updateTimer(0, false);
       setTime(0);
       setRunning(false);
       setBg('#fff')
     }
 
     const resumeStopWatch = () => {
-      startTimeRef.current = Date.now() - time*1000;
+      updateTimer(startTimeRef.current, true);
       intervalRef.current = setInterval(()=>{
         setTime(Math.floor((Date.now()-startTimeRef.current)/1000));
       },1000)
-
       setRunning(true);
       setBg('#baffa7ff')
     }
@@ -253,9 +258,13 @@ export const Stopwatch = () => {
     const formatWatch = (seconds:number) => {
     const minutes = Math.floor(seconds/60);
     const sec = seconds%60;
-    return `${String(minutes).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
-
+    return `${String(minutes).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;      
   }
+    useEffect(()=>{
+      if (control.activeSession?.running){
+        resumeStopWatch();
+      }
+    },[])
 
     return(
       <View style={{flex:1,flexDirection:'row',marginTop:10, marginBottom:50}}>

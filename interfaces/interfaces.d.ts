@@ -50,6 +50,8 @@ export interface Session {
     exercises: SessionExercise[];
     setNumber:number;
     active?:boolean;
+    timer?:number;
+    running?:boolean;
     
 }
 

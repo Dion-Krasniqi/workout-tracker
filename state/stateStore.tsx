@@ -180,6 +180,7 @@ interface SessionStore {
     loadPreviousSession: (session_id:number)=>void;
     deletePreviousSession:(session_id:number)=>void;
     startSession: (workout_id:number)=>Session;
+    updateTimer: (time:number, paused:boolean)=>void;
     endSession: ()=>void;
     quitSession: ()=>void;
     loadActiveExercisesWithSets: (workout_id:number, session_id:number)=>Promise<void>;
@@ -320,11 +321,18 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             time_started:Date.now(),
             exercises: [],
             setNumber:0,
+            timer:0,
+            running:false,
         };
         const { sessionMarked } = get();
         if (sessionMarked) set({sessionMarked:false});
         set({activeSession:newSession});
         return newSession;
+    },
+    updateTimer: (time:number,paused:boolean)=>{
+        const { activeSession } = get();
+        if(!activeSession) return;
+        set({activeSession:{...activeSession, timer:time, running:paused}})
     },
 
     endSession: async()=>{

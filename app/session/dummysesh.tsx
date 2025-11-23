@@ -121,7 +121,7 @@ const Exercise_creation = () => {
            <SessionHeaderComponent text={`${session.startedAt[language]} ${time}`} width={32}/>
           </View>
           <View>
-           <Stopwatch />
+           <Stopwatch session={activeSession} />
           </View>
          </View>
         </View>
