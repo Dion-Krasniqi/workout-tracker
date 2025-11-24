@@ -247,6 +247,14 @@ export const getAllExerciseSets = async(exercise_id:number)=>{
                                          ORDER BY id DESC`, [exercise_id]);
     return result;
 }
+export const getAllSetsSession = async(session_id:number)=>{
+    const result = await db.getAllAsync<{id:number;exercise_id:number;weight:number;reps:number;date:number;}>(
+                                        `SELECT id, exercise_id, weight, reps, date
+                                         FROM session_sets
+                                         WHERE session_id = ?`, [session_id]);
+    console.log(result)
+    return result;
+}
 
 // backup data stuff
 

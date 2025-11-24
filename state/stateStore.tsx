@@ -1,5 +1,5 @@
-import { addExerciseToWorkout, backupSession, changeSetNumber, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, deleteSavedLeftovers, deleteSession, getAllSessions, getMonthSession, getMostCommon, getNotes, getSavedSession, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
-import { ExerciseTemplate, Session, WorkoutTemplate } from '@/interfaces/interfaces';
+import { addExerciseToWorkout, backupSession, changeSetNumber, changeWorkoutName, createCustomWorkout, createSession, deleteAllSessions, deleteSavedLeftovers, deleteSession, getAllSessions, getAllSetsSession, getMonthSession, getMostCommon, getNotes, getSavedSession, getSetData, getWorkoutExercises, loadWorkouts, removeExercise, reorderExercise, writeNotes, writeSet } from '@/app/db/queries';
+import { ExerciseTemplate, Session, SessionExercise, SessionSet, WorkoutTemplate } from '@/interfaces/interfaces';
 import { formatDate } from '@/utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
@@ -245,55 +245,39 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         const w_id = finishedSession?.workout_id
         const workoutStore = useWorkoutStore.getState();
 
-        if (workoutStore.workouts.length == 0){
-            await workoutStore.loadWorkouts();
-        }
         const workout = workoutStore.workouts.find((w)=>w.id==w_id)
         if (!workout){
             //do something
             return;
         }
-        if(w_id){
-            await useWorkoutStore.getState().loadExercises(w_id);
-        }
         if (!finishedSession) return;
-        
-        console.log(finishedSession.setNumber);
-        let setId = 1;   
-        const sessionExercises = await Promise.all(
+        const dd = await getAllSetsSession(finishedSession.id)
+        const sessionSets: SessionSet[] = await Promise.all(
             
-            workout.exercises.map(async(ex,index)=>{
-            
-            const SessionExerciseId = ex.id;
-            const notes = await getNotes(ex.exercise_id, session_id);
-            
-            const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
+            dd.map(async(set,index)=>{
+                const SessionExerciseId = set.exercise_id;
+                console.log(set.weight)
                 finishedSession.setNumber++;
-                const result = await getSetData(ex.exercise_id,i+1, session_id);
-                setId=setId+1;
                 return {
-                    id: setId,
-                    session_exercise_id: SessionExerciseId,
-                    set_number: i + 1,
-                    weight:result?.weight,
-                    reps:result?.reps,
-                    oldWeight:result?.weight,
-                    oldReps:result?.reps,
+                    id: set.id,
+                    session_exercise_id: set.exercise_id,
+                    set_number: index + 1,
+                    weight:set.weight,
+                    reps:set.reps,
+                    oldWeight:set.weight,
+                    oldReps:set.reps,
                 }
-                
-            }));
-            setId = setId + 1;
-            return {
-                id: SessionExerciseId,
-                session_id,
-                exercise_id: ex.exercise_id,
-                name: ex.name,
-                sets,
-                notes:notes,
-                oldNotes:notes,
-            };
         }));
-        set({finishedSession:{...finishedSession,session_name:workout.name, exercises: sessionExercises},loading:false});
+        const exercise: SessionExercise[] = [{
+                id: 0,
+                session_id,
+                exercise_id: 0,
+                name: 'Big Exercise',
+                sets: sessionSets,
+                notes:'',
+                oldNotes:'',
+        }];
+        set({finishedSession:{...finishedSession,session_name:workout.name, exercises: exercise},loading:false});
 
     },
     deletePreviousSession: async(session_id)=>{
