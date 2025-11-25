@@ -248,9 +248,10 @@ export const getAllExerciseSets = async(exercise_id:number)=>{
     return result;
 }
 export const getAllSetsSession = async(session_id:number)=>{
-    const result = await db.getAllAsync<{id:number;exercise_id:number;weight:number;reps:number;date:number;}>(
-                                        `SELECT id, exercise_id, weight, reps, date
+    const result = await db.getAllAsync<{id:number;exercise_id:number;weight:number;reps:number;date:number;name:string}>(
+                                        `SELECT session_sets.id, exercise_id, weight, reps, date, name
                                          FROM session_sets
+                                         JOIN exercises_info ON exercises_info.id = session_sets.exercise_id
                                          WHERE session_id = ?`, [session_id]);
     console.log(result)
     return result;

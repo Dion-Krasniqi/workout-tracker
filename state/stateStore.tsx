@@ -251,13 +251,13 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             return;
         }
         if (!finishedSession) return;
-        const dd = await getAllSetsSession(finishedSession.id)
-        const sessionSets: SessionSet[] = await Promise.all(
+        const dd = await getAllSetsSession(finishedSession.id);
+        const names : {[key:number]:string} = {};
+        let sessionSets: SessionSet[] = await Promise.all(
             
             dd.map(async(set,index)=>{
-                const SessionExerciseId = set.exercise_id;
-                console.log(set.weight)
                 finishedSession.setNumber++;
+                names[set.exercise_id]=set.name;
                 return {
                     id: set.id,
                     session_exercise_id: set.exercise_id,
@@ -268,15 +268,24 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
                     oldReps:set.reps,
                 }
         }));
-        const exercise: SessionExercise[] = [{
-                id: 0,
-                session_id,
-                exercise_id: 0,
-                name: 'Big Exercise',
-                sets: sessionSets,
-                notes:'',
-                oldNotes:'',
-        }];
+        const exercise : SessionExercise[] = [];
+        let i = 0;
+        while (sessionSets[0]){
+                const tempId = sessionSets[0].session_exercise_id;
+                const tempNotes = await getNotes(tempId,session_id)
+                exercise.push({id:i,
+                               session_id,
+                               exercise_id: tempId,
+                               name: names[tempId],
+                               sets:sessionSets.filter((set)=>set.session_exercise_id == tempId),
+                               notes:tempNotes,
+                               oldNotes:'',
+                })
+                sessionSets = sessionSets.filter((set)=>set.session_exercise_id != tempId);
+                i++;
+                
+        }
+        
         set({finishedSession:{...finishedSession,session_name:workout.name, exercises: exercise},loading:false});
 
     },
