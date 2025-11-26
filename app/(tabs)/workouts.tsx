@@ -1,10 +1,11 @@
 import CustomButton from '@/Components/button'
 import Search from '@/Components/search'
+import WorkoutCard from '@/Components/WorkoutCard'
 import { WorkoutTemplate } from '@/interfaces/interfaces'
-import { useSessionStore, useWorkoutStore } from '@/state/stateStore'
-import { Link, useRouter } from 'expo-router'
+import { useWorkoutStore } from '@/state/stateStore'
+import { useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { FlatList, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, ScrollView, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { exportAllSetData } from '../db/db'
 
@@ -14,8 +15,6 @@ const Workouts = () => {
   const [query, setQuery] = useState('');
 
   const workoutControl = useWorkoutStore();
-  const beginSession = useSessionStore((state)=>state.startSession);
-  const loadExercises = useSessionStore((state)=>state.loadActiveExercisesWithSets);
   const [workouts, setWorkouts] = useState<WorkoutTemplate[]>([]);
   
   // setup
@@ -38,10 +37,7 @@ const Workouts = () => {
    return () => clearTimeout(timeOutId);
   },[query]);
 
-  const startSession = async (workout_id:number)=>{
-    const sesh = await beginSession(workout_id);
-    await loadExercises(workout_id, sesh.id)
-  };
+  
   
   return (
     <SafeAreaProvider>
@@ -66,16 +62,7 @@ const Workouts = () => {
                                          </View>}
                     ListFooterComponent={<CustomButton onPress={()=>exportAllSetData()} buttonText='Extract All Data' />}
                     ListFooterComponentStyle={{marginTop:30}}
-                   renderItem={({item})=>(<Link href={`/workout/${item.id}`} asChild>
-                                           <TouchableOpacity className='w-[90%] mt-2 
-                                                                        py-2 bg-dark-200 
-                                                                        rounded-md border-2 
-                                                                        border-[rgba(255,255,255,0.1)] 
-                                                                        items-center self-center' 
-                                                                        onLongPress={async()=>{await startSession(item.id)}}>
-                                            <Text className='text-white text-2xl font-md'>{item.name}</Text>
-                                           </TouchableOpacity>
-                                          </Link>)}/>
+                   renderItem={({item})=>(<WorkoutCard item={item} />)}/>
         </>
        </View>
       </ScrollView>
