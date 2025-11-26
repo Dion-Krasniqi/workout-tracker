@@ -44,6 +44,11 @@ export const getExercise = async (id:number) => {
 
 //Workout Related
 export const addExerciseToWorkout = async (workout_id:number, exercise_id:number,set_number:number,order_index:number): Promise<number> => {
+    await db.runAsync(`UPDATE exercises
+                       SET order_index = (?)
+                       WHERE workout_id = (?) 
+                       AND exercise_id = (?) 
+                       AND order_index = (?)`, order_index-1, workout_id, exercise_id, order_index);
     const result = await db.runAsync(`INSERT INTO exercises (workout_id,exercise_id,set_number,order_index) VALUES (?,?,?,?)`,
                                                              workout_id,exercise_id,set_number,order_index);
     return result.lastInsertRowId as number;

@@ -241,7 +241,6 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
     loadPreviousSession: async(session_id)=>{
 
         const { finishedSession } = get();
-        
         const w_id = finishedSession?.workout_id
         const workoutStore = useWorkoutStore.getState();
 
@@ -251,11 +250,10 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             return;
         }
         if (!finishedSession) return;
-        const dd = await getAllSetsSession(finishedSession.id);
+        const allSets = await getAllSetsSession(finishedSession.id);
         const names : {[key:number]:string} = {};
         let sessionSets: SessionSet[] = await Promise.all(
-            
-            dd.map(async(set,index)=>{
+            allSets.map(async(set,index)=>{
                 finishedSession.setNumber++;
                 names[set.exercise_id]=set.name;
                 return {
@@ -295,6 +293,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         await deleteSession(session_id);
 
     },
+    
     // starts session with a dummy id and sets start_time to when called and defaults exercises object to empty array
     // then assigns session object to activeSession
     startSession: (workout_id)=>{
