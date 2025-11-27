@@ -6,7 +6,6 @@ import { SessionHeaderComponent } from '@/Components/SessionHeaderComponent';
 import { useSessionStore, useUserPreferences } from '@/state/stateStore';
 //import ThemeHandler from '@/utils/ThemeHandler';
 import { general, session } from '@/constants/content';
-import { getSystemTheme } from '@/utils/ThemeHandler';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
@@ -34,15 +33,12 @@ const Exercise_creation = () => {
       loadExercises(activeSession?.workout_id,activeSession?.id)
       getAllNotes();
     }
-  },[]);
-
-  useEffect(()=>{
     if(systemTheme=='default'){
       setColor(' bg-black')
     }else{
       setColor(' bg-white')
     }
-  }, [getSystemTheme]);
+  },[]);
 
   useEffect(()=>{
     const interval = setInterval(()=>{

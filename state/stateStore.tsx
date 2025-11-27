@@ -68,7 +68,7 @@ interface WorkoutStore {
     addWorkout: (workout_name: string)=>Promise<number>;
     addExerciseToWorkout: (workout_id:number,exercise_id:number,exercise_name:string, set_number:number) =>void;
     removeExerciseFromWorkout:(workout_id:number,exercise_id:number) => void;
-    loadExercises: (workout_id:number) =>Promise<void>;
+    loadExercises: (workout_id:number) =>Promise<number>;
     changeOrder:(workout_id:number, exercise_id:number,new_index:number,old_index:number) => void;
     changeSetNumber:(workout_id:number, exercise_id:number,setNumber:number) => void;
 }
@@ -114,7 +114,7 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
         const workout = state.workouts.find(w => w.id == workout_id);
         const lastOrder = workout?.exercises.at(-1)?.order_index ?? 0;
         const order_index = lastOrder + 1;
-        const id = await addExerciseToWorkout(workout_id, exercise_id, set_number,order_index);
+        const id = await addExerciseToWorkout(workout_id, exercise_id, set_number, order_index);
         const newExercise = {id:id, exercise_id:exercise_id, name:exercise_name, set_number:set_number, order_index:order_index};
         set((state)=>({
             workouts: state.workouts.map((w)=>w.id==workout_id ? 
@@ -138,6 +138,7 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
                                              {...w, exercises:exercises}:
                                               w)
         }))
+        return exercises.length
     },
     changeOrder: async(workout_id,exercise_id,new_index,old_index)=>{
         const state = get();
@@ -163,8 +164,6 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
     },
 
 }));
-
-
 
 interface SessionStore {
     previousSessions: Session[];
@@ -293,7 +292,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         await deleteSession(session_id);
 
     },
-    
+
     // starts session with a dummy id and sets start_time to when called and defaults exercises object to empty array
     // then assigns session object to activeSession
     startSession: (workout_id)=>{
@@ -322,9 +321,17 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         return newSession;
     },
     updateTimer: (time:number,paused:boolean)=>{
-        const { activeSession } = get();
-        if(!activeSession) return;
-        set({activeSession:{...activeSession, timer:time, running:paused}})
+        const { activeSession,loading } = get();
+        set({loading:true})
+        try {
+            if(!activeSession) return;
+            set({activeSession:{...activeSession, timer:time, running:paused}})
+        } catch {
+            // timer bugges or something
+        }
+        finally {
+            set({loading:false})
+        }
     },
 
     endSession: async()=>{

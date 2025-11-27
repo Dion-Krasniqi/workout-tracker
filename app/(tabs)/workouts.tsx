@@ -45,7 +45,7 @@ const Workouts = () => {
       <ScrollView className="flex w-full px-5 mb-24" showsVerticalScrollIndicator={false} 
                   contentContainerStyle={{ minHeight:'100%'}}>
        <View style={{flexDirection:'row', marginTop:30, justifyContent:'space-between', 
-                     alignItems:'center', marginHorizontal:25}}>
+                     alignItems:'center', marginHorizontal:5}}>
         <CustomButton onPress={()=>router.push('/otherPages/workout_creation')} buttonText='Create Workout'/>
         <CustomButton onPress={()=>router.push('/otherPages/exercise_list')} buttonText='Exercise List' />
        </View>
@@ -55,7 +55,7 @@ const Workouts = () => {
                    keyExtractor={(item) =>item.id.toString()}
                    className="mt-8 w-full self-center"
                    scrollEnabled={false}
-                   ListHeaderComponent={<View style={{width:'87%', alignSelf:'center', marginBottom:30}}>
+                   ListHeaderComponent={<View style={{width:'95%', alignSelf:'center', marginBottom:30}}>
                                           <Search pholder='Search Workout' 
                                                   value={query} 
                                                   onChangeText={(text)=>{setQuery(text)}}/>
