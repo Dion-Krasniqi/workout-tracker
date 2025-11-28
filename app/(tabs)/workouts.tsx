@@ -1,8 +1,9 @@
 import CustomButton from '@/Components/button'
 import Search from '@/Components/search'
 import WorkoutCard from '@/Components/WorkoutCard'
+import { workout } from '@/constants/content'
 import { WorkoutTemplate } from '@/interfaces/interfaces'
-import { useWorkoutStore } from '@/state/stateStore'
+import { useUserPreferences, useWorkoutStore } from '@/state/stateStore'
 import { useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { FlatList, ScrollView, View } from 'react-native'
@@ -13,6 +14,7 @@ const Workouts = () => {
   
   const router = useRouter();
   const [query, setQuery] = useState('');
+  const { language } = useUserPreferences();
 
   const workoutControl = useWorkoutStore();
   const [workouts, setWorkouts] = useState<WorkoutTemplate[]>([]);
@@ -46,8 +48,8 @@ const Workouts = () => {
                   contentContainerStyle={{ minHeight:'100%'}}>
        <View style={{flexDirection:'row', marginTop:30, justifyContent:'space-between', 
                      alignItems:'center', marginHorizontal:5}}>
-        <CustomButton onPress={()=>router.push('/otherPages/workout_creation')} buttonText='Create Workout'/>
-        <CustomButton onPress={()=>router.push('/otherPages/exercise_list')} buttonText='Exercise List' />
+        <CustomButton onPress={()=>router.push('/otherPages/workout_creation')} buttonText={workout.create[language]} />
+        <CustomButton onPress={()=>router.push('/otherPages/exercise_list')} buttonText={workout.exerciseList[language]} />
        </View>
        <View className='flex-1 w-[100%]'>
         <>
@@ -56,11 +58,11 @@ const Workouts = () => {
                    className="mt-8 w-full self-center"
                    scrollEnabled={false}
                    ListHeaderComponent={<View style={{width:'95%', alignSelf:'center', marginBottom:30}}>
-                                          <Search pholder='Search Workout' 
+                                          <Search pholder={workout.searchWorkout[language]} 
                                                   value={query} 
                                                   onChangeText={(text)=>{setQuery(text)}}/>
                                          </View>}
-                    ListFooterComponent={<CustomButton onPress={()=>exportAllSetData()} buttonText='Extract All Data' />}
+                    ListFooterComponent={<CustomButton onPress={()=>exportAllSetData()} buttonText={workout.extract[language]} />}
                     ListFooterComponentStyle={{marginTop:30}}
                    renderItem={({item})=>(<WorkoutCard item={item} />)}/>
         </>

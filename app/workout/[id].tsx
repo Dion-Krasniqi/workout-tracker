@@ -1,5 +1,6 @@
 import CustomButton from '@/Components/button';
-import { useSessionStore, useWorkoutStore } from '@/state/stateStore';
+import { exerciseStatic, general, session } from '@/constants/content';
+import { useSessionStore, useUserPreferences, useWorkoutStore } from '@/state/stateStore';
 import { Height } from '@/utils';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -20,6 +21,7 @@ const WorkoutInformation = () => {
     }
   }
 
+  const { language } = useUserPreferences();
   const [direction, setDirection] = useState('column');
   const { id } = useLocalSearchParams();
   const {workouts, loading} = useWorkoutStore();
@@ -66,10 +68,10 @@ const WorkoutInformation = () => {
   } 
 
   if(loading){
-    return(<Text>Loading Workouts</Text>)
+    return(<Text>{session.workoutLoad[language]}</Text>)
   }
   if (!workout) {
-    return(<Text>Workout not found</Text>)
+    return(<Text>{session.workoutNot[language]}</Text>)
   }
 
   const router = useRouter();
@@ -89,7 +91,7 @@ const WorkoutInformation = () => {
                          borderRadius: 5, padding: 15, shadowColor: '#000',
                          shadowOffset: {width: 0, height: 2,}, shadowOpacity: 0.25, shadowRadius: 4,}}>
             <View className='flex-row items-center justify-between'>
-              <Text >Change Number of Sets</Text>
+              <Text >{session.changeSets[language]}</Text>
               <TextInput value={setNumber>0 ? String(setNumber):''} 
                        onChangeText={(text)=>setSetNumber(Number(text))}
                        keyboardType='numeric'
@@ -97,7 +99,7 @@ const WorkoutInformation = () => {
             </View>
             <View className='flex-row justify-between mt-10'>
               <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-                <Text>Return</Text>
+                <Text>{general.return[language]}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={async()=>{try{await updateSetNumber(exerciseid,setNumber,Number(id));
                                       } catch(error){console.log(error);
@@ -151,7 +153,7 @@ const WorkoutInformation = () => {
                                                 
                                                   <View className='flex flex-cols'>
                                                       <Text className='text-white text-lg font-bold'>{item.name}</Text>
-                                                      <Text className='text-white mr-10'>{item.set_number} Sets</Text>
+                                                      <Text className='text-white mr-10'>{item.set_number} {session.sets[language]}</Text>
                                                   </View>
                                                   
                                                   <View className='flex flex-row gap-4'>
@@ -175,12 +177,12 @@ const WorkoutInformation = () => {
                        className="mt-6 w-full "/>
 
              <View className='mt-2'>
-              <CustomButton buttonText='Add Exercise' onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
+              <CustomButton buttonText={exerciseStatic.add[language]} onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
                                                                                 params: {workout_id:workout?.id}})}/>
              </View>
              <View className='mt-4'>
                                          
-                                         <CustomButton buttonText='Start Workout' 
+                                         <CustomButton buttonText={general.start[language]}
                                                                 onPress={()=>{beginSession(workout?.id);}}/>
             </View>
              <View className='mt-4'>

@@ -1,5 +1,7 @@
 import CustomButton from '@/Components/button';
 import { DropdownMenu, MenuOption } from '@/Components/dropDown';
+import { exerciseStatic } from '@/constants/content';
+import { useUserPreferences } from '@/state/stateStore';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
@@ -14,6 +16,8 @@ const Exercise_creation = () => {
   const [exerciseName, setExerciseName] = useState('');
   const [muscleGroup, setMuscleGroup] = useState(1);
   const [muscleGroupText, setMuscleGroupText] = useState('None');
+
+  const { language } = useUserPreferences();
   
   const MenuOptionView = (text:string) => {
     return(
@@ -35,11 +39,11 @@ const Exercise_creation = () => {
     <SafeAreaProvider>
      <SafeAreaView className='bg-dark-100' style={{flex: 1}}> 
       <View className="mx-2 px-5 mt-10">
-       <Text className='items-start text-light-100 text-xl mb-3' >Exercise Name:</Text>
+       <Text className='items-start text-light-100 text-xl mb-3' >{exerciseStatic.name[language]}</Text>
         <TextInput value={exerciseName} onChangeText={setExerciseName} 
                    placeholderTextColor={'darkgrey'}
                    className='text-start text-white border-2 border-light-100 rounded-md h-[50]'/>
-        <Text className='items-start text-light-100 text-xl mt-5 mb-3' >Muscle Group:</Text>
+        <Text className='items-start text-light-100 text-xl mt-5 mb-3'>{exerciseStatic.group[language]}</Text>
         <View>
           <DropdownMenu visible={visible}
                         handleOpen={()=>{setVisible(true)}}
@@ -48,6 +52,7 @@ const Exercise_creation = () => {
                         <Text className='text-lg py-2 w-[full] text-start px-2 bg-white rounded-lg text-light-100'>
                          {muscleGroupText}
                         </Text>}>
+                        {/*translate */}
            <MenuOption onSelect={()=>{setVisible(false);setMuscleGroup(1);setMuscleGroupText('None')}}>
               {MenuOptionView('None')}
            </MenuOption>
@@ -73,7 +78,7 @@ const Exercise_creation = () => {
           </DropdownMenu>
         </View>
         <View className='mt-72'>
-          {exerciseName.length>0 && <CustomButton onPress={()=>pressButton()} buttonText='Create Exercise' />}
+          {exerciseName.length>0 && <CustomButton onPress={()=>pressButton()} buttonText={exerciseStatic.create[language]} />}
         </View>
        </View>
     </SafeAreaView>

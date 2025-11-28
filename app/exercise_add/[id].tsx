@@ -1,6 +1,7 @@
 import CustomButton from '@/Components/button';
+import { exerciseStatic } from '@/constants/content';
 import { ExerciseInfo } from '@/interfaces/interfaces';
-import { useWorkoutStore } from '@/state/stateStore';
+import { useUserPreferences, useWorkoutStore } from '@/state/stateStore';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Text, TextInput } from 'react-native';
@@ -12,6 +13,7 @@ const ExerciseAddPage = () => {
   const {id,workout_id} = useLocalSearchParams();
   const [exerciseRef, setExerciseRef] = useState<ExerciseInfo | null>(null);
   const [sets, setSets] = useState(1);
+  const { language } = useUserPreferences();
 
   const addExerciseToWorkout = useWorkoutStore((state)=>state.addExerciseToWorkout);
 
@@ -28,7 +30,7 @@ const ExerciseAddPage = () => {
     <SafeAreaProvider>
         <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}}>
             <Text className='text-white font-semibold text-2xl mt-12'>{exerciseRef?.name}</Text>
-            <Text className='text-light-100 text-xl mt-12'>Number of Sets</Text>
+            <Text className='text-light-100 text-xl mt-12'>{exerciseStatic.setNumber[language]} </Text>
             <TextInput defaultValue='1' placeholder='1'
                        placeholderTextColor={'darkgrey'}
                        keyboardType="numeric"
@@ -37,7 +39,7 @@ const ExerciseAddPage = () => {
                                   border-light-100 rounded-md
                                   w-[70%] mb-4'/>
             
-            <CustomButton buttonText='Add Exercise' 
+            <CustomButton buttonText={exerciseStatic.add[language]} 
                           onPress={()=>{//@ts-ignore
                                    addExerciseToWorkout(Number(workout_id),exerciseRef?.id,exerciseRef?.name,sets);
                                    router.push(`/workout/${workout_id}`)}}/>

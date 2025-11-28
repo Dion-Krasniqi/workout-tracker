@@ -68,7 +68,7 @@ interface WorkoutStore {
     addWorkout: (workout_name: string)=>Promise<number>;
     addExerciseToWorkout: (workout_id:number,exercise_id:number,exercise_name:string, set_number:number) =>void;
     removeExerciseFromWorkout:(workout_id:number,exercise_id:number) => void;
-    loadExercises: (workout_id:number) =>Promise<number>;
+    loadExercises: (workout_id:number) =>Promise<void>;
     changeOrder:(workout_id:number, exercise_id:number,new_index:number,old_index:number) => void;
     changeSetNumber:(workout_id:number, exercise_id:number,setNumber:number) => void;
 }
@@ -138,7 +138,6 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
                                              {...w, exercises:exercises}:
                                               w)
         }))
-        return exercises.length
     },
     changeOrder: async(workout_id,exercise_id,new_index,old_index)=>{
         const state = get();
@@ -218,11 +217,10 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
     },
     findPreviousSessions: (session_string)=>{
         const {previousSessions} = get();
-        if (!previousSessions) return null;
+        if (!previousSessions || previousSessions.length == 0) return [];
 
         const S = previousSessions.filter((s)=>s.session_name.toLowerCase().includes(session_string.toLowerCase()) 
                                             || formatDate(s.time_started).includes(session_string));
-        if (!S) return null;
         const fSessions: Session[] = S;
 
         return fSessions;
@@ -253,7 +251,6 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         const names : {[key:number]:string} = {};
         let sessionSets: SessionSet[] = await Promise.all(
             allSets.map(async(set,index)=>{
-                finishedSession.setNumber++;
                 names[set.exercise_id]=set.name;
                 return {
                     id: set.id,
@@ -282,8 +279,8 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
                 i++;
                 
         }
-        
-        set({finishedSession:{...finishedSession,session_name:workout.name, exercises: exercise},loading:false});
+        const setNumber = sessionSets.length || 0
+        set({finishedSession:{...finishedSession,session_name:workout.name, exercises: exercise,setNumber:setNumber},loading:false});
 
     },
     deletePreviousSession: async(session_id)=>{
@@ -301,7 +298,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         if(activeSession){
             Alert.alert('Session already active','Do you want to start a new workout?',
             [{text: 'Cancel',onPress: () => {},style: 'cancel',},
-             { text: 'YES', onPress: () => ({activeSession:null}) },],
+             { text: 'YES', onPress: () => set({activeSession:null}) },],
              { cancelable: false });
 
         }
@@ -321,7 +318,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         return newSession;
     },
     updateTimer: (time:number,paused:boolean)=>{
-        const { activeSession,loading } = get();
+        const { activeSession } = get();
         set({loading:true})
         try {
             if(!activeSession) return;
@@ -401,6 +398,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         if (!activeSession) return;
         //dummy set Id so the updateSet can access
         let setId = 1
+        let setNumber = 0
         const sessionExercises = await Promise.all(
             
             workout.exercises.map(async(ex,index)=>{
@@ -409,11 +407,11 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
             const notes = await getNotes(ex.exercise_id);
             
             const sets = await Promise.all(Array.from({length:ex.set_number}, async(_, i)=>{
-                activeSession.setNumber++;
                 // have to update it so when its loading data where session_id -1, load the previous saved set
                 const result = await getSetData(ex.exercise_id,i+1);
                 // this should give unique temp ids
                 setId=setId+1;
+                setNumber += 1;
                 return {
                     id: setId,
                     session_exercise_id: SessionExerciseId,
@@ -439,7 +437,7 @@ export const useSessionStore = create<SessionStore>((set, get)=>({
         }));
         
 
-        set({activeSession:{...activeSession,session_name:workout.name, exercises: sessionExercises},loading:false});
+        set({activeSession:{...activeSession,session_name:workout.name, exercises: sessionExercises, setNumber},loading:false});
         
        
     },  

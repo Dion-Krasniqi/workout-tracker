@@ -1,6 +1,8 @@
+import { exerciseStatic } from '@/constants/content';
 import { ExerciseInfo } from '@/interfaces/interfaces';
+import { useUserPreferences } from '@/state/stateStore';
 import { useLocalSearchParams } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Text, View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -43,13 +45,14 @@ const ExerciseInformation = () => {
   },[])
 
   const Width = Dimensions.get("window").width/1.2;
+  const { language } = useUserPreferences();
   
   return (
     
     <SafeAreaProvider>
      <SafeAreaView className='flex-1 bg-dark-100' style={{ alignItems: "center"}}> 
       <View className='mt-6'>
-       <Text className='text-white font-bold text-2xl'>Stats for {exercise?.name}</Text>
+       <Text className='text-white font-bold text-2xl'>{exerciseStatic.statsFor[language]} {exercise?.name}</Text>
       </View>
       <View className='w-full flex-1'>
        {weight && weight.length>0 ? 
@@ -63,7 +66,7 @@ const ExerciseInformation = () => {
                          width={Width} adjustToWidth
                          data={weight}
                          showScrollIndicator scrollToEnd/>
-              <Text className='text-white text-lg font-bold mt-10'>Full Exercise History</Text>
+              <Text className='text-white text-lg font-bold mt-10'>{exerciseStatic.history[language]}</Text>
               <>
                <FlatList data={sets} renderItem={({item})=>(setEntry(item.weight,item.reps,item.date))}
                          className="mt-6 w-full" style={{marginBottom:290}}
@@ -71,7 +74,7 @@ const ExerciseInformation = () => {
                          contentContainerStyle={{justifyContent:'space-between'}}/>
               </>
             </View>):
-            (<View><Text className='text-white self-center mt-20'>There exists no data for this exercise</Text></View>)}  
+            (<View><Text className='text-white self-center mt-20'>{exerciseStatic.noData[language]}</Text></View>)}  
     </View>   
    </SafeAreaView>
   </SafeAreaProvider>)}

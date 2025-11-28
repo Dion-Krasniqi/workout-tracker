@@ -1,13 +1,16 @@
+import { exerciseStatic, session } from '@/constants/content';
 import { Session, SessionExercise, SessionSet } from '@/interfaces/interfaces';
-import { useSessionStore } from '@/state/stateStore';
+import { useSessionStore, useUserPreferences } from '@/state/stateStore';
 import { formatDate } from '@/utils';
 import { Link } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const Width = Dimensions.get("window").width;
+
 // renders sets in exercises
 export const SetView = ({set}:{set:SessionSet}) => {
+  const { language } = useUserPreferences();
   const oldW = set.oldWeight;
   const oldR = Number(set.oldReps);
   const [weight, setWeight] = useState(set.weight);
@@ -54,7 +57,7 @@ export const SetView = ({set}:{set:SessionSet}) => {
                  scrollEnabled={false}
                  className='text-center px-2 text-white border-2 border-light-100 rounded-md h-[40] focus:border-white' 
                  style={{width:inputWidth/1.5, borderWidth:1}}/>
-            <Text style={{marginLeft:4, color:'white',alignSelf:'center'}}>Reps</Text>
+            <Text style={{marginLeft:4, color:'white',alignSelf:'center'}}>{exerciseStatic.reps[language]}</Text>
           </View>
         </View>
       </View>
@@ -70,6 +73,7 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   const [resetted, setResetted] = useState(exercise.marked || false);
   const updateNotes = useSessionStore((state)=>state.updateNotes);
   const resetExercise = useSessionStore((state)=>state.resetExercise);
+  const { language } = useUserPreferences();
 
   useEffect(()=>{
     updateNotes(exercise.exercise_id,notes)
@@ -104,13 +108,13 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
                  style={{width:inputWidth*.85, textAlign:'center', alignSelf:'center', color:'white', height:80, marginTop:20}}/>
       </View>
       <Link style={{alignSelf:'flex-end',marginTop:8}} href={`/exercise/${exercise.exercise_id}`}>
-        <Text className='text-white'>Stats</Text>
+        <Text className='text-white'>{exerciseStatic.stats[language]}</Text>
       </Link>
       <TouchableOpacity style={{alignSelf:'flex-end',marginTop:8}} onPress={markExercise} disabled={resetted}>
         <Text className='bg-white' style={{borderRadius:5, padding:4, 
                                            backgroundColor:resetted ? ('#2e2e2eff'):('white'),
                                            fontSize:resetted ? (10):(12)}}>
-                                          {resetted ? ('Marked'):('Reset')}</Text>
+                                          {resetted ? (exerciseStatic.marked[language]):(exerciseStatic.reset[language])}</Text>
       </TouchableOpacity>
     </View>
    </View>
@@ -118,10 +122,10 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
 }
 
 export const FinishedSet = ({set}:{set:SessionSet}) => {
+  const { language } = useUserPreferences();
   const oldW = set.oldWeight;
   const oldR = Number(set.oldReps);
 
-  const inputWidth = Width/6;
 
 
   return (
@@ -130,15 +134,16 @@ export const FinishedSet = ({set}:{set:SessionSet}) => {
                       paddingVertical:5, paddingHorizontal:8}}
              className='bg-white rounded-md bg-white border-light-100'>
 
-            <Text className='text-xl self-center font-bold'>Set {set.set_number}</Text>
+            <Text className='text-xl self-center font-bold'>{exerciseStatic.set[language]} {set.set_number}</Text>
             <Text className='text-center'>{oldW} Kg</Text>
-            <Text className='text-center'>{oldR} Reps</Text>
+            <Text className='text-center'>{oldR} {exerciseStatic.reps[language]}</Text>
   
       </View>
   )
 }
 
 export const FinishedExercise = ({exercise}:{exercise:SessionExercise}) => {
+  const { language } = useUserPreferences();
 
   const notes = exercise.notes;
 
@@ -161,7 +166,7 @@ export const FinishedExercise = ({exercise}:{exercise:SessionExercise}) => {
                       height:'100%', 
                       marginTop:20,
                       }}>
-          {notes=='Notes' ? ('No notes found'):notes}
+          {notes=='Notes' ? (exerciseStatic.notes[language]):notes}
         </Text>
       </View>
     </View>
@@ -179,9 +184,11 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
   seconds = Math.round(seconds%60);
   const date = formatDate(sesh.time_started)
   const screenWidth = Dimensions.get("window").width/1.1;
+  const { language } = useUserPreferences();
 
   const setPrevSession = useSessionStore((state)=>state.setPreviousSession);
   const loadExercises = useSessionStore((state)=>state.loadPreviousSession);
+  //check
   const setSession = async(id:number)=> {
     const ses = await setPrevSession(id);
     await loadExercises(id);
@@ -198,7 +205,7 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
         </View>
         <View className='items-start'>
           
-          <Text className='font-bold text-center'>Duration: {hours}:{minutes}:{seconds}</Text>
+          <Text className='font-bold text-center'>{session.duration[language]}: {hours}:{minutes}:{seconds}</Text>
         </View>
          
       </TouchableOpacity>
@@ -208,11 +215,11 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
 }
 
 export const Stopwatch = ({session}:{session?:Session | null}) => {
+    const { language } = useUserPreferences();
     const [time, setTime] = useState(0);
     const [running, setRunning] = useState(false);
     const [bg,setBg] = useState('#fff');
     const updateTimer = useSessionStore((state)=>state.updateTimer);
-
     const control = useSessionStore();
 
     const intervalRef = useRef(null);
@@ -275,7 +282,7 @@ export const Stopwatch = ({session}:{session?:Session | null}) => {
                       </TouchableOpacity>
                       <TouchableOpacity style={{marginLeft:7,borderRadius:5, height:50, backgroundColor:'white', justifyContent:'center', width:'32%'}}
                                         onPress={resetStopwatch}>
-                          <Text className='font-bold text-center'>Reset Stopwatch</Text>
+                          <Text className='font-bold text-center'>{exerciseStatic.stopwatch[language]}</Text>
                       </TouchableOpacity>
        </View>
     )

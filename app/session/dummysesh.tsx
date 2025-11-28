@@ -18,7 +18,9 @@ const Exercise_creation = () => {
   const quitSession = useSessionStore((state)=>state.quitSession);
   const loadExercises = useSessionStore((state)=>state.loadActiveExercisesWithSets);
   
-  const {activeSession, loading, sessionMarked} = useSessionStore();
+  const activeSession = useSessionStore((state)=>state.activeSession);
+  const loading = useSessionStore((state)=>state.loading);
+  const sessionMarked = useSessionStore((state)=>state.sessionMarked);
 
   const { systemTheme, language } = useUserPreferences();
   const [color, setColor] = useState('white');
@@ -33,12 +35,15 @@ const Exercise_creation = () => {
       loadExercises(activeSession?.workout_id,activeSession?.id)
       getAllNotes();
     }
-    if(systemTheme=='default'){
+  },[activeSession]);
+
+  useEffect(()=>{
+     if(systemTheme=='default'){
       setColor(' bg-black')
     }else{
       setColor(' bg-white')
     }
-  },[]);
+  },[systemTheme])
 
   useEffect(()=>{
     const interval = setInterval(()=>{

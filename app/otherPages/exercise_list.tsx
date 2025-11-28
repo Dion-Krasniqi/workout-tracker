@@ -1,6 +1,8 @@
 import CustomButton from '@/Components/button';
 import { NameCardExec } from '@/Components/nameCard';
+import { exerciseStatic } from '@/constants/content';
 import { ExerciseInfo } from '@/interfaces/interfaces';
+import { useUserPreferences } from '@/state/stateStore';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, TouchableOpacity, View } from 'react-native';
@@ -11,6 +13,7 @@ const Exercise_list = () => {
 
   const router = useRouter();
   const [exercises, setExercises] = useState<ExerciseInfo[]>([]);
+  const { language } = useUserPreferences();
 
   useEffect(()=>{
     async function setup (){
@@ -30,7 +33,7 @@ const Exercise_list = () => {
         <Image source={require('../../assets/icons/arrow.png')} style={{tintColor:'white', transform:[{scaleX:-1.2},{scaleY:1.2}]}}
                className='items-center'/>
        </TouchableOpacity>
-       <CustomButton onPress={()=>router.push('/otherPages/exercise_creation')} buttonText='Create Exercise' />
+       <CustomButton onPress={()=>router.push('/otherPages/exercise_creation')} buttonText={exerciseStatic.create[language]} />
       </View>
       <View className='w-full flex-1'>  
        <>

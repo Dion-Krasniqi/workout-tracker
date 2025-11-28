@@ -1,6 +1,8 @@
 import { NameCardExecAdd } from '@/Components/nameCard';
 import Search from '@/Components/search';
+import { exerciseStatic } from '@/constants/content';
 import { ExerciseInfo } from '@/interfaces/interfaces';
+import { useUserPreferences } from '@/state/stateStore';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
@@ -9,10 +11,12 @@ import { getAllExercises, getAllExercisesSearch } from '../db/queries';
 
 const Exercise_list_add = () => {
   const {workout_id} = useLocalSearchParams();
+  //translate
   const muscleGroups = ['None','Chest','Back','Shoulders','Arms','Legs','Abs'];
   const [exercises, setExercises] = useState<ExerciseInfo[]>([]);
   const [group, setGroup] = useState(0);
   const [query, setQuery] = useState('');
+  const { language } = useUserPreferences();
 
   // initial loading
   useEffect(()=>{
@@ -65,7 +69,7 @@ const Exercise_list_add = () => {
      <SafeAreaView className='flex-1 bg-dark-100' style={{ alignItems: "center"}}> 
       <View className='flex-1 w-full items-center'>
        <View className='mt-4 items-center'>
-        <Text className='text-white text-2xl font-bold '>Exercise List</Text>
+        <Text className='text-white text-2xl font-bold '>{exerciseStatic.list[language]}</Text>
        </View>
        <>
         <View style={{width:'90%'}}>

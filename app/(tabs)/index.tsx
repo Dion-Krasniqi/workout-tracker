@@ -12,6 +12,8 @@ import { ActivityIndicator, Dimensions, FlatList, Image, Modal, Text, TextInput,
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getAllExerciseInstances } from "../db/queries";
 
+import { general, homepage } from '@/constants/content';
+
 const Index = ()=> {
 
   const loadAllSessions = useSessionStore((state)=>state.loadPreviousSessions);
@@ -43,7 +45,8 @@ const Index = ()=> {
   }
 
   // side menu def
-  const SideMenu = ()=> {
+  //@ts-ignore
+  const SideMenu = ({modalVisible, setModalVisible})=> {
     const [userName, setuserName] = useState('User');
     const [oldUserName, setOldUserName] = useState(userName);
 
@@ -97,11 +100,11 @@ const Index = ()=> {
                                     <Text className="color-white p-2 font-bold uppercase">{language}</Text>
                                   </TouchableOpacity>
                                   <View className="gap-4" style={{marginVertical:50}}>
-                                    <SideMenuItem label='Sessions this month:' value={String(numberOfSessions)}/>
-                                    <SideMenuItem label='Most Common Workout:' value={mostCommonWorkout} />
+                                    <SideMenuItem label={homepage.sessionNumber[language]} value={String(numberOfSessions)}/>
+                                    <SideMenuItem label={homepage.sessionCommon[language]} value={mostCommonWorkout} />
                                     <TouchableOpacity onPress={syncData} 
                                                       style={{alignSelf:'center',borderRadius:5, marginTop:30}} className='bg-dark-200'>
-                                      <Text className="color-white font-bold" style={{padding:10}}>Sync Data</Text>
+                                      <Text className="color-white font-bold" style={{padding:10}}>{homepage.sync[language]}</Text>
                                     </TouchableOpacity>
                                     
                                   </View>
@@ -129,7 +132,7 @@ const Index = ()=> {
   return (
     <SafeAreaProvider>
       <SafeAreaView className='bg-dark-100' style={{flex: 1, paddingBottom:80,left:modalVisible ? Width*.5 : 0}}> 
-        {SideMenu()}
+        <SideMenu modalVisible={modalVisible} setModalVisible={setModalVisible} />
         {loadingsessions ? (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>):
          (<View>
            {/* Header */}
@@ -142,7 +145,7 @@ const Index = ()=> {
                                                        className="bg-white rounded-md" style={{width:Width/2.5}}>
                                       <Text className="py-2 self-center font-bold">{activeSession?.session_name}</Text>
                                      </TouchableOpacity>):
-                                    (<Text className="text-white self-center font-bold">No active session</Text>)}
+                                    (<Text className="text-white self-center font-bold">{homepage.activeSession[language]}</Text>)}
              </View>
             </View>
            </View>
@@ -150,14 +153,14 @@ const Index = ()=> {
            <FlatList data={previousSessions}
                   renderItem={({item})=>(<FinishedSessionView sesh={item}/>)}
                   contentContainerStyle={{alignItems:'center',marginBottom:120}}
-                  ListHeaderComponent={previousSessions.length>0 ? 
+                  ListHeaderComponent={previousSessions?.length>0 ? 
                                        (<View style={{width:Width*.8}}>
-                                         <Search  onPress={()=>router.push('/otherPages/SearchPage')} pholder="Search Session"/>
+                                         <Search  onPress={()=>router.push('/otherPages/SearchPage')} pholder={homepage.searchSession[language]} />
                                         </View>):
                                        (<View></View>)}
-                  ListEmptyComponent={<Text className='text-white font-semibold mt-5'>No Sessions Recorded</Text>}
+                  ListEmptyComponent={<Text className='text-white font-semibold mt-5'>{homepage.emptySessions[language]}</Text>}
                   ListFooterComponent={<View className="mb-24 mt-8 w-full">
-                                        {previousSessions.length>0 && <CustomButton onPress={()=>delSessions()} buttonText='Delete All'/>}
+                                        {previousSessions?.length>0 && <CustomButton onPress={()=>delSessions()} buttonText={general.deleteAll[language]}/>}
                                        </View>}/>
           </View>)}
      </SafeAreaView>

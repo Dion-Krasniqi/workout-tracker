@@ -1,7 +1,7 @@
 import { WorkoutTemplate } from '@/interfaces/interfaces'
 import { useSessionStore, useWorkoutStore } from '@/state/stateStore'
 import { Link } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 
@@ -15,13 +15,6 @@ export const WorkoutCard = ({item}:{item:WorkoutTemplate}) => {
   };
   const [number, setNumber] = useState(1)
   
-  useEffect(()=>{
-    async function setup (){
-      const n = await getExerciseNumber(item.id);
-      setNumber(n);
-    }
-    setup();
-  },[item.id])
   
   return (
     <Link href={`/workout/${item.id}`} asChild>
@@ -32,9 +25,7 @@ export const WorkoutCard = ({item}:{item:WorkoutTemplate}) => {
                                      items-center self-center' 
                                      onLongPress={async()=>{await startSession(item.id)}}>
             <View style={{flex:1, flexDirection:'row', alignItems:'center', paddingVertical:10, paddingHorizontal:12}}>
-                <Text className='text-white text-2xl font-md' 
-                      style={{flex:1,alignItems:'flex-start'}}>{item.name}</Text>
-                <Text className='text-light-100 text-lg font-md'>Exercises: {number}</Text>
+                <Text className='text-white text-2xl font-md' >{item.name}</Text>
             </View>
         </TouchableOpacity>
     </Link>

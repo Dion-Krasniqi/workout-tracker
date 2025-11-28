@@ -1,7 +1,8 @@
 import CustomButton from '@/Components/button';
 import { FinishedExercise } from '@/Components/sessionComponents';
 import { SessionHeaderComponent } from '@/Components/SessionHeaderComponent';
-import { useSessionStore } from '@/state/stateStore';
+import { general, session } from '@/constants/content';
+import { useSessionStore, useUserPreferences } from '@/state/stateStore';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Image, TouchableOpacity, View } from 'react-native';
@@ -14,6 +15,7 @@ const SessionDetails = () => {
     const deleteSession = useSessionStore((state)=>state.deletePreviousSession);
     const [loading, setLoading] = useState(false);
     const { finishedSession } = useSessionStore();
+    const { language } = useUserPreferences();
 
     useEffect(()=>{},[]);
 
@@ -28,12 +30,12 @@ const SessionDetails = () => {
     const DeleteButton = ()=> {
       return (
         <View className='mb-24 mt-16 w-full'>
-         <CustomButton buttonText='Delete Session' 
+         <CustomButton buttonText={session.deleteSession[language]} 
                        onPress={()=>{if(finishedSession)
-                        {Alert.alert('Session information will be lost',
-                                     'Do you wish to proceed?',
-                                    [{text: 'Cancel',onPress: () => {},style: 'cancel',},
-                                     { text: 'YES', onPress: async() => {await deleteSession(Number(id));
+                        {Alert.alert(session.quitMessage[language],
+                                     general.alertQuestion[language],
+                                    [{text: general.alertCancel[language], onPress: () => {},style: 'cancel',},
+                                     { text: general.alertYes[language], onPress: async() => {await deleteSession(Number(id));
                                                                          router.replace('/(tabs)')}},
                                     ],
                                      { cancelable: false });}}}/>
@@ -56,8 +58,8 @@ const SessionDetails = () => {
                </View>
                <SessionHeaderComponent text= {finishedSession?.session_name || ''} />
                <View className='flex-row justify-between mt-3'>
-                <SessionHeaderComponent text={`Exercises: ${startTime}`} width={49}/>
-                <SessionHeaderComponent text={`Exercises: ${endTime}`} width={49}/>
+                <SessionHeaderComponent text={`${session.startedAt[language]} ${startTime}`} width={49}/>
+                <SessionHeaderComponent text={`${session.finishedAt[language]} ${endTime}`} width={49}/>
                </View>
               </View>
              </View>
