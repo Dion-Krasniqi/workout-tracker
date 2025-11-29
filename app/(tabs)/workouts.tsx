@@ -64,7 +64,7 @@ const Workouts = () => {
                                          </View>}
                     ListFooterComponent={<CustomButton onPress={()=>exportAllSetData()} buttonText={workout.extract[language]} />}
                     ListFooterComponentStyle={{marginTop:30}}
-                   renderItem={({item})=>(<WorkoutCard item={item} />)}/>
+                   renderItem={({item})=>(<WorkoutCard item={item}/>)}/>
         </>
        </View>
       </ScrollView>
