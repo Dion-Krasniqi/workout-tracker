@@ -31,8 +31,8 @@ export const SetView = ({set}:{set:SessionSet}) => {
                      marginTop:18, justifyContent:'space-between', 
                      alignItems:'center'}}>
         <View>
-          <Text className='text-white text-xl self-center border-white'
-                style={{borderWidth:0.5, borderRadius:20, padding:8, textAlign:'center'}}>{set.set_number}</Text>
+          <Text className='text-white text-xl self-center'
+                style={{borderWidth:0.5, borderRadius:20, padding:8, textAlign:'center', borderColor:'rgba(255, 255, 255, 0.65)'}}>{set.set_number}</Text>
         </View>
         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
           <View style={{flexDirection:'row', marginRight:15}}>
@@ -87,7 +87,7 @@ export const ExerciseView = ({exercise}:{exercise:SessionExercise}) => {
   }
 
   return (
-    <View className='rounded-lg bg-dark-100 mt-2' style={{borderWidth:0.5, borderColor:'rgba(255, 255, 255, 0.33)'}}>
+    <View className='rounded-lg bg-dark-300 mt-2' style={{borderWidth:0.5, borderColor:'rgba(255, 255, 255, 0.33)'}}>
     <View style={{flex:1,marginBottom:18, marginTop:15,paddingHorizontal:28}}>
       <View style={{width:'100%'}}>
         <Text className='text-white font-semibold text-xl'>{exercise.name}</Text>

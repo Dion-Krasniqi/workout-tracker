@@ -97,7 +97,7 @@ const Index = ()=> {
                                   <TouchableOpacity onPress={changeLanguage}
                                                                   className="rounded-md bg-black" 
                                                                   style={{width:Width/4, alignItems:'center', marginTop:12}}>
-                                    <Text className="color-white p-2 font-bold uppercase">{language}</Text>
+                                    <Text className="color-white p-2 font-bold uppercase">{language ? 'en':'al'}</Text>
                                   </TouchableOpacity>
                                   <View className="gap-4" style={{marginVertical:50}}>
                                     <SideMenuItem label={homepage.sessionNumber[language]} value={String(numberOfSessions)}/>

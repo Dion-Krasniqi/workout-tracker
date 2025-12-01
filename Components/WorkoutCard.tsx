@@ -18,13 +18,13 @@ export const WorkoutCard = ({item}:{item:WorkoutTemplate}) => {
   
   return (
     <Link href={`/workout/${item.id}`} asChild>
-        <TouchableOpacity className='bg-dark-200 rounded-md border-2 
-                                     border-[rgba(255,255,255,0.1)]' 
+        <TouchableOpacity className='bg-dark-200 rounded-md border-2' 
                           style={{justifyContent:'center', 
                                   alignItems:'center', 
                                   paddingVertical:18, 
                                   width:'95%', 
                                   marginBottom:10,
+                                  borderColor:'rgba(255,255,255,0.1)',
                                   alignSelf:'center'}}
                           onLongPress={async()=>{await startSession(item.id)}}>
                 <Text className='text-white text-2xl font-medium'>{item.name}</Text>

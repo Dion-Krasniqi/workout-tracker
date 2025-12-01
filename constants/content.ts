@@ -42,6 +42,9 @@ export const homepage = {
     activeSession: ['No active session', 'Asnjë sesion aktiv'],
     emptySessions: ['No sessions recorder', 'Asnjë sesion i regjistruar'],
     searchSession: ['Search session', 'Kërko sesionin'],
+    searchCase: ['Search is Case Sensitive', 'Kërkimi është Sensitiv Ndaj Shkronjave'],
+    searchResult: ['Results for', 'Rezultatet për'],
+    searchEmpty: ['No Results Found', 'Nuk u Gjet Asnjë Rezultat'],
 }
 
 export const workout = {

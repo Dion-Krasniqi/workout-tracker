@@ -1,16 +1,18 @@
-import CustomButton from '@/Components/button'
-import Search from '@/Components/search'
-import { FinishedSessionView } from '@/Components/sessionComponents'
-import { Session } from '@/interfaces/interfaces'
-import { useSessionStore } from '@/state/stateStore'
-import { useEffect, useState } from 'react'
-import { Dimensions, FlatList, Text, View } from 'react-native'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import CustomButton from '@/Components/button';
+import Search from '@/Components/search';
+import { FinishedSessionView } from '@/Components/sessionComponents';
+import { general, homepage } from '@/constants/content';
+import { Session } from '@/interfaces/interfaces';
+import { useSessionStore, useUserPreferences } from '@/state/stateStore';
+import { useEffect, useState } from 'react';
+import { Dimensions, FlatList, Text, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const SearchPage = () => {
   const delSessions = useSessionStore((state)=>state.deletePreviousSessions);
   const findSessions = useSessionStore((state)=>state.findPreviousSessions);
   const { previousSessions } = useSessionStore();
+  const { language } = useUserPreferences();
 
   const [query, setQuery] = useState('');
   const [foundSessions, setFoundSessions] = useState<Session[]>(previousSessions)
@@ -32,7 +34,7 @@ const SearchPage = () => {
     <SafeAreaProvider>
      <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}} >
       <View style={{width:Width*.8,marginBottom:50}}>
-       <Search value={query} pholder='Search Session' onChangeText={(text:string)=>setQuery(text)}/>
+       <Search value={query} pholder={homepage.searchSession[language]} onChangeText={(text:string)=>setQuery(text)}/>
       </View>
       <View>
        <>
@@ -43,20 +45,16 @@ const SearchPage = () => {
                                       (<View>{query.length>0 ? 
                                             // create a component for this
                                             (<Text className='text-white font-semibold mt-5'>
-                                              Results for 
-                                              <Text className='text-blue-100'>
-                                               {query}
-                                              </Text>
-                                              </Text>):
+                                              {homepage.searchResult[language]}<Text className='text-blue-100'> {query}</Text></Text>):
                                             (<Text className='text-light-100 font-semibold mt-5'>
-                                              Search is Case Sensitive
+                                              {homepage.searchCase[language]}
                                              </Text>)}
                                        </View>):
                                        (<View></View>)}
-                  ListEmptyComponent={<Text className='text-white font-semibold mt-5'>No Sessions Match The Query</Text>}
+                  ListEmptyComponent={<Text className='text-white font-semibold mt-5'>{homepage.searchEmpty[language]}</Text>}
                   ListFooterComponent={<View className="mb-24 mt-8 w-full">
                                         {foundSessions.length>0 && 
-                                         <CustomButton onPress={()=>delSessions()} buttonText='Delete All'/>}
+                                         <CustomButton onPress={()=>delSessions()} buttonText={general.deleteAll[language]}/>}
                                        </View>}/>
        </>
       </View>

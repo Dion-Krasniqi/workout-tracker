@@ -126,11 +126,11 @@ const Exercise_creation = () => {
           </View>
          </View>
         </View>
-      <View className="mx-2"style={{backgroundColor:systemTheme=='default' ? 'white' : '#111823'}}>
+      <View style={{backgroundColor:systemTheme=='default' ? 'white' : '#080c11ff'}}>
        <FlatList 
                 data={activeSession?.exercises} keyExtractor={(item)=>item.id.toString()}
                 renderItem={({item})=>(<ExerciseView exercise={item}/>)}
-                contentContainerStyle={{paddingBottom:120}}
+                contentContainerStyle={{paddingBottom:120, marginHorizontal:10}}
                 ListFooterComponent={<View className='self-center mb-44 mt-5 items-center'>
                                       <Text className='font-bold text-4xl mb-7' style={{color:systemTheme=='default' ? 'black' : 'white'}}>{formatWatch(elapsed)}</Text>
                                       <QuitButton />
