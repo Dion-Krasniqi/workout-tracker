@@ -97,7 +97,7 @@ const Index = ()=> {
                                   <TouchableOpacity onPress={changeLanguage}
                                                                   className="rounded-md bg-black" 
                                                                   style={{width:Width/4, alignItems:'center', marginTop:12}}>
-                                    <Text className="color-white p-2 font-bold uppercase">{language ? 'en':'al'}</Text>
+                                    <Text className="color-white p-2 font-bold uppercase">{language ? 'al':'en'}</Text>
                                   </TouchableOpacity>
                                   <View className="gap-4" style={{marginVertical:50}}>
                                     <SideMenuItem label={homepage.sessionNumber[language]} value={String(numberOfSessions)}/>
@@ -131,12 +131,12 @@ const Index = ()=> {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView className='bg-dark-100' style={{flex: 1, paddingBottom:80,left:modalVisible ? Width*.5 : 0}}> 
+      <SafeAreaView className='bg-dark-100' style={{flex: 1, paddingBottom:130,left:modalVisible ? Width*.5 : 0}}> 
         <SideMenu modalVisible={modalVisible} setModalVisible={setModalVisible} />
         {loadingsessions ? (<ActivityIndicator size="large" className="flex-1 justify-center" color="#fff"/>):
          (<View>
            {/* Header */}
-           <View className='mt-5 border-b-2 border-light-100 pb-6'>
+           <View className='mt-2 border-b-2 border-light-100 pb-3'>
             <View className='mt-2 flex-row items-center justify-between px-4'>
              <TouchableOpacity onPress={()=>{setModalVisible(!modalVisible)}} style={{width:Width/14, height:Width/14}}>
               <Image source={icons.hamburger} style={{tintColor:'white',width:Width/14, height:Width/14}}/>
@@ -154,7 +154,7 @@ const Index = ()=> {
                   renderItem={({item})=>(<FinishedSessionView sesh={item}/>)}
                   contentContainerStyle={{alignItems:'center',marginBottom:120}}
                   ListHeaderComponent={previousSessions?.length>0 ? 
-                                       (<View style={{width:Width*.8}}>
+                                       (<View style={{width:Width*.8, marginTop:10}}>
                                          <Search  onPress={()=>router.push('/otherPages/SearchPage')} pholder={homepage.searchSession[language]} />
                                         </View>):
                                        (<View></View>)}

@@ -44,7 +44,7 @@ const Workouts = () => {
   return (
     <SafeAreaProvider>
      <SafeAreaView className='bg-dark-100' style={{flex: 1,alignItems: "center",}}> 
-      <ScrollView className="flex w-full px-5 mb-24" showsVerticalScrollIndicator={false} 
+      <ScrollView className="flex w-full px-5 mb-4" showsVerticalScrollIndicator={true} 
                   contentContainerStyle={{ minHeight:'100%'}}>
        <View style={{flexDirection:'row', marginTop:30, justifyContent:'space-between', 
                      alignItems:'center', marginHorizontal:5}}>
@@ -55,7 +55,7 @@ const Workouts = () => {
         <>
          <FlatList data={workouts}
                    keyExtractor={(item) =>item.id.toString()}
-                   className="mt-8 w-full self-center"
+                   className="mt-8 w-full self-center pb-24"
                    scrollEnabled={false}
                    ListHeaderComponent={<View style={{width:'95%', alignSelf:'center', marginBottom:30}}>
                                           <Search pholder={workout.searchWorkout[language]} 

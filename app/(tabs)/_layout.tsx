@@ -30,7 +30,7 @@ const TabLayout = () => {
                                            justifyContent:'center',
                                            alignItems:'center',},
                           tabBarStyle:{borderRadius:25,
-                                       marginBottom:40,
+                                       marginBottom:50,
                                        marginHorizontal:10,
                                        height:70,
                                        position:'absolute',}}}>
