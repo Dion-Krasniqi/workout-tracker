@@ -173,23 +173,25 @@ const WorkoutInformation = () => {
                                                 
                                               </View>
                        </TouchableOpacity>)}
+                       ListFooterComponent={(<View>
+                                              <CustomButton buttonText={exerciseStatic.add[language]} 
+                                                            onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
+                                                             params: {workout_id:workout?.id}})}/>
+                                             </View>)}
+                       ListFooterComponentStyle={{marginTop:25}}
                        keyExtractor={(item) =>item.id.toString()}
                        className="mt-6 w-full "/>
+             
 
-             <View className='mt-2'>
-              <CustomButton buttonText={exerciseStatic.add[language]} onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
-                                                                                params: {workout_id:workout?.id}})}/>
+             <View style={{flexDirection:'row', alignItems:'center', width:'80%', justifyContent:'space-between', marginBottom:15}}>
+              <View>
+                 <CustomButton buttonText='Back' onPress={()=>router.push('/(tabs)/workouts')}/>
+              </View>
+              <View>
+                <CustomButton buttonText={general.start[language]} onPress={()=>{beginSession(workout?.id);}} />
+              </View>
              </View>
-             <View className='mt-4'>
-                                         
-                                         <CustomButton buttonText={general.start[language]}
-                                                                onPress={()=>{beginSession(workout?.id);}}/>
-            </View>
-             <View className='mt-4'>
-                                         
-                                         <CustomButton buttonText='Back' 
-                                                                onPress={()=>router.push('/(tabs)/workouts')}/>
-            </View>
+             
              
 
          </SafeAreaView>

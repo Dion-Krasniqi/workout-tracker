@@ -26,7 +26,7 @@ export const SetView = ({set}:{set:SessionSet}) => {
 
   return (
       
-     <TouchableOpacity onLongPress={async()=>{setWeight(oldW);setReps(oldR)}}>
+     
        <View style={{flexDirection:'row', marginHorizontal:10,
                      marginTop:18, justifyContent:'space-between', 
                      alignItems:'center'}}>
@@ -34,6 +34,7 @@ export const SetView = ({set}:{set:SessionSet}) => {
           <Text className='text-white text-xl self-center'
                 style={{borderWidth:0.5, borderRadius:20, padding:8, textAlign:'center', borderColor:'rgba(255, 255, 255, 0.65)'}}>{set.set_number}</Text>
         </View>
+        <TouchableOpacity onLongPress={async()=>{setWeight(oldW);setReps(oldR)}}>
         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
           <View style={{flexDirection:'row', marginRight:15}}>
             <TextInput placeholder={(oldW).toString()}
@@ -60,8 +61,8 @@ export const SetView = ({set}:{set:SessionSet}) => {
             <Text style={{marginLeft:4, color:'white',alignSelf:'center'}}>{exerciseStatic.reps[language]}</Text>
           </View>
         </View>
+        </TouchableOpacity>
       </View>
-     </TouchableOpacity>
   
   )
 }

@@ -10,7 +10,7 @@ The app allows the user to create their own exercises and workouts,track workout
   <img src="showcaseIMG/TimerG.jpg" alt="Session" width="22%">
 </p>
 <p align="center">
-  <img src="showcaseIMG/TimerR.jpg" alt="Home Page" width="22%">
+  <img src="showcaseIMG/Previous.jpg" alt="Home Page" width="22%">
   <img src="showcaseIMG/stats.jpg" alt="Workout" width="22%">
   <img src="showcaseIMG/Exercise.jpg" alt="Exercise" width="22%">
   <img src="showcaseIMG/Workout.jpg" alt="Session" width="22%">
@@ -43,9 +43,7 @@ Sessions are "active" instances of workout routines. To start a session click on
 * Most of UI needs to be improved and standardised;
 * When dropdown menu in exercise creation is active, there appears a black box at the bottom;
 * Loading screen before actual loading the sessions/workouts(partially);
-* Stopwatch resets if active session is exited(maybe save last time in zustand with the paused/running);
-* Mix of tailwindCSS and CSS might mess up some styling;
-* First load for previous sessions is empty;
+* Convert non color stuff to CSS, keep color/font stuff in tailwind;
 
 
 Planned features:
