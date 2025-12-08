@@ -4,8 +4,11 @@ import { useSessionStore, useUserPreferences, useWorkoutStore } from '@/state/st
 import { Height } from '@/utils';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, LayoutAnimation, Modal, Platform, Text, TextInput, TouchableOpacity, UIManager, View } from 'react-native';
+import { LayoutAnimation, Modal, Platform, Text, TextInput, TouchableOpacity, UIManager, View } from 'react-native';
+import DraggableFlatList from "react-native-draggable-flatlist";
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 
@@ -82,6 +85,8 @@ const WorkoutInformation = () => {
     }
   },[workout?.id])
 
+  
+
   const renderModal = ()=> {
     return (
       <Modal animationType="slide" transparent={true} visible={modalVisible}
@@ -112,13 +117,33 @@ const WorkoutInformation = () => {
     )
   }
 
+  const renderItem = ({item, drag, isActive})=>{  
+    return(
+      <TouchableOpacity onPress={async()=>{setSetNumber(item.set_number);setExerciseId(item.id);setModalVisible(true)}}
+                        onLongPress={()=>deleteExercise(workout.id, item.id)}
+                        style={{marginTop:15}}>
+        <View style={{backgroundColor: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
+                      alignSelf: 'center', width: '90%', paddingHorizontal:25}}
+              className='flex flex-row py-4 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between'>
+          <View className='flex flex-cols'>
+           <Text className='text-white text-lg font-bold'>{item.name}</Text>
+           <Text className='text-white mr-10'>{item.set_number} {session.sets[language]}</Text>
+          </View>
+          <TouchableOpacity onLongPress={drag}>
+            <Text className='text-white font-bold ' style={{transform:[{scale:2}]}}>⇑⇓</Text>
+          </TouchableOpacity>
+        </View>
+       </TouchableOpacity>
+  )}
+
 
 
   return (
+    <GestureHandlerRootView>
     <SafeAreaProvider>
          <SafeAreaView className='bg-dark-100' style={{flex: 1, alignItems: "center"}}> 
             {renderModal()}
-            <View className="items-center mt-10 w-[80%] flex flex-row">
+            <View className="flex flex-row" style={{alignItems:'center', width:'80%', marginTop:30, marginBottom:25}}>
                 <TextInput placeholder={workout.name} 
                    onChangeText={(text)=>{setName(text);
                                           if(text?.length>0 && direction=='column' && text != workout.name){
@@ -146,56 +171,30 @@ const WorkoutInformation = () => {
 
             
              </View>
-             <FlatList data={workout.exercises}
-                       renderItem={({item})=>(<TouchableOpacity onPress={async()=>{setSetNumber(item.set_number);setExerciseId(item.id);setModalVisible(true)}} onLongPress={()=>deleteExercise(workout.id,item.id)}>
-                        <View className='flex flex-row self-center w-[90%] mt-2 py-4 px-4 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center justify-between'>
-                                                
-                                                
-                                                  <View className='flex flex-cols'>
-                                                      <Text className='text-white text-lg font-bold'>{item.name}</Text>
-                                                      <Text className='text-white mr-10'>{item.set_number} {session.sets[language]}</Text>
-                                                  </View>
-                                                  
-                                                  <View className='flex flex-row gap-4'>
-                                                    {(item.order_index==workout.exercises.length ) && (<Text className='mr-2'></Text>)}
-                                                    {item.order_index>1 && (<TouchableOpacity onPress={()=>
-                                                      {changeOrder(Number(id),item.id,item.order_index-1, item.order_index)}}>
-                                                      <Text className='text-white font-bold ' style={{transform:[{scale:2}]}}>⇑</Text>
-                                                    </TouchableOpacity>)}
-                                                    
-                                                    
-                                                    {(item.order_index<workout.exercises.length ) && (<TouchableOpacity onPress={()=>
-                                                      changeOrder(Number(id),item.id,item.order_index+1, item.order_index)}>
-                                                      <Text className='text-white font-bold ' style={{transform:[{scale:2}]}}>⇓</Text>
-                                                    </TouchableOpacity>)}
-                                                  
-                                                  </View>
-                                                
-                                              </View>
-                       </TouchableOpacity>)}
-                       ListFooterComponent={(<View>
-                                              <CustomButton buttonText={exerciseStatic.add[language]} 
-                                                            onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
+              <DraggableFlatList
+                data={workout.exercises}
+                renderItem={renderItem}
+                keyExtractor={(item) =>item.id.toString()}
+                onDragEnd={({data})=>changeOrder(Number(id), data)}
+                ListFooterComponent={(<View style={{flexDirection:'row', alignItems:'center', width:'100%', justifyContent:'space-between', paddingHorizontal:25}}>
+                                          
+                                          <CustomButton buttonText={exerciseStatic.add[language]} 
+                                            onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
                                                              params: {workout_id:workout?.id}})}/>
+                                          <View  style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
+                                            <CustomButton buttonText='Back' onPress={()=>router.push('/(tabs)/workouts')}/>
+                                            <CustomButton buttonText={general.start[language]} onPress={()=>{beginSession(workout?.id);}} />
+                                          </View>
                                              </View>)}
-                       ListFooterComponentStyle={{marginTop:25}}
-                       keyExtractor={(item) =>item.id.toString()}
-                       className="mt-6 w-full "/>
+                ListFooterComponentStyle={{marginTop:25}}
+              />
              
-
-             <View style={{flexDirection:'row', alignItems:'center', width:'80%', justifyContent:'space-between', marginBottom:15}}>
-              <View>
-                 <CustomButton buttonText='Back' onPress={()=>router.push('/(tabs)/workouts')}/>
-              </View>
-              <View>
-                <CustomButton buttonText={general.start[language]} onPress={()=>{beginSession(workout?.id);}} />
-              </View>
-             </View>
              
              
 
          </SafeAreaView>
    </SafeAreaProvider>
+   </GestureHandlerRootView>
   )
 }
 

@@ -1,4 +1,4 @@
-import { ExerciseInfo, Session, WorkoutTemplate } from "@/interfaces/interfaces";
+import { ExerciseInfo, ExerciseTemplate, Session, WorkoutTemplate } from "@/interfaces/interfaces";
 import db from "./db";
 
 //Exercise Related
@@ -60,14 +60,23 @@ export const changeSetNumber = async(exercise_id:number,set_number:number)=> {
                        WHERE id = (?);`, set_number,exercise_id);
 };
 
-//Possibly do this in one
-export const reorderExercise = async(exercise_id:number,order_index:number,old_index:number,other_id:number)=> {
-    await db.runAsync(`UPDATE exercises 
-                       SET order_index = (?)
-                       WHERE id = (?);`, order_index,exercise_id);
-    await db.runAsync(`UPDATE exercises 
-                       SET order_index = (?)
-                       WHERE id = (?);`, old_index,other_id); 
+//Possibly dont change everything
+export const reorderExercise = async(workout_id:number, newOrder:ExerciseTemplate[])=> {
+    await db.runAsync('BEGIN TRANSACTION;');
+    try {
+        for (const exercise of newOrder){
+            await db.runAsync(`UPDATE exercises
+                               SET order_index = (?)
+                               WHERE id = (?);`,
+                               exercise.order_index,
+                               exercise.id);
+        }
+        await db.runAsync('COMMIT;');
+    } catch (error) {
+        await db.runAsync('ROLLBACK;');
+        console.log(error)
+        throw (error);
+    }
 }
 
 export const removeExercise = async (exercise_id:number): Promise<number> => {

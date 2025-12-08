@@ -69,7 +69,7 @@ interface WorkoutStore {
     addExerciseToWorkout: (workout_id:number,exercise_id:number,exercise_name:string, set_number:number) =>void;
     removeExerciseFromWorkout:(workout_id:number,exercise_id:number) => void;
     loadExercises: (workout_id:number) =>Promise<void>;
-    changeOrder:(workout_id:number, exercise_id:number,new_index:number,old_index:number) => void;
+    changeOrder:(workout_id:number, newWorkout:ExerciseTemplate[]) => void;
     changeSetNumber:(workout_id:number, exercise_id:number,setNumber:number) => void;
 }
 
@@ -139,17 +139,14 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
                                               w)
         }))
     },
-    changeOrder: async(workout_id,exercise_id,new_index,old_index)=>{
-        const state = get();
-        const workout = state.workouts.find(w => w.id == workout_id);
-        const other_id = (workout?.exercises.find(e => e.order_index === new_index))?.id;
-        //sort to update the flatlist
+    changeOrder: async(workout_id,newWorkout)=>{
+        // a bit too much
+        const newOrder = newWorkout.map((exercise,index)=>({...exercise, order_index: index + 1,}))
+        await reorderExercise(workout_id, newOrder);
         set((state)=>({
             workouts: state.workouts.map((w)=>w.id==workout_id ? 
-                                         {...w, exercises: w.exercises.map((e)=> e.id == other_id ? { ...e, order_index: old_index }
-              : e.id == exercise_id ? { ...e, order_index: new_index } : e ).sort((a, b) => a.order_index - b.order_index),} : w),}));
-        //@ts-ignore
-        reorderExercise(exercise_id,new_index,old_index,other_id);
+                                         {...w, exercises: newOrder} : w),}));
+        
     },
     changeSetNumber: async(workout_id,exercise_id,setNumber)=>{
         await changeSetNumber(exercise_id,setNumber);
