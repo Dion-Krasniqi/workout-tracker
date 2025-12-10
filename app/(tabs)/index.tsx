@@ -1,6 +1,6 @@
 import CustomButton from "@/Components/button";
+import { FinishedSessionView } from "@/Components/FinishedSessionCard";
 import Search from "@/Components/search";
-import { FinishedSessionView } from "@/Components/sessionComponents";
 import SideMenuItem from "@/Components/SideMenuItem";
 import { icons } from "@/constants/icons";
 import { useSessionStore, useUserPreferences } from "@/state/stateStore";

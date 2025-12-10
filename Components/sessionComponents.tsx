@@ -1,7 +1,6 @@
-import { exerciseStatic, session } from '@/constants/content';
+import { exerciseStatic } from '@/constants/content';
 import { Session, SessionExercise, SessionSet } from '@/interfaces/interfaces';
 import { useSessionStore, useUserPreferences } from '@/state/stateStore';
-import { formatDate } from '@/utils';
 import { Link } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -175,45 +174,7 @@ export const FinishedExercise = ({exercise}:{exercise:SessionExercise}) => {
 }
 
 
-// renders finished session
-export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
-  //@ts-ignore
-  let seconds = (sesh.time_ended-sesh.time_started)/1000;
-  const hours = Math.floor(seconds / 3600);
-  seconds = seconds % 3600;
-  const minutes = Math.floor(seconds/60)
-  seconds = Math.round(seconds%60);
-  const date = formatDate(sesh.time_started)
-  const screenWidth = Dimensions.get("window").width/1.1;
-  const { language } = useUserPreferences();
 
-  const setPrevSession = useSessionStore((state)=>state.setPreviousSession);
-  const loadExercises = useSessionStore((state)=>state.loadPreviousSession);
-  //check
-  const setSession = async(id:number)=> {
-    const ses = await setPrevSession(id);
-    await loadExercises(id);
-  };
-
-  return (
-    <Link href={`/session/completed/${sesh.id}`} asChild>
-      <TouchableOpacity className='flex rounded-md justify-center px-2 bg-white mt-4' 
-                        style={{width:screenWidth, height:65}} 
-                        onPress={async()=>{await setSession(Number(sesh.id))}}>
-        <View className='flex-row justify-between'>
-          <Text className='font-bold text-center'>{sesh.session_name}</Text>
-          <Text>{date}</Text>
-        </View>
-        <View className='items-start'>
-          
-          <Text className='font-bold text-center'>{session.duration[language]}: {hours}:{minutes}:{seconds}</Text>
-        </View>
-         
-      </TouchableOpacity>
-      </Link>
-              )
-
-}
 
 export const Stopwatch = ({session}:{session?:Session | null}) => {
     const { language } = useUserPreferences();
