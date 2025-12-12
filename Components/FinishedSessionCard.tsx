@@ -1,9 +1,10 @@
 import { session } from "@/constants/content";
+import { icons } from "@/constants/icons";
 import { Session } from "@/interfaces/interfaces";
 import { useSessionStore, useUserPreferences } from "@/state/stateStore";
 import { formatDate, getMonth } from "@/utils";
 import { Link } from "expo-router";
-import { Dimensions, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, Image, Text, TouchableOpacity, View } from "react-native";
 
 export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
   //@ts-ignore
@@ -23,19 +24,32 @@ export const FinishedSessionView = ({sesh}:{sesh:Session}) =>{
     const ses = await setPrevSession(id);
     await loadExercises(id);
   };
+  const alert = ()=> {
+    Alert.alert('Session data will be lost forever','Do you wish to proceed?',
+                [{text: 'Cancel',onPress: () => {},style: 'cancel',},
+                 { text: 'YES', onPress: () => console.log("Deleted") },],
+                 { cancelable: false });
+  }
 
   return (
     <Link href={`/session/completed/${sesh.id}`} asChild>
-      <TouchableOpacity className='flex flex-row items-center rounded-md justify-between px-2 bg-white mt-4' 
+      <TouchableOpacity className='flex flex-row items-center rounded-xl justify-between px-2 bg-white mt-4' 
                         style={{width:screenWidth, height:85}} 
                         onPress={async()=>{await setSession(Number(sesh.id))}}>
-        <View style={{alignItems:'center', paddingHorizontal:20, paddingVertical:11,}} className="bg-dark-200 rounded-md">
-            <Text className="text-3xl text-white font-bold">{date.charAt(0)}{date.charAt(1)}</Text>
-            <Text className="text-white font-bold">{getMonth(date.substring(3,5))}</Text>
+        <View style={{padding:20}} className="bg-dark-200 rounded-lg flex items-center justify-center">
+            <Text className="text-4xl text-white font-bold text-center" style={{lineHeight:23}}>{date.charAt(0)}{date.charAt(1)}</Text>
+            <Text className="text-white font-bold text-center" style={{lineHeight:11}}>{getMonth(date.substring(3,5))}</Text>
+        </View>
+        <View className="flex items-center justify-center">
+            <Text className='font-bold text-3xl text-center'>{sesh.session_name}</Text>
+            <Text className='text-center'>{session.duration[language]}: {hours}:{minutes}:{seconds}</Text>
         </View>
         
-        <Text className='font-bold text-3xl text-center'>{sesh.session_name}</Text>
-        <Text className='text-center'>{session.duration[language]}: {hours}:{minutes}:{seconds}</Text>
+        <TouchableOpacity style={{padding:20, alignItems:'center', justifyContent:'center'}} onPress={()=>alert()}>
+            <Image source={icons.trash} style={{transform:[{scale:1.2}]}}/>
+        </TouchableOpacity>
+        
+        
         
          
       </TouchableOpacity>
