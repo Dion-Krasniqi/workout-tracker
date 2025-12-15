@@ -4,7 +4,7 @@ import { useSessionStore, useUserPreferences, useWorkoutStore } from '@/state/st
 import { Height } from '@/utils';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { LayoutAnimation, Modal, Platform, Text, TextInput, TouchableOpacity, UIManager, View } from 'react-native';
+import { Alert, LayoutAnimation, Modal, Platform, Text, TextInput, TouchableOpacity, UIManager, View } from 'react-native';
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
@@ -76,6 +76,12 @@ const WorkoutInformation = () => {
   if (!workout) {
     return(<Text>{session.workoutNot[language]}</Text>)
   }
+  const deleteAlert = (id:number)=> {
+      Alert.alert('Remove Exercise?','',
+                  [{text: 'Cancel',onPress: () => {},style: 'cancel',},
+                   { text: 'YES', onPress: () => deleteExercise(workout.id, id) },],
+                   { cancelable: false });
+    }
 
   const router = useRouter();
   
@@ -120,7 +126,7 @@ const WorkoutInformation = () => {
   const renderItem = ({item, drag, isActive})=>{  
     return(
       <TouchableOpacity onPress={async()=>{setSetNumber(item.set_number);setExerciseId(item.id);setModalVisible(true)}}
-                        onLongPress={()=>deleteExercise(workout.id, item.id)}
+                        onLongPress={()=>deleteAlert(item.id)}
                         style={{marginTop:15}}>
         <View style={{backgroundColor: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
                       alignSelf: 'center', width: '90%', paddingHorizontal:25}}
@@ -168,30 +174,25 @@ const WorkoutInformation = () => {
                     <Text className='items-center'>✓</Text>
                   </TouchableOpacity>
                 )}
-
-            
              </View>
+              <View style={{flex:1, paddingBottom:50}}>
               <DraggableFlatList
                 data={workout.exercises}
                 renderItem={renderItem}
                 keyExtractor={(item) =>item.id.toString()}
                 onDragEnd={({data})=>changeOrder(Number(id), data)}
-                ListFooterComponent={(<View style={{flexDirection:'row', alignItems:'center', width:'100%', justifyContent:'space-between', paddingHorizontal:25}}>
-                                          
-                                          <CustomButton buttonText={exerciseStatic.add[language]} 
-                                            onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
-                                                             params: {workout_id:workout?.id}})}/>
-                                          <View  style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
-                                            <CustomButton buttonText='Back' onPress={()=>router.push('/(tabs)/workouts')}/>
-                                            <CustomButton buttonText={general.start[language]} onPress={()=>{beginSession(workout?.id);}} />
-                                          </View>
-                                             </View>)}
-                ListFooterComponentStyle={{marginTop:25}}
+                containerStyle={{paddingBottom:15}}
               />
-             
-             
-             
-
+              <View style={{flexDirection:'row', alignItems:'center', width:'100%', justifyContent:'space-between', paddingHorizontal:25}}>
+                <CustomButton buttonText={exerciseStatic.add[language]} 
+                              onPress={()=>router.push({pathname: '/otherPages/exercise_list_adding',
+                                       params: {workout_id:workout?.id}})}/>
+              <View  style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
+                <CustomButton buttonText='Back' onPress={()=>router.push('/(tabs)/workouts')}/>
+                <CustomButton buttonText={general.start[language]} onPress={()=>{beginSession(workout?.id);}} />
+              </View>
+             </View>
+            </View>
          </SafeAreaView>
    </SafeAreaProvider>
    </GestureHandlerRootView>

@@ -26,6 +26,7 @@ const Index = ()=> {
   const changeLang = useUserPreferences((state)=>state.changeLanguage);
   const loadSystemTheme = useUserPreferences((state)=>state.loadSystemTheme);
   const syncData = useUserPreferences((state)=>state.syncData);
+  const changeModal = useUserPreferences((state)=>state.changeModalOpen);
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -77,9 +78,9 @@ const Index = ()=> {
     
     return (
       <Modal /*animationType="slide"*/ transparent={true} visible={modalVisible}
-                   onRequestClose={() => {setModalVisible(!modalVisible)}}>
+                   onRequestClose={() => {setModalVisible(!modalVisible);changeModal(!modalVisible)}}>
       
-                  <TouchableWithoutFeedback onPressOut={() => setModalVisible(!modalVisible)}>
+                  <TouchableWithoutFeedback onPressOut={() => {setModalVisible(!modalVisible);changeModal(!modalVisible)}}>
                     <View className="flex-1" style={{ width:Width, height:Height}}>
                       <TouchableWithoutFeedback
                                style={{ height:Height,
@@ -138,7 +139,7 @@ const Index = ()=> {
            {/* Header */}
            <View className='mt-2 border-b-2 border-light-100 pb-3'>
             <View className='mt-2 flex-row items-center justify-between px-4'>
-             <TouchableOpacity onPress={()=>{setModalVisible(!modalVisible)}} style={{width:Width/14, height:Width/14}}>
+             <TouchableOpacity onPress={()=>{setModalVisible(!modalVisible);changeModal(!modalVisible)}} style={{width:Width/14, height:Width/14}}>
               <Image source={icons.hamburger} style={{tintColor:'white',width:Width/14, height:Width/14}}/>
              </TouchableOpacity>
              <View>{activeSession ? (<TouchableOpacity onPress={()=>router.push('/session/dummysesh')}

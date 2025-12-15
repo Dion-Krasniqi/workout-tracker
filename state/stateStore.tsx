@@ -11,6 +11,8 @@ interface UserPreferences {
     numberOfSessions:number;
     mostCommonWorkout:string;
     language: number;
+    modalOpen:boolean;
+    changeModalOpen: (state:boolean)=>void;
     loadSystemTheme:()=>void;
     updateSystemTheme:(value:string)=>void;
     changeLanguage:(value:number)=>void;
@@ -22,6 +24,10 @@ export const useUserPreferences = create<UserPreferences>((set,get)=>({
     numberOfSessions:0,
     mostCommonWorkout:'Workout Name',
     language: 0,
+    modalOpen:false,
+    changeModalOpen: (state:boolean)=> {
+        set({modalOpen:state})
+    },
     loadSystemTheme: async()=>{
         const savedTheme = await AsyncStorage.getItem('theme');
         const savedLang = await AsyncStorage.getItem('language');

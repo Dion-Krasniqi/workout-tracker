@@ -1,13 +1,21 @@
 
 import { icons } from "@/constants/icons";
+import { useUserPreferences } from "@/state/stateStore";
 import { Tabs } from "expo-router";
 import { Dimensions, Image, Text } from 'react-native';
 
+
+
+
 const Ticon = ({focused, title}:any) => {
+  const { modalOpen } = useUserPreferences();
   // icons are a bit different in size and how they fit so have to treat each diff
   const Width = Dimensions.get("window").width;
   if (focused ) {
     if (title == 'Home'){
+      if(modalOpen){
+        return 
+      }
       return (
         <Image  style={{width:Width/12, height:Width/12, marginTop:25}} source={icons.homepage} />)
     } else {
