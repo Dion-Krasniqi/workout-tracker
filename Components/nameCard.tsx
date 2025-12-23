@@ -10,7 +10,10 @@ export const NameCardExec = ({id, name}: ExerciseInfo) => {
   return (
     
     <Link href={`/exercise/${id}`} asChild>
-      <TouchableOpacity className='w-[90%] mt-2 py-2 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center self-center' >
+      <TouchableOpacity className='bg-dark-200 
+                                 rounded-md border-2 border-[rgba(255,255,255,0.05)] 
+                                 items-center self-center' 
+                      style={{paddingVertical:12, width:'90%', marginTop:10}}>
       <Text className='text-white text-2xl font-md'>{name}</Text>
     </TouchableOpacity>
     </Link>
@@ -29,11 +32,12 @@ export const NameCardExecAdd = ({id,name,workout_id}:test) => {
   return (
     
     
-    <TouchableOpacity className='w-[90%] mt-2 bg-dark-200 rounded-md border-2 border-[rgba(255,255,255,0.05)] items-center self-center' 
-    //@ts-ignore
-    style={{paddingVertical:10}}
-    onPress={()=>router.push({pathname:`/exercise_add/${id}`,
-                              params:{workout_id:workout_id}})}>
+    <TouchableOpacity className='bg-dark-200 
+                                 rounded-md border-2 border-[rgba(255,255,255,0.05)] 
+                                 items-center self-center' 
+                      style={{paddingVertical:12, width:'90%', marginTop:10}}
+                      onPress={()=>router.push({pathname:`/exercise_add/${id}`,
+                                     params:{workout_id:workout_id}})}>
       <Text className='text-white text-2xl font-md'>{name}</Text>
     </TouchableOpacity>
     
