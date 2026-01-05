@@ -1,6 +1,6 @@
 import CustomButton from '@/Components/button';
+import { FinishedSessionView } from '@/Components/FinishedSessionCard';
 import Search from '@/Components/search';
-import { FinishedSessionView } from '@/Components/sessionComponents';
 import { general, homepage } from '@/constants/content';
 import { Session } from '@/interfaces/interfaces';
 import { useSessionStore, useUserPreferences } from '@/state/stateStore';

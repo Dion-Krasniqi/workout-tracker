@@ -1,4 +1,4 @@
-import { NameCardExecAdd } from '@/Components/nameCard';
+import AddExerciseCard from '@/Components/AddExerciseCard';
 import Search from '@/Components/search';
 import { exerciseStatic } from '@/constants/content';
 import { ExerciseInfo } from '@/interfaces/interfaces';
@@ -84,7 +84,7 @@ const Exercise_list_add = () => {
         </View>
         <FlatList data={exercises}
                   //@ts-ignore
-                  renderItem={({item})=>(<NameCardExecAdd id={item.id} name={item.name} workout_id={workout_id}/>)}
+                  renderItem={({item})=>(<AddExerciseCard id={item.id} name={item.name} workout_id={workout_id} />)}
                   keyExtractor={(item) =>item.id.toString()}
                   className="mt-6 w-full" contentContainerStyle={{justifyContent:'space-between'}}/>
        </>

@@ -146,7 +146,6 @@ export const useWorkoutStore = create<WorkoutStore>((set,get)=>({
         }))
     },
     changeOrder: async(workout_id,newWorkout)=>{
-        // a bit too much
         const newOrder = newWorkout.map((exercise,index)=>({...exercise, order_index: index + 1,}))
         await reorderExercise(workout_id, newOrder);
         set((state)=>({

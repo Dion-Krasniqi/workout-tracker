@@ -1,5 +1,5 @@
 import CustomButton from '@/Components/button';
-import { NameCardExec } from '@/Components/nameCard';
+import ExerciseCard from '@/Components/ExerciseCard';
 import { exerciseStatic } from '@/constants/content';
 import { ExerciseInfo } from '@/interfaces/interfaces';
 import { useUserPreferences } from '@/state/stateStore';
@@ -37,7 +37,7 @@ const Exercise_list = () => {
       </View>
       <View className='w-full flex-1'>  
        <>
-        <FlatList data={exercises} renderItem={({item})=>(<NameCardExec {...item} />)}
+        <FlatList data={exercises} renderItem={({item})=>(<ExerciseCard {...item} />)}
                   keyExtractor={(item) =>item.id.toString()}
                   className="mt-6 w-full" contentContainerStyle={{justifyContent:'space-between'}}/>
        </>
